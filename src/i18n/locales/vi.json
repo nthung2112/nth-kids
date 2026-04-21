@@ -1,0 +1,498 @@
+{
+  "app": {
+    "title": "🌟 Học Tập Cùng Bé",
+    "subtitle": "Khám phá thế giới số, chữ cái và màu sắc"
+  },
+  "nav": {
+    "numbers": "Số",
+    "letters": "Chữ",
+    "colors": "Màu",
+    "shapes": "Hình",
+    "flashcards": "Ôn Tập",
+    "settings": "Cài Đặt"
+  },
+  "header": {
+    "titles": {
+      "home": "🌟 Học Tập Cùng Bé",
+      "numbers": "🔢 Học Đếm Số",
+      "letters": "🔤 Học Chữ Cái",
+      "colors": "🎨 Học Màu Sắc",
+      "shapes": "🔷 Học Hình Khối",
+      "flashcards": "📚 Ôn Tập Tổng Hợp"
+    }
+  },
+  "language": {
+    "label": "Ngôn ngữ",
+    "switchTo": "Chuyển sang {{name}}"
+  },
+  "home": {
+    "topics": {
+      "numbers": {
+        "title": "Học Số",
+        "description": "Đếm 1 - 100 với trò chơi vui"
+      },
+      "letters": {
+        "title": "Học Chữ Cái",
+        "description": "Bảng chữ cái A - Z sinh động"
+      },
+      "colors": {
+        "title": "Học Màu Sắc",
+        "description": "Nhận biết và tô màu sáng tạo"
+      },
+      "shapes": {
+        "title": "Học Hình Khối",
+        "description": "Nhận biết hình tròn, vuông, tam giác..."
+      }
+    },
+    "cta": "Bắt Đầu",
+    "featuresTitle": "🎯 Tính Năng Nổi Bật",
+    "features": {
+      "interactive": "Trò Chơi Tương Tác",
+      "sound": "Âm Thanh Sinh Động",
+      "flexible": "Tùy Chỉnh Linh Hoạt",
+      "mobile": "Thân Thiện Mobile"
+    },
+    "recommend": {
+      "title": "✨ Gợi ý cho bé",
+      "continue": "Tiếp tục bài hôm trước",
+      "tryNew": "Thử trò chơi mới",
+      "tryFlashcards": "Ôn tập tổng hợp",
+      "newcomer": "Bắt đầu với trò chơi đầu tiên"
+    }
+  },
+  "footer": {
+    "cheer": "Chúc bé học tập vui vẻ!",
+    "age": "👶 Dành cho bé 2+ tuổi"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "close": "Đóng",
+    "cancel": "Hủy",
+    "apply": "Áp Dụng",
+    "listen": "Nghe",
+    "correct": "Đúng rồi!",
+    "playGame": "🎮 Chơi Game",
+    "playLesson": "📚 Học Bài",
+    "playAgain": "Chơi Lại",
+    "soundOn": "Bật âm thanh",
+    "soundOff": "Tắt âm thanh",
+    "touch": "👆",
+    "more": "Xem thêm",
+    "less": "Thu gọn",
+    "next": "Tiếp theo",
+    "back": "Quay lại"
+  },
+  "numbers": {
+    "rangeLabel": "{{range}} · {{level}}",
+    "levels": {
+      "basic": "Cơ bản",
+      "intermediate": "Nâng cao",
+      "hard": "Khó"
+    },
+    "learning": {
+      "instructionsTitle": "Nhấn vào số để học nhé!",
+      "instructionsSubtitle": "Học đếm từ 1 đến {{max}}",
+      "prev": "Số trước",
+      "next": "Số tiếp"
+    }
+  },
+  "letters": {
+    "modes": {
+      "basic": "🎯 Cơ Bản",
+      "sequence": "🧠 Chuỗi Chữ"
+    },
+    "learning": {
+      "instructionsTitle": "Nhấn vào chữ cái để học nhé!",
+      "instructionsSubtitle": "Học bảng chữ cái từ A đến Z",
+      "prev": "Chữ trước",
+      "next": "Chữ tiếp"
+    }
+  },
+  "colors": {
+    "modes": {
+      "identify": "🎯 Nhận Dạng",
+      "matching": "🧩 Ghép Cặp",
+      "coloring": "🎨 Tô Màu"
+    },
+    "learning": {
+      "instructionsTitle": "Nhấn vào màu để học nhé!",
+      "instructionsSubtitle": "Học 7 màu cơ bản với ví dụ sinh động",
+      "exampleLabel": "Ví dụ:",
+      "prev": "Màu trước",
+      "next": "Màu tiếp"
+    }
+  },
+  "games": {
+    "common": {
+      "loading": "Đang tải...",
+      "results": {
+        "super": "Siêu Xuất Sắc!",
+        "good": "Giỏi Lắm!",
+        "tryHarder": "Cố Gắng Lên!"
+      },
+      "stats": {
+        "score": "🎯 Điểm số: {{score}}",
+        "scoreOutOf": "🎯 Điểm số: {{score}}/{{max}}",
+        "answered": "📝 Câu đã trả lời: {{answered}}/{{total}}",
+        "stars": "⭐ Sao thưởng: {{count}}",
+        "rainbowStars": "🌈 Sao thưởng: {{count}}",
+        "matched": "🎨 Cặp đã ghép: {{matched}}/{{total}}"
+      },
+      "encouragements": [
+        "🎉 Giỏi lắm!",
+        "⭐ Tuyệt vời!",
+        "🌟 Đúng rồi!",
+        "🎊 Xuất sắc!",
+        "💖 Thông minh quá!",
+        "🏆 Siêu đỉnh!"
+      ],
+      "tryAgainMessages": [
+        "💪 Thử lại nhé!",
+        "🤗 Đừng lo, thử tiếp!",
+        "😊 Cố gắng lên!",
+        "🌈 Lần sau sẽ đúng!"
+      ],
+      "tutorialButton": "Hướng dẫn",
+      "aria": {
+        "score": "Điểm: {{score}}",
+        "lives": "Còn {{lives}} trên {{total}} mạng",
+        "progress": "Câu {{current}} trên {{total}}"
+      }
+    },
+    "counting": {
+      "question": "Đếm xem có bao nhiêu?",
+      "instructionsTitle": "Nhấn vào số đúng nhé!",
+      "instructionsSubtitle": "Đếm các hình và chọn số tương ứng (1-{{max}})"
+    },
+    "alphabet": {
+      "question": "Chữ cái nào bắt đầu từ này?",
+      "instructionsTitle": "Chọn chữ cái đúng nhé!",
+      "instructionsSubtitle": "Tìm chữ cái bắt đầu của từ"
+    },
+    "sequence": {
+      "question": "Chữ cái tiếp theo là gì?",
+      "instructionsTitle": "Tìm chữ cái tiếp theo trong chuỗi!",
+      "instructionsSubtitle": "Quan sát thứ tự và chọn chữ cái đúng",
+      "completeSequence": "Chuỗi hoàn chỉnh:"
+    },
+    "colorGuess": {
+      "question": "Đây là màu gì?",
+      "instructionsTitle": "Nhìn màu và chọn tên đúng!",
+      "instructionsSubtitle": "Nhận dạng màu sắc qua emoji và hình tròn màu"
+    },
+    "colorMatching": {
+      "title": "Ghép Cặp Màu Giống Nhau!",
+      "instructionsTitle": "Lật thẻ và ghép cặp màu giống nhau!",
+      "instructionsSubtitle": "Nhớ vị trí các thẻ để ghép thành công",
+      "hiddenCard": "Thẻ úp"
+    },
+    "coloring": {
+      "palette": "Bảng Màu",
+      "templates": "Chọn Mẫu Tranh",
+      "progressTitle": "Tiến Độ Tô Màu:",
+      "progressStatus": "Đã tô: {{filled}}/{{total}} vùng",
+      "showReference": "Hiện gợi ý màu",
+      "hideReference": "Ẩn gợi ý màu",
+      "useReferenceColor": "Dùng màu gợi ý",
+      "saveToGallery": "Lưu vào bộ sưu tập",
+      "savedToGallery": "Đã lưu!",
+      "gallery": "Bộ sưu tập của bé",
+      "galleryEmpty": "Chưa có tranh nào. Hãy tô và lưu nhé!",
+      "deleteFromGallery": "Xoá tranh",
+      "tools": {
+        "eraseOff": "Tẩy Xóa",
+        "eraseOn": "Đang Xóa",
+        "clearAll": "Xóa Tất Cả",
+        "download": "Tải Về"
+      },
+      "canvas": {
+        "hintErasing": "🧽 Nhấn vào vùng để xóa màu",
+        "hintColoring": "🎨 Nhấn vào vùng để tô màu",
+        "pickFromPalette": "Chọn màu từ bảng màu bên trái"
+      },
+      "howTo": {
+        "title": "🎨 Cách Chơi Tô Màu 🎨",
+        "steps": [
+          { "label": "1. Chọn màu:", "text": "Nhấn vào màu yêu thích" },
+          { "label": "2. Tô màu:", "text": "Nhấn vào vùng trên tranh" },
+          { "label": "3. Hoàn thành:", "text": "Tải về tranh đẹp của bé!" }
+        ]
+      },
+      "downloadFilename": "tranh-to-mau-{{name}}.png"
+    }
+  },
+  "tutorial": {
+    "prev": "← Trước",
+    "next": "Tiếp →",
+    "start": "Bắt Đầu!",
+    "sequence": {
+      "steps": [
+        {
+          "title": "🎯 Trò Chơi Chuỗi Chữ Cái",
+          "content": "Chào bé! Hôm nay chúng ta sẽ học cách tìm chữ cái tiếp theo trong chuỗi!"
+        },
+        {
+          "title": "📝 Cách Chơi",
+          "content": "Bé sẽ thấy 3 chữ cái liên tiếp, nhiệm vụ là tìm chữ cái tiếp theo!"
+        },
+        {
+          "title": "🌟 Ví Dụ Khác",
+          "content": "Nếu thấy G H I, chữ tiếp theo sẽ là J!"
+        },
+        {
+          "title": "🎮 Sẵn Sàng Chơi!",
+          "content": "Bé đã hiểu cách chơi rồi! Hãy bắt đầu và tìm những chữ cái tiếp theo nhé!"
+        }
+      ]
+    },
+    "counting": {
+      "steps": [
+        {
+          "title": "🔢 Trò Chơi Đếm Số",
+          "content": "Bé sẽ thấy một nhóm hình. Hãy đếm xem có bao nhiêu nhé!"
+        },
+        {
+          "title": "👆 Cách Chơi",
+          "content": "Đếm số hình trên màn hình, rồi chọn con số tương ứng ở dưới."
+        },
+        {
+          "title": "🎯 Ví Dụ",
+          "content": "Nếu thấy 3 quả táo, hãy chọn số 3."
+        },
+        {
+          "title": "🎮 Sẵn Sàng!",
+          "content": "Bé hãy đếm cẩn thận và chọn số đúng nhé!"
+        }
+      ]
+    },
+    "alphabet": {
+      "steps": [
+        {
+          "title": "🔤 Trò Chơi Chữ Cái Đầu",
+          "content": "Bé sẽ thấy một hình ảnh và một từ. Hãy chọn chữ cái bắt đầu của từ đó!"
+        },
+        {
+          "title": "👀 Cách Chơi",
+          "content": "Nhìn từ in ở dưới hình. Chữ cái đầu tiên là đáp án."
+        },
+        {
+          "title": "🍎 Ví Dụ",
+          "content": "Nếu thấy 🍎 Apple, chữ cái đầu là A."
+        },
+        {
+          "title": "🎮 Bắt Đầu Nào!",
+          "content": "Hãy chọn chữ cái đầu tiên của từ nhé!"
+        }
+      ]
+    },
+    "colorGuess": {
+      "steps": [
+        {
+          "title": "🎨 Trò Chơi Đoán Màu",
+          "content": "Bé sẽ thấy một hình tròn màu và một emoji gợi ý. Hãy chọn tên màu!"
+        },
+        {
+          "title": "👀 Cách Chơi",
+          "content": "Nhìn vào hình tròn màu rồi chọn tên đúng ở dưới."
+        },
+        {
+          "title": "🍎 Ví Dụ",
+          "content": "Hình tròn đỏ và 🍎 → đáp án là Đỏ."
+        },
+        {
+          "title": "🎮 Bắt Đầu!",
+          "content": "Hãy nhận diện màu nào!"
+        }
+      ]
+    },
+    "colorMatching": {
+      "steps": [
+        {
+          "title": "🧩 Ghép Cặp Màu",
+          "content": "Mỗi màu xuất hiện hai lần. Bé hãy tìm các cặp giống nhau!"
+        },
+        {
+          "title": "👆 Cách Chơi",
+          "content": "Lật một thẻ, rồi lật thẻ tiếp theo. Nếu trùng màu, cặp sẽ được giữ lại."
+        },
+        {
+          "title": "🧠 Mẹo",
+          "content": "Hãy ghi nhớ vị trí những thẻ đã lật để ghép cặp dễ hơn!"
+        },
+        {
+          "title": "🎮 Sẵn Sàng!",
+          "content": "Cố gắng ghép hết các cặp với ít lần thử nhất nhé!"
+        }
+      ]
+    },
+    "coloring": {
+      "steps": [
+        {
+          "title": "🎨 Tô Màu Sáng Tạo",
+          "content": "Bé hãy chọn màu yêu thích và tô vào tranh nhé!"
+        },
+        {
+          "title": "👆 Cách Tô",
+          "content": "Bước 1: chọn màu trong bảng màu. Bước 2: nhấn vào vùng cần tô."
+        },
+        {
+          "title": "🧽 Tẩy & Đổi Màu",
+          "content": "Nhấn nút tẩy để xoá màu của một vùng. Có thể đổi màu bất cứ lúc nào!"
+        },
+        {
+          "title": "📥 Hoàn Thành",
+          "content": "Khi tô xong, bé có thể tải tranh về máy để khoe ba mẹ!"
+        }
+      ]
+    },
+    "shapes": {
+      "steps": [
+        {
+          "title": "🔷 Trò Chơi Hình Khối",
+          "content": "Bé sẽ thấy một hình. Hãy chọn tên đúng của hình!"
+        },
+        {
+          "title": "👀 Cách Chơi",
+          "content": "Nhìn kỹ hình và chọn tên ở các đáp án bên dưới."
+        },
+        {
+          "title": "🎮 Bắt Đầu!",
+          "content": "Hãy nhận diện các hình cơ bản nhé!"
+        }
+      ]
+    },
+    "flashcards": {
+      "steps": [
+        {
+          "title": "📚 Ôn Tập Tổng Hợp",
+          "content": "Bé sẽ ôn lại số, chữ cái, màu sắc và hình khối — tất cả trong một game!"
+        },
+        {
+          "title": "👆 Cách Chơi",
+          "content": "Mỗi câu là một thẻ học. Hãy chọn đáp án đúng từ các lựa chọn."
+        },
+        {
+          "title": "🎮 Bắt Đầu!",
+          "content": "Cùng kiểm tra trí nhớ của bé nhé!"
+        }
+      ]
+    }
+  },
+  "settings": {
+    "title": "Cài Đặt",
+    "subtitle": "Tùy chỉnh trải nghiệm cho bé",
+    "selected": "Đã chọn: 1 - {{max}}",
+    "sections": {
+      "sound": "Âm thanh",
+      "language": "Ngôn ngữ",
+      "numberRange": "Phạm vi số (trang Số)",
+      "accessibility": "Trải nghiệm"
+    },
+    "soundOn": "Bật âm thanh",
+    "soundOff": "Tắt âm thanh",
+    "reduceMotion": "Giảm hiệu ứng chuyển động",
+    "reduceMotionHelp": "Bớt nảy/xoay khi bé dễ phân tâm",
+    "trigger": "Cài đặt",
+    "difficulty": {
+      "veryEasy": "Rất dễ",
+      "easy": "Dễ",
+      "medium": "Trung bình",
+      "hard": "Khó"
+    },
+    "hints": {
+      "level1": "Hoàn hảo cho việc học đếm cơ bản",
+      "level2": "Tốt cho việc phát triển kỹ năng đếm",
+      "level3": "Thử thách phù hợp cho trẻ lớn hơn",
+      "level4": "Dành cho trẻ đã thành thạo đếm cơ bản"
+    },
+    "ranges": {
+      "r10": "Cơ bản cho bé 2-3 tuổi",
+      "r20": "Phát triển cho bé 3-4 tuổi",
+      "r30": "Nâng cao cho bé 4-5 tuổi",
+      "r50": "Thử thách cho bé 5-6 tuổi",
+      "r80": "Khó cho bé 6+ tuổi",
+      "r100": "Siêu khó cho bé thông minh"
+    }
+  },
+  "data": {
+    "colors": {
+      "red": { "name": "Đỏ", "english": "Red", "description": "Màu của táo, hoa hồng" },
+      "yellow": { "name": "Vàng", "english": "Yellow", "description": "Màu của mặt trời, chuối" },
+      "green": { "name": "Xanh Lục", "english": "Green", "description": "Màu của cây lá, ếch" },
+      "blue": { "name": "Xanh Lam", "english": "Blue", "description": "Màu của biển, cá voi" },
+      "purple": { "name": "Tím", "english": "Purple", "description": "Màu của nho, kỳ lân" },
+      "orange": { "name": "Cam", "english": "Orange", "description": "Màu của cam, bí đỏ" },
+      "pink": { "name": "Hồng", "english": "Pink", "description": "Màu của hoa đào, kẹo bông" },
+      "brown": { "name": "Nâu", "english": "Brown", "description": "Màu của sô-cô-la, gỗ" },
+      "black": { "name": "Đen", "english": "Black", "description": "Màu của chim cánh cụt" },
+      "white": { "name": "Trắng", "english": "White", "description": "Màu của mây, cừu" },
+      "gray": { "name": "Xám", "english": "Gray", "description": "Màu của đá, cá voi" }
+    },
+    "alphabet": {
+      "A": { "word": "Apple", "vietnamese": "Ăn · Táo" },
+      "B": { "word": "Ball", "vietnamese": "Bóng" },
+      "C": { "word": "Cat", "vietnamese": "Mèo" },
+      "D": { "word": "Dog", "vietnamese": "Chó" },
+      "E": { "word": "Elephant", "vietnamese": "Voi" },
+      "F": { "word": "Fish", "vietnamese": "Cá" },
+      "G": { "word": "Grape", "vietnamese": "Nho" },
+      "H": { "word": "Horse", "vietnamese": "Ngựa" },
+      "I": { "word": "Ice cream", "vietnamese": "Kem" },
+      "J": { "word": "Jelly", "vietnamese": "Kẹo" },
+      "K": { "word": "Kite", "vietnamese": "Diều" },
+      "L": { "word": "Lion", "vietnamese": "Sư tử" },
+      "M": { "word": "Monkey", "vietnamese": "Khỉ" },
+      "N": { "word": "Nest", "vietnamese": "Tổ chim" },
+      "O": { "word": "Orange", "vietnamese": "Cam" },
+      "P": { "word": "Panda", "vietnamese": "Gấu trúc" },
+      "Q": { "word": "Queen", "vietnamese": "Nữ hoàng" },
+      "R": { "word": "Rabbit", "vietnamese": "Thỏ" },
+      "S": { "word": "Sun", "vietnamese": "Mặt trời" },
+      "T": { "word": "Tree", "vietnamese": "Cây" },
+      "U": { "word": "Umbrella", "vietnamese": "Ô" },
+      "V": { "word": "Vase", "vietnamese": "Bình hoa" },
+      "W": { "word": "Whale", "vietnamese": "Cá voi" },
+      "X": { "word": "X-ray", "vietnamese": "Tia X" },
+      "Y": { "word": "Yarn", "vietnamese": "Sợi len" },
+      "Z": { "word": "Zebra", "vietnamese": "Ngựa vằn" }
+    },
+    "templates": {
+      "sun": { "name": "Mặt trời" },
+      "house": { "name": "Ngôi nhà" },
+      "tree": { "name": "Cây" }
+    },
+    "shapes": {
+      "circle": { "name": "Hình tròn", "description": "Tròn như mặt trời, quả bóng" },
+      "square": { "name": "Hình vuông", "description": "Bốn cạnh đều nhau" },
+      "triangle": { "name": "Hình tam giác", "description": "Ba cạnh, ba góc" },
+      "rectangle": { "name": "Hình chữ nhật", "description": "Bốn cạnh, hai cạnh dài hơn" },
+      "star": { "name": "Hình ngôi sao", "description": "Năm cánh, lung linh" },
+      "heart": { "name": "Hình trái tim", "description": "Biểu tượng yêu thương" },
+      "diamond": { "name": "Hình thoi", "description": "Bốn cạnh, hai đường chéo" },
+      "oval": { "name": "Hình bầu dục", "description": "Tròn dài như quả trứng" }
+    }
+  },
+  "shapes": {
+    "learning": {
+      "instructionsTitle": "Nhấn vào hình để học!",
+      "instructionsSubtitle": "Học các hình cơ bản với ví dụ sinh động",
+      "exampleLabel": "Ví dụ:",
+      "prev": "Hình trước",
+      "next": "Hình tiếp"
+    },
+    "game": {
+      "question": "Đây là hình gì?",
+      "instructionsTitle": "Chọn tên hình đúng!",
+      "instructionsSubtitle": "Quan sát hình và chọn tên ở dưới"
+    }
+  },
+  "flashcards": {
+    "intro": "Mỗi câu hỏi là một thẻ học. Chọn đáp án đúng nhé!",
+    "questionLabels": {
+      "number": "Đây là số nào?",
+      "letter": "Chữ cái nào?",
+      "color": "Đây là màu gì?",
+      "shape": "Hình gì đây?"
+    }
+  }
+}

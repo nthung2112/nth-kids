@@ -9,11 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ShapesRouteImport } from './routes/shapes'
 import { Route as NumbersRouteImport } from './routes/numbers'
 import { Route as LettersRouteImport } from './routes/letters'
+import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ColorsRouteImport } from './routes/colors'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ShapesRoute = ShapesRouteImport.update({
+  id: '/shapes',
+  path: '/shapes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NumbersRoute = NumbersRouteImport.update({
   id: '/numbers',
   path: '/numbers',
@@ -22,6 +29,11 @@ const NumbersRoute = NumbersRouteImport.update({
 const LettersRoute = LettersRouteImport.update({
   id: '/letters',
   path: '/letters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlashcardsRoute = FlashcardsRouteImport.update({
+  id: '/flashcards',
+  path: '/flashcards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ColorsRoute = ColorsRouteImport.update({
@@ -38,39 +50,67 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
+  '/flashcards': typeof FlashcardsRoute
   '/letters': typeof LettersRoute
   '/numbers': typeof NumbersRoute
+  '/shapes': typeof ShapesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
+  '/flashcards': typeof FlashcardsRoute
   '/letters': typeof LettersRoute
   '/numbers': typeof NumbersRoute
+  '/shapes': typeof ShapesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
+  '/flashcards': typeof FlashcardsRoute
   '/letters': typeof LettersRoute
   '/numbers': typeof NumbersRoute
+  '/shapes': typeof ShapesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/colors' | '/letters' | '/numbers'
+  fullPaths:
+    | '/'
+    | '/colors'
+    | '/flashcards'
+    | '/letters'
+    | '/numbers'
+    | '/shapes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/colors' | '/letters' | '/numbers'
-  id: '__root__' | '/' | '/colors' | '/letters' | '/numbers'
+  to: '/' | '/colors' | '/flashcards' | '/letters' | '/numbers' | '/shapes'
+  id:
+    | '__root__'
+    | '/'
+    | '/colors'
+    | '/flashcards'
+    | '/letters'
+    | '/numbers'
+    | '/shapes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ColorsRoute: typeof ColorsRoute
+  FlashcardsRoute: typeof FlashcardsRoute
   LettersRoute: typeof LettersRoute
   NumbersRoute: typeof NumbersRoute
+  ShapesRoute: typeof ShapesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/shapes': {
+      id: '/shapes'
+      path: '/shapes'
+      fullPath: '/shapes'
+      preLoaderRoute: typeof ShapesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/numbers': {
       id: '/numbers'
       path: '/numbers'
@@ -83,6 +123,13 @@ declare module '@tanstack/react-router' {
       path: '/letters'
       fullPath: '/letters'
       preLoaderRoute: typeof LettersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flashcards': {
+      id: '/flashcards'
+      path: '/flashcards'
+      fullPath: '/flashcards'
+      preLoaderRoute: typeof FlashcardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/colors': {
@@ -105,8 +152,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ColorsRoute: ColorsRoute,
+  FlashcardsRoute: FlashcardsRoute,
   LettersRoute: LettersRoute,
   NumbersRoute: NumbersRoute,
+  ShapesRoute: ShapesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

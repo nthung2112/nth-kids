@@ -1,105 +1,23 @@
 import { useState } from "react";
+
+import { ChevronLeft, ChevronRight, RotateCcw, Volume2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Volume2, RotateCcw } from "lucide-react";
-import { useSound } from "../hooks/useSound";
-
-const colorData = [
-  {
-    name: "Đỏ",
-    english: "Red",
-    color: "#FF0000",
-    bgColor: "bg-red-500",
-    borderColor: "border-red-300",
-    hoverColor: "hover:bg-red-600",
-    lightBg: "bg-red-100",
-    emoji: "🍎",
-    examples: ["🍎", "🌹", "❤️", "🍓"],
-    description: "Màu của táo, hoa hồng",
-  },
-  {
-    name: "Vàng",
-    english: "Yellow",
-    color: "#FFFF00",
-    bgColor: "bg-yellow-500",
-    borderColor: "border-yellow-300",
-    hoverColor: "hover:bg-yellow-600",
-    lightBg: "bg-yellow-100",
-    emoji: "☀️",
-    examples: ["☀️", "🍌", "⭐", "🌻"],
-    description: "Màu của mặt trời, chuối",
-  },
-  {
-    name: "Xanh Lục",
-    english: "Green",
-    color: "#00FF00",
-    bgColor: "bg-green-500",
-    borderColor: "border-green-300",
-    hoverColor: "hover:bg-green-600",
-    lightBg: "bg-green-100",
-    emoji: "🌳",
-    examples: ["🌳", "🍃", "🐸", "🥒"],
-    description: "Màu của cây lá, ếch",
-  },
-  {
-    name: "Xanh Lam",
-    english: "Blue",
-    color: "#0000FF",
-    bgColor: "bg-blue-500",
-    borderColor: "border-blue-300",
-    hoverColor: "hover:bg-blue-600",
-    lightBg: "bg-blue-100",
-    emoji: "🌊",
-    examples: ["🌊", "🐋", "💙", "🫐"],
-    description: "Màu của biển, cá voi",
-  },
-  {
-    name: "Đen",
-    english: "Black",
-    color: "#000000",
-    bgColor: "bg-gray-800",
-    borderColor: "border-gray-600",
-    hoverColor: "hover:bg-gray-900",
-    lightBg: "bg-gray-100",
-    emoji: "🐧",
-    examples: ["🐧", "🖤", "🦇", "⚫"],
-    description: "Màu của chim cánh cụt",
-  },
-  {
-    name: "Trắng",
-    english: "White",
-    color: "#FFFFFF",
-    bgColor: "bg-white",
-    borderColor: "border-gray-300",
-    hoverColor: "hover:bg-gray-50",
-    lightBg: "bg-gray-50",
-    emoji: "☁️",
-    examples: ["☁️", "🤍", "🐑", "⚪"],
-    description: "Màu của mây, cừu",
-  },
-  {
-    name: "Tím",
-    english: "Purple",
-    color: "#800080",
-    bgColor: "bg-purple-500",
-    borderColor: "border-purple-300",
-    hoverColor: "hover:bg-purple-600",
-    lightBg: "bg-purple-100",
-    emoji: "🍇",
-    examples: ["🍇", "💜", "🦄", "🔮"],
-    description: "Màu của nho, kỳ lân",
-  },
-];
+import { COLOR_DEFS, COLOR_LEARNING_IDS, type ColorId } from "@/data/colors";
+import { useSound } from "@/hooks/useSound";
 
 export default function ColorLearning() {
+  const { t } = useTranslation();
   const { playClickSound, playColorSound } = useSound();
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<ColorId | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
 
-  const handleColorClick = (colorName: string) => {
+  const handleColorClick = (id: ColorId) => {
     playClickSound();
-    playColorSound(colorName);
-    setSelectedColor(colorName);
+    playColorSound(id);
+    setSelectedId(id);
     setShowCelebration(true);
 
     setTimeout(() => {
@@ -108,47 +26,59 @@ export default function ColorLearning() {
   };
 
   const resetSelection = () => {
-    setSelectedColor(null);
+    setSelectedId(null);
     setShowCelebration(false);
   };
 
-  const selectedColorData = colorData.find((item) => item.name === selectedColor);
+  const stepColor = (delta: number) => {
+    if (!selectedId) return;
+    const idx = COLOR_LEARNING_IDS.indexOf(selectedId);
+    const next = (idx + delta + COLOR_LEARNING_IDS.length) % COLOR_LEARNING_IDS.length;
+    handleColorClick(COLOR_LEARNING_IDS[next]);
+  };
+
+  const selected = selectedId ? COLOR_DEFS[selectedId] : null;
 
   return (
-    <div className="max-w-6xl mx-auto">
-      {/* Hiển thị màu được chọn */}
-      {selectedColor && selectedColorData && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="p-8 max-w-lg mx-4 text-center relative">
+    <div className="mx-auto max-w-6xl">
+      {selectedId && selected && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <Card className="relative mx-4 max-w-lg p-8 text-center">
             {showCelebration && (
-              <div className="absolute -top-4 -left-4 -right-4 -bottom-4 pointer-events-none">
+              <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
                 <div className="animate-bounce text-6xl">🎨</div>
                 <div className="absolute top-4 right-4 animate-spin text-4xl">🌈</div>
                 <div className="absolute bottom-4 left-4 animate-pulse text-4xl">✨</div>
               </div>
             )}
 
-            {/* Hiển thị màu lớn */}
             <div
-              className={`w-32 h-32 mx-auto mb-4 rounded-full border-8 ${selectedColorData.borderColor} shadow-lg`}
-              style={{ backgroundColor: selectedColorData.color }}
+              className={`mx-auto mb-4 h-32 w-32 rounded-full border-8 ${selected.borderClass} shadow-lg`}
+              style={{ backgroundColor: selected.hex }}
             />
 
-            <div className="text-4xl font-bold text-gray-800 mb-2">{selectedColorData.name}</div>
-            <div className="text-2xl text-gray-600 mb-4">{selectedColorData.english}</div>
+            <div className="mb-2 text-4xl font-bold text-gray-800">
+              {t(`data.colors.${selectedId}.name`)}
+            </div>
+            <div className="mb-4 text-2xl text-gray-600">
+              {t(`data.colors.${selectedId}.english`)}
+            </div>
 
-            <div className="text-6xl mb-4">{selectedColorData.emoji}</div>
+            <div className="mb-4 text-6xl">{selected.emoji}</div>
 
-            <div className="text-lg text-gray-600 mb-4">{selectedColorData.description}</div>
+            <div className="mb-4 text-lg text-gray-600">
+              {t(`data.colors.${selectedId}.description`)}
+            </div>
 
-            {/* Ví dụ */}
             <div className="mb-6">
-              <div className="text-lg font-semibold text-gray-700 mb-2">Ví dụ:</div>
+              <div className="mb-2 text-lg font-semibold text-gray-700">
+                {t("colors.learning.exampleLabel")}
+              </div>
               <div className="flex justify-center gap-3">
-                {selectedColorData.examples.map((example, index) => (
+                {selected.examples.map((example, index) => (
                   <span
-                    key={index}
-                    className="text-4xl animate-bounce"
+                    key={`${selectedId}-ex-${index}-${example}`}
+                    className="animate-bounce text-4xl"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     {example}
@@ -157,16 +87,34 @@ export default function ColorLearning() {
               </div>
             </div>
 
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button
+                onClick={() => stepColor(-1)}
+                className="bg-blue-500 px-4 py-3 text-base text-white hover:bg-blue-600"
+                aria-label={t("colors.learning.prev")}
+              >
+                <ChevronLeft className="mr-1" />
+                {t("colors.learning.prev")}
+              </Button>
+
               <Button
                 onClick={() => {
                   playClickSound();
-                  playColorSound(selectedColor);
+                  playColorSound(selectedId);
                 }}
-                className="bg-green-500 hover:bg-green-600 text-white text-lg px-6 py-3"
+                className="bg-green-500 px-6 py-3 text-base text-white hover:bg-green-600"
               >
                 <Volume2 className="mr-2" />
-                Nghe
+                {t("common.listen")}
+              </Button>
+
+              <Button
+                onClick={() => stepColor(1)}
+                className="bg-blue-500 px-4 py-3 text-base text-white hover:bg-blue-600"
+                aria-label={t("colors.learning.next")}
+              >
+                {t("colors.learning.next")}
+                <ChevronRight className="ml-1" />
               </Button>
 
               <Button
@@ -174,57 +122,58 @@ export default function ColorLearning() {
                   playClickSound();
                   resetSelection();
                 }}
-                className="bg-purple-500 hover:bg-purple-600 text-white text-lg px-6 py-3"
+                className="bg-purple-500 px-6 py-3 text-base text-white hover:bg-purple-600"
               >
                 <RotateCcw className="mr-2" />
-                Đóng
+                {t("common.close")}
               </Button>
             </div>
           </Card>
         </div>
       )}
 
-      {/* Lưới màu sắc */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {colorData.map((item) => (
-          <Card
-            key={item.name}
-            className={`${item.lightBg} border-4 ${item.borderColor} cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95 p-6 text-center`}
-            onClick={() => handleColorClick(item.name)}
-          >
-            {/* Vòng tròn màu */}
-            <div
-              className={`w-24 h-24 mx-auto mb-4 rounded-full border-4 ${item.borderColor} shadow-lg`}
-              style={{ backgroundColor: item.color }}
-            />
+      {/* Color grid */}
+      <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+        {COLOR_LEARNING_IDS.map(id => {
+          const color = COLOR_DEFS[id];
+          return (
+            <Card
+              key={id}
+              className={`${color.lightBgClass} border-4 ${color.borderClass} transform cursor-pointer p-6 text-center transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95`}
+              onClick={() => handleColorClick(id)}
+            >
+              <div
+                className={`mx-auto mb-4 h-24 w-24 rounded-full border-4 ${color.borderClass} shadow-lg`}
+                style={{ backgroundColor: color.hex }}
+              />
 
-            {/* Tên màu */}
-            <div className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{item.name}</div>
-            <div className="text-lg text-gray-600 mb-3">{item.english}</div>
+              <div className="mb-2 text-2xl font-bold text-gray-800 md:text-3xl">
+                {t(`data.colors.${id}.name`)}
+              </div>
+              <div className="mb-3 text-lg text-gray-600">{t(`data.colors.${id}.english`)}</div>
 
-            {/* Emoji đại diện */}
-            <div className="text-4xl md:text-5xl mb-3">{item.emoji}</div>
+              <div className="mb-3 text-4xl md:text-5xl">{color.emoji}</div>
 
-            {/* Ví dụ nhỏ */}
-            <div className="flex justify-center gap-1">
-              {item.examples.slice(0, 3).map((example, index) => (
-                <span key={index} className="text-2xl">
-                  {example}
-                </span>
-              ))}
-            </div>
-          </Card>
-        ))}
+              <div className="flex justify-center gap-1">
+                {color.examples.slice(0, 3).map((example, index) => (
+                  <span key={`${id}-preview-${index}`} className="text-2xl">
+                    {example}
+                  </span>
+                ))}
+              </div>
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Hướng dẫn */}
-      <div className="text-center mt-8 text-lg text-purple-600 bg-white rounded-2xl p-4 shadow-lg">
-        <div className="flex items-center justify-center gap-2 mb-2">
+      {/* Instructions */}
+      <div className="mt-8 rounded-2xl bg-white p-4 text-center text-lg text-purple-600 shadow-lg">
+        <div className="mb-2 flex items-center justify-center gap-2">
           <span>🎨</span>
-          <span className="font-semibold">Nhấn vào màu để học nhé!</span>
+          <span className="font-semibold">{t("colors.learning.instructionsTitle")}</span>
           <span>🎨</span>
         </div>
-        <div className="text-sm text-purple-500">Học 7 màu cơ bản với ví dụ sinh động</div>
+        <div className="text-sm text-purple-500">{t("colors.learning.instructionsSubtitle")}</div>
       </div>
     </div>
   );

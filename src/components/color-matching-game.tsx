@@ -1,280 +1,205 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+
+import { Shuffle } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+import FeedbackModal from "@/components/games/feedback-modal";
+import GameHud from "@/components/games/game-hud";
+import GameResult from "@/components/games/game-result";
+import GameTutorial from "@/components/games/game-tutorial";
+import { COLOR_MATCHING_EXAMPLES } from "@/components/games/tutorial-examples";
 import { Card } from "@/components/ui/card";
-import { Star, RotateCcw, Trophy, Heart, Shuffle } from "lucide-react";
-import { useSound } from "../hooks/useSound";
-
-const gameColors = [
-  { name: "Đỏ", color: "#FF0000", lightColor: "#FFE6E6" },
-  { name: "Vàng", color: "#FFD700", lightColor: "#FFFACD" },
-  { name: "Xanh Lục", color: "#00AA00", lightColor: "#E6FFE6" },
-  { name: "Xanh Lam", color: "#0066FF", lightColor: "#E6F2FF" },
-  { name: "Tím", color: "#8A2BE2", lightColor: "#F0E6FF" },
-  { name: "Cam", color: "#FF8C00", lightColor: "#FFE6CC" },
-];
-
-const encouragements = [
-  "🎨 Tuyệt vời!",
-  "🌈 Giỏi lắm!",
-  "✨ Đúng rồi!",
-  "🎊 Xuất sắc!",
-  "💖 Thông minh quá!",
-  "🏆 Siêu đỉnh!",
-];
-
-const tryAgainMessages = [
-  "💪 Thử lại nhé!",
-  "🤗 Đừng lo, thử tiếp!",
-  "😊 Cố gắng lên!",
-  "🌈 Lần sau sẽ đúng!",
-];
+import { GAME_CONFIGS } from "@/config/games";
+import { COLOR_DEFS, COLOR_MATCHING_IDS, type ColorId } from "@/data/colors";
+import { useGameEngine } from "@/hooks/useGameEngine";
+import { useSound } from "@/hooks/useSound";
 
 interface ColorPair {
   id: number;
-  name: string;
-  color: string;
-  lightColor: string;
+  colorId: ColorId;
   matched: boolean;
 }
 
+const config = { ...GAME_CONFIGS.colorMatching, feedbackMs: 1500 };
+const PAIR_COUNT = config.totalQuestions;
+const REVEAL_DELAY_MS = 1000;
+
 export default function ColorMatchingGame() {
-  const { playSuccessSound, playErrorSound, playClickSound, playColorSound, playGameOverSound } =
-    useSound();
+  const { t } = useTranslation();
+  const { playClickSound } = useSound();
+  const engine = useGameEngine(config);
+
   const [colorPairs, setColorPairs] = useState<ColorPair[]>([]);
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
-  const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3);
-  const [gameOver, setGameOver] = useState(false);
-  const [showResult, setShowResult] = useState<"correct" | "wrong" | null>(null);
-  const [resultMessage, setResultMessage] = useState("");
-  const [matchedPairs, setMatchedPairs] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const initializeGame = () => {
-    // Chọn 3 màu ngẫu nhiên cho game dễ hơn
-    const selectedColors = gameColors.slice(0, 3);
+    const selectedIds = COLOR_MATCHING_IDS.slice(0, PAIR_COUNT);
     const pairs: ColorPair[] = [];
 
-    selectedColors.forEach((color, index) => {
-      // Tạo 2 thẻ cho mỗi màu (tên và màu)
-      pairs.push({
-        id: index * 2,
-        name: color.name,
-        color: color.color,
-        lightColor: color.lightColor,
-        matched: false,
-      });
-      pairs.push({
-        id: index * 2 + 1,
-        name: color.name,
-        color: color.color,
-        lightColor: color.lightColor,
-        matched: false,
-      });
+    selectedIds.forEach((colorId, index) => {
+      pairs.push({ id: index * 2, colorId, matched: false });
+      pairs.push({ id: index * 2 + 1, colorId, matched: false });
     });
 
-    // Trộn thẻ
     const shuffledPairs = pairs.sort(() => Math.random() - 0.5);
     setColorPairs(shuffledPairs);
     setSelectedCards([]);
-    setMatchedPairs(0);
     setIsProcessing(false);
   };
 
-  const handleCardClick = (cardId: number) => {
-    if (isProcessing || selectedCards.includes(cardId) || colorPairs[cardId]?.matched) {
+  const handleCardClick = (cardIndex: number) => {
+    if (isProcessing || selectedCards.includes(cardIndex) || colorPairs[cardIndex]?.matched) {
       return;
     }
 
     playClickSound();
-    const newSelected = [...selectedCards, cardId];
+    const newSelected = [...selectedCards, cardIndex];
     setSelectedCards(newSelected);
 
     if (newSelected.length === 2) {
       setIsProcessing(true);
-      const [firstId, secondId] = newSelected;
-      const firstCard = colorPairs[firstId];
-      const secondCard = colorPairs[secondId];
+      const [firstIdx, secondIdx] = newSelected;
+      const firstCard = colorPairs[firstIdx];
+      const secondCard = colorPairs[secondIdx];
 
       setTimeout(() => {
-        if (firstCard.name === secondCard.name) {
-          // Đúng - ghép thành công
-          playSuccessSound();
-          setScore(score + 20);
-          setMatchedPairs(matchedPairs + 1);
-          setShowResult("correct");
-          setResultMessage(encouragements[Math.floor(Math.random() * encouragements.length)]);
-
-          // Đánh dấu thẻ đã ghép
-          const updatedPairs = colorPairs.map((pair, index) =>
-            index === firstId || index === secondId ? { ...pair, matched: true } : pair
-          );
-          setColorPairs(updatedPairs);
-
-          // Kiểm tra thắng
-          if (matchedPairs + 1 >= 3) {
-            setTimeout(() => {
-              playGameOverSound(true);
-              setGameOver(true);
-            }, 1500);
-          }
-        } else {
-          // Sai
-          playErrorSound();
-          setLives(lives - 1);
-          setShowResult("wrong");
-          setResultMessage(tryAgainMessages[Math.floor(Math.random() * tryAgainMessages.length)]);
-
-          if (lives - 1 <= 0) {
-            setTimeout(() => {
-              playGameOverSound(false);
-              setGameOver(true);
-            }, 1500);
-          }
-        }
-
-        setTimeout(() => {
+        const advance = () => {
           setSelectedCards([]);
-          setShowResult(null);
           setIsProcessing(false);
-        }, 1500);
-      }, 1000);
-    }
-  };
+        };
 
-  const resetGame = () => {
-    playClickSound();
-    setScore(0);
-    setLives(3);
-    setGameOver(false);
-    setShowResult(null);
-    initializeGame();
+        if (firstCard.colorId === secondCard.colorId) {
+          setColorPairs(prev =>
+            prev.map((pair, index) =>
+              index === firstIdx || index === secondIdx ? { ...pair, matched: true } : pair
+            )
+          );
+          engine.handleCorrect({ onAdvance: advance });
+        } else {
+          engine.handleWrong({ onAdvance: advance });
+        }
+      }, REVEAL_DELAY_MS);
+    }
   };
 
   useEffect(() => {
     initializeGame();
   }, []);
 
-  if (gameOver) {
+  if (engine.gameOver) {
     return (
-      <div className="max-w-2xl mx-auto text-center">
-        <Card className="p-8 bg-linear-to-br from-pink-100 to-purple-100 border-4 border-pink-300">
-          <div className="text-6xl mb-4">{score >= 60 ? "🏆" : score >= 40 ? "🌈" : "🎨"}</div>
-
-          <h2 className="text-4xl font-bold text-purple-800 mb-4">
-            {score >= 60 ? "Siêu Xuất Sắc!" : score >= 40 ? "Giỏi Lắm!" : "Cố Gắng Lên!"}
-          </h2>
-
-          <div className="text-2xl text-purple-600 mb-6">
-            <div className="mb-2">🎯 Điểm số: {score}</div>
-            <div className="mb-2">🎨 Cặp đã ghép: {matchedPairs}/3</div>
-            <div>🌈 Sao thưởng: {Math.floor(score / 20)}</div>
-          </div>
-
-          <div className="flex justify-center gap-4">
-            <Button
-              onClick={resetGame}
-              className="bg-linear-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white text-xl px-8 py-4 rounded-full"
-            >
-              <RotateCcw className="mr-2" />
-              Chơi Lại
-            </Button>
-          </div>
-        </Card>
-      </div>
+      <GameResult
+        score={engine.score}
+        maxScore={engine.maxScore}
+        questionsAnswered={engine.questionsAnswered}
+        totalQuestions={PAIR_COUNT}
+        superRatio={config.resultThresholds.superRatio}
+        goodRatio={config.resultThresholds.goodRatio}
+        pointsPerQuestion={config.pointsPerQuestion}
+        onPlayAgain={() => engine.reset(initializeGame)}
+        variant="color"
+        starsLabelKey="rainbowStars"
+      />
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Thanh trạng thái */}
-      <div className="flex justify-between items-center mb-8 bg-white rounded-full p-4 shadow-lg">
-        <div className="flex items-center gap-2">
-          <Trophy className="text-yellow-500" />
-          <span className="text-xl font-bold text-purple-800">{score}</span>
-        </div>
+    <div className="mx-auto max-w-4xl">
+      <GameHud
+        score={engine.score}
+        lives={engine.lives}
+        livesStart={config.livesStart}
+        current={engine.questionsAnswered}
+        total={PAIR_COUNT}
+        onTutorial={() => setShowTutorial(true)}
+      />
 
-        <div className="flex items-center gap-1">
-          {[...Array(3)].map((_, i) => (
-            <Heart
-              key={i}
-              className={`w-8 h-8 ${i < lives ? "text-red-500 fill-red-500" : "text-gray-300"}`}
-            />
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold text-purple-600">{matchedPairs}/3</span>
-        </div>
-      </div>
-
-      {/* Kết quả */}
-      {showResult && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="p-8 max-w-md mx-4 text-center">
-            <div className="text-8xl mb-4">{showResult === "correct" ? "🎨" : "😊"}</div>
-            <div className="text-3xl font-bold text-purple-800 mb-4">{resultMessage}</div>
-            {showResult === "correct" && (
-              <div className="flex justify-center gap-2">
-                {[...Array(3)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="text-yellow-500 fill-yellow-500 w-8 h-8 animate-bounce"
-                    style={{ animationDelay: `${i * 0.2}s` }}
-                  />
-                ))}
-              </div>
-            )}
-          </Card>
-        </div>
+      {engine.showResult && (
+        <FeedbackModal
+          kind={engine.showResult}
+          message={engine.resultMessage}
+          successEmoji="🎨"
+        />
       )}
 
-      {/* Game board */}
-      <Card className="p-8 mb-8 bg-linear-to-br from-pink-100 to-orange-100 border-4 border-pink-300">
-        <h2 className="text-3xl font-bold text-center text-purple-800 mb-6">
-          Ghép Cặp Màu Giống Nhau!
+      <Card className="mb-8 border-4 border-pink-300 bg-linear-to-br from-pink-100 to-orange-100 p-8">
+        <h2 className="mb-6 text-center text-3xl font-bold text-purple-800">
+          {t("games.colorMatching.title")}
         </h2>
 
-        <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-          {colorPairs.map((pair, index) => (
-            <Card
-              key={pair.id}
-              className={`h-24 cursor-pointer transform transition-all duration-300 border-4 ${
-                pair.matched
-                  ? "bg-green-100 border-green-400 scale-95 opacity-50"
-                  : selectedCards.includes(index)
-                    ? "bg-yellow-100 border-yellow-400 scale-105"
-                    : "bg-white border-gray-300 hover:scale-105 hover:shadow-lg"
-              } ${isProcessing && !selectedCards.includes(index) ? "pointer-events-none" : ""}`}
-              onClick={() => handleCardClick(index)}
-            >
-              <div className="h-full flex items-center justify-center">
-                {selectedCards.includes(index) || pair.matched ? (
-                  <div className="text-center">
-                    <div
-                      className="w-12 h-12 mx-auto mb-2 rounded-full border-2 border-gray-400"
-                      style={{ backgroundColor: pair.color }}
-                    />
-                    <div className="text-sm font-bold text-gray-700">{pair.name}</div>
-                  </div>
-                ) : (
-                  <div className="text-4xl">❓</div>
-                )}
-              </div>
-            </Card>
-          ))}
+        <div
+          className="mx-auto grid max-w-md grid-cols-3 gap-4"
+          role="grid"
+          aria-label={t("games.colorMatching.title")}
+        >
+          {colorPairs.map((pair, index) => {
+            const def = COLOR_DEFS[pair.colorId];
+            const isRevealed = selectedCards.includes(index) || pair.matched;
+            const colorName = t(`data.colors.${pair.colorId}.name`);
+            return (
+              <Card
+                key={pair.id}
+                role="button"
+                tabIndex={pair.matched ? -1 : 0}
+                aria-pressed={isRevealed}
+                aria-label={isRevealed ? colorName : t("games.colorMatching.hiddenCard")}
+                className={`h-24 transform cursor-pointer border-4 transition-all duration-300 motion-reduce:transition-none ${
+                  pair.matched
+                    ? "scale-95 border-green-400 bg-green-100 opacity-70"
+                    : selectedCards.includes(index)
+                      ? "scale-105 border-yellow-400 bg-yellow-100"
+                      : "border-gray-300 bg-white hover:scale-105 hover:shadow-lg"
+                } ${isProcessing && !selectedCards.includes(index) ? "pointer-events-none" : ""}`}
+                onClick={() => handleCardClick(index)}
+                onKeyDown={event => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleCardClick(index);
+                  }
+                }}
+              >
+                <div className="flex h-full items-center justify-center">
+                  {isRevealed ? (
+                    <div className="text-center">
+                      <div
+                        className="mx-auto mb-2 h-12 w-12 rounded-full border-2 border-gray-400"
+                        style={{ backgroundColor: def.hex }}
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm font-bold text-gray-700">{colorName}</div>
+                    </div>
+                  ) : (
+                    <div className="text-4xl" aria-hidden="true">
+                      ❓
+                    </div>
+                  )}
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </Card>
 
-      {/* Hướng dẫn */}
-      <div className="text-center text-lg text-purple-600 bg-white rounded-2xl p-4 shadow-lg">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Shuffle className="text-pink-500" />
-          <span className="font-semibold">Lật thẻ và ghép cặp màu giống nhau!</span>
-          <Shuffle className="text-pink-500" />
+      <div className="rounded-2xl bg-white p-4 text-center text-lg text-purple-600 shadow-lg">
+        <div className="mb-2 flex items-center justify-center gap-2">
+          <Shuffle className="text-pink-500" aria-hidden="true" />
+          <span className="font-semibold">{t("games.colorMatching.instructionsTitle")}</span>
+          <Shuffle className="text-pink-500" aria-hidden="true" />
         </div>
-        <div className="text-sm text-purple-500">Nhớ vị trí các thẻ để ghép thành công</div>
+        <div className="text-sm text-purple-500">
+          {t("games.colorMatching.instructionsSubtitle")}
+        </div>
       </div>
+
+      {showTutorial && (
+        <GameTutorial
+          onClose={() => setShowTutorial(false)}
+          stepsKey="tutorial.colorMatching.steps"
+          examples={COLOR_MATCHING_EXAMPLES}
+        />
+      )}
     </div>
   );
 }

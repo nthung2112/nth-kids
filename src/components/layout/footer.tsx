@@ -1,17 +1,17 @@
 import { Star } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
-  return (
-    <div className="text-center mt-12 mb-8">
-      <div className="flex justify-center items-center gap-2 text-2xl text-purple-700 font-semibold">
-        <Star className="text-yellow-500" />
-        <span>Chúc bé học tập vui vẻ!</span>
-        <Star className="text-yellow-500" />
-      </div>
+  const { t } = useTranslation();
 
-      <div className="mt-4 text-lg text-purple-600">
-        👶 Dành cho bé 2+ tuổi - Học số, chữ cái và màu sắc 👶
+  return (
+    <footer className="px-4 pt-2 pb-3 text-center sm:pt-3 sm:pb-4">
+      <div className="flex items-center justify-center gap-2 text-sm font-semibold text-purple-700 sm:text-base">
+        <Star className="h-4 w-4 fill-yellow-400 text-yellow-500 sm:h-5 sm:w-5" />
+        <span>{t("footer.cheer")}</span>
+        <Star className="h-4 w-4 fill-yellow-400 text-yellow-500 sm:h-5 sm:w-5" />
       </div>
-    </div>
+      <div className="mt-0.5 text-xs text-purple-600 sm:text-sm">{t("footer.age")}</div>
+    </footer>
   );
 }

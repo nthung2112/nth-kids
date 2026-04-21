@@ -1,88 +1,97 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import ColorLearning from "@/components/color-learning";
+import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+
 import ColorGame from "@/components/color-game";
+import ColorLearning from "@/components/color-learning";
 import ColorMatchingGame from "@/components/color-matching-game";
 import ColoringGame from "@/components/coloring-game";
 import PageLayout from "@/components/layout/page-layout";
+import { Button } from "@/components/ui/button";
 import { useSound } from "@/hooks/useSound";
+import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
 
 export const Route = createFileRoute("/colors")({
   component: ColorsPage,
 });
 
+type ColorMode = "basic" | "matching" | "coloring";
+
+const COLOR_MODES: Array<{
+  id: ColorMode;
+  labelKey: string;
+  active: string;
+  inactive: string;
+}> = [
+  {
+    id: "basic",
+    labelKey: "colors.modes.identify",
+    active: "bg-red-500 text-white shadow-md hover:bg-red-600",
+    inactive: "border-2 border-red-400 bg-white/80 text-red-600 hover:bg-white",
+  },
+  {
+    id: "matching",
+    labelKey: "colors.modes.matching",
+    active: "bg-blue-500 text-white shadow-md hover:bg-blue-600",
+    inactive: "border-2 border-blue-400 bg-white/80 text-blue-600 hover:bg-white",
+  },
+  {
+    id: "coloring",
+    labelKey: "colors.modes.coloring",
+    active: "bg-green-500 text-white shadow-md hover:bg-green-600",
+    inactive: "border-2 border-green-400 bg-white/80 text-green-600 hover:bg-white",
+  },
+];
+
 function ColorsPage() {
+  const { t } = useTranslation();
   const { playClickSound } = useSound();
   const [showGame, setShowGame] = useState(false);
-  const [colorGameMode, setColorGameMode] = useState<"basic" | "matching" | "coloring">("basic");
+  const [colorGameMode, setColorGameMode] = useState<ColorMode>("basic");
+
+  useEffect(() => {
+    preloadSpriteTopic("colors");
+  }, []);
 
   return (
     <PageLayout>
-      {/* Mode toggle and game mode selection */}
-      <div className="text-center mb-6">
-        <div className="flex flex-wrap justify-center gap-4 mb-4">
-          <Button
-            onClick={() => {
-              playClickSound();
-              setShowGame(!showGame);
-            }}
-            className="bg-linear-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white text-lg px-6 py-3 rounded-full"
-          >
-            {showGame ? "📚 Học Bài" : "🎮 Chơi Game"}
-          </Button>
+      <div className="mb-3 flex flex-wrap items-center justify-center gap-2 sm:mb-4 sm:gap-3">
+        <Button
+          onClick={() => {
+            playClickSound();
+            setShowGame(!showGame);
+          }}
+          className="h-11 rounded-full bg-linear-to-r from-pink-500 to-purple-600 px-4 text-sm font-semibold text-white shadow-md hover:from-pink-600 hover:to-purple-700 sm:px-5 sm:text-base"
+        >
+          {showGame ? t("common.playLesson") : t("common.playGame")}
+        </Button>
 
-          {/* Game mode cho màu sắc */}
-          {showGame && (
-            <div className="flex gap-2">
-              <Button
-                onClick={() => {
-                  playClickSound();
-                  setColorGameMode("basic");
-                }}
-                className={`text-sm px-3 py-2 rounded-full ${
-                  colorGameMode === "basic"
-                    ? "bg-red-500 hover:bg-red-600 text-white"
-                    : "bg-white hover:bg-gray-100 text-red-500 border-2 border-red-500"
-                }`}
-              >
-                🎯 Nhận Dạng
-              </Button>
-
-              <Button
-                onClick={() => {
-                  playClickSound();
-                  setColorGameMode("matching");
-                }}
-                className={`text-sm px-3 py-2 rounded-full ${
-                  colorGameMode === "matching"
-                    ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-white hover:bg-gray-100 text-blue-500 border-2 border-blue-500"
-                }`}
-              >
-                🧩 Ghép Cặp
-              </Button>
-
-              <Button
-                onClick={() => {
-                  playClickSound();
-                  setColorGameMode("coloring");
-                }}
-                className={`text-sm px-3 py-2 rounded-full ${
-                  colorGameMode === "coloring"
-                    ? "bg-green-500 hover:bg-green-600 text-white"
-                    : "bg-white hover:bg-gray-100 text-green-500 border-2 border-green-500"
-                }`}
-              >
-                🎨 Tô Màu
-              </Button>
-            </div>
-          )}
-        </div>
+        {showGame && (
+          <div className="flex flex-wrap justify-center gap-2" role="tablist">
+            {COLOR_MODES.map(mode => {
+              const isActive = colorGameMode === mode.id;
+              return (
+                <Button
+                  key={mode.id}
+                  onClick={() => {
+                    playClickSound();
+                    setColorGameMode(mode.id);
+                  }}
+                  className={`h-11 rounded-full px-3 text-xs font-semibold sm:px-4 sm:text-sm ${
+                    isActive ? mode.active : mode.inactive
+                  }`}
+                  aria-pressed={isActive}
+                  role="tab"
+                >
+                  {t(mode.labelKey)}
+                </Button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      {/* Nội dung chính */}
       {!showGame ? (
         <ColorLearning />
       ) : colorGameMode === "basic" ? (

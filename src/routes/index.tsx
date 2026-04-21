@@ -1,111 +1,129 @@
-import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+import Footer from "@/components/layout/footer";
+import RecommendationCard from "@/components/recommendation-card";
+import SettingsTrigger from "@/components/settings/settings-trigger";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { TOPICS, type TopicPath } from "@/data/topics";
 import { useSound } from "@/hooks/useSound";
-import SoundControl from "@/components/sound-control";
-import Footer from "@/components/layout/footer";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
+const RECENT_TOPIC_KEY = "nthkids:recent-topic";
+
+const FEATURES = [
+  { icon: "🎮", key: "home.features.interactive" },
+  { icon: "🔊", key: "home.features.sound" },
+  { icon: "⚙️", key: "home.features.flexible" },
+  { icon: "📱", key: "home.features.mobile" },
+];
+
 function Home() {
   const { playClickSound } = useSound();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const navigateTo = (path: "/numbers" | "/letters" | "/colors") => {
+  const navigateTo = (path: TopicPath) => {
     playClickSound();
+    try {
+      window.localStorage.setItem(RECENT_TOPIC_KEY, path);
+    } catch {
+      // ignore storage errors (private mode etc.)
+    }
     navigate({ to: path });
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-sky-200 via-purple-200 to-pink-200 p-4">
-      <SoundControl />
+    <div className="flex min-h-dvh flex-col bg-linear-to-br from-sky-200 via-purple-200 to-pink-200">
+      <SettingsTrigger />
 
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-5xl md:text-7xl font-bold text-purple-800 mb-4">
-          🌟 Học Tập Cùng Bé 🌟
-        </h1>
-        <p className="text-2xl md:text-3xl text-purple-600 font-semibold mb-8">
-          Khám phá thế giới số, chữ cái và màu sắc
-        </p>
-      </div>
-
-      {/* Main content cards */}
-      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
-        {/* Numbers Card */}
-        <Card
-          className="p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-gradient-to-br from-blue-100 to-blue-200 border-4 border-blue-300"
-          onClick={() => navigateTo("/numbers")}
-        >
-          <div className="text-8xl mb-6">🔢</div>
-          <h2 className="text-3xl font-bold text-blue-800 mb-4">Học Số</h2>
-          <p className="text-lg text-blue-600 mb-6">
-            Cùng bé học đếm từ 1 đến 100 với các trò chơi vui nhộn
+      <main className="flex flex-1 flex-col px-3 pt-4 pb-3 sm:px-4 sm:pt-6">
+        <div className="mb-4 text-center sm:mb-6">
+          <h1 className="text-3xl font-bold text-purple-800 sm:text-5xl md:text-6xl">
+            {t("app.title")} 🌟
+          </h1>
+          <p className="mt-1 text-sm font-semibold text-purple-600 sm:mt-2 sm:text-lg md:text-xl">
+            {t("app.subtitle")}
           </p>
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white text-lg px-8 py-3 rounded-full">
-            Bắt Đầu Học
-          </Button>
-        </Card>
+        </div>
 
-        {/* Letters Card */}
-        <Card
-          className="p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-gradient-to-br from-green-100 to-green-200 border-4 border-green-300"
-          onClick={() => navigateTo("/letters")}
-        >
-          <div className="text-8xl mb-6">🔤</div>
-          <h2 className="text-3xl font-bold text-green-800 mb-4">Học Chữ Cái</h2>
-          <p className="text-lg text-green-600 mb-6">
-            Khám phá bảng chữ cái A-Z với âm thanh và hình ảnh sinh động
-          </p>
-          <Button className="bg-green-500 hover:bg-green-600 text-white text-lg px-8 py-3 rounded-full">
-            Bắt Đầu Học
-          </Button>
-        </Card>
+        <div className="mx-auto mb-4 w-full max-w-5xl sm:mb-6">
+          <RecommendationCard
+            recentTopicKey={RECENT_TOPIC_KEY}
+            onNavigate={path => navigateTo(path as TopicPath)}
+          />
+        </div>
 
-        {/* Colors Card */}
-        <Card
-          className="p-8 text-center cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl bg-gradient-to-br from-pink-100 to-pink-200 border-4 border-pink-300"
-          onClick={() => navigateTo("/colors")}
-        >
-          <div className="text-8xl mb-6">🎨</div>
-          <h2 className="text-3xl font-bold text-pink-800 mb-4">Học Màu Sắc</h2>
-          <p className="text-lg text-pink-600 mb-6">Nhận biết màu sắc và thử tài tô màu sáng tạo</p>
-          <Button className="bg-pink-500 hover:bg-pink-600 text-white text-lg px-8 py-3 rounded-full">
-            Bắt Đầu Học
-          </Button>
-        </Card>
-      </div>
+        <div className="mx-auto mb-5 w-full max-w-5xl space-y-3 sm:mb-6 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0 lg:grid-cols-4 md:gap-6">
+          {TOPICS.map(topic => (
+            <Card
+              key={topic.path}
+              role="button"
+              tabIndex={0}
+              aria-label={t(topic.homeTitleKey)}
+              className={`flex cursor-pointer items-center gap-4 border-4 p-3 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-95 motion-reduce:transition-none sm:flex-col sm:gap-2 sm:p-5 sm:text-center md:p-6 ${topic.theme.cardClass}`}
+              onClick={() => navigateTo(topic.path)}
+              onKeyDown={event => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  navigateTo(topic.path);
+                }
+              }}
+            >
+              <div className="shrink-0 text-5xl sm:text-6xl md:text-7xl" aria-hidden="true">
+                {topic.icon}
+              </div>
 
-      {/* Features section */}
-      <div className="max-w-4xl mx-auto mb-12">
-        <h3 className="text-3xl font-bold text-purple-800 text-center mb-8">
-          🎯 Tính Năng Nổi Bật
-        </h3>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white/70 rounded-lg p-6 text-center">
-            <div className="text-4xl mb-3">�</div>
-            <h4 className="text-xl font-bold text-purple-700 mb-2">Trò Chơi Tương Tác</h4>
-            <p className="text-purple-600">Học qua chơi với nhiều mini-game thú vị</p>
-          </div>
-          <div className="bg-white/70 rounded-lg p-6 text-center">
-            <div className="text-4xl mb-3">🔊</div>
-            <h4 className="text-xl font-bold text-purple-700 mb-2">Âm Thanh Sinh Động</h4>
-            <p className="text-purple-600">Phát âm chuẩn giúp bé học hiệu quả</p>
-          </div>
-          <div className="bg-white/70 rounded-lg p-6 text-center">
-            <div className="text-4xl mb-3">⚙️</div>
-            <h4 className="text-xl font-bold text-purple-700 mb-2">Tùy Chỉnh Linh Hoạt</h4>
-            <p className="text-purple-600">Điều chỉnh độ khó phù hợp với từng bé</p>
-          </div>
-          <div className="bg-white/70 rounded-lg p-6 text-center">
-            <div className="text-4xl mb-3">📱</div>
-            <h4 className="text-xl font-bold text-purple-700 mb-2">Thân Thiện Mobile</h4>
-            <p className="text-purple-600">Hoạt động mượt mà trên mọi thiết bị</p>
+              <div className="flex-1 text-left sm:flex-none sm:text-center">
+                <h2 className={`text-lg font-bold sm:text-xl md:text-2xl ${topic.theme.titleClass}`}>
+                  {t(topic.homeTitleKey)}
+                </h2>
+                <p className={`mt-0.5 text-xs sm:mt-1 sm:text-sm md:text-base ${topic.theme.descClass}`}>
+                  {t(topic.homeDescriptionKey)}
+                </p>
+              </div>
+
+              <Button
+                className={`hidden rounded-full px-5 text-sm text-white sm:mt-2 sm:inline-flex md:px-7 md:text-base ${topic.theme.buttonClass}`}
+                tabIndex={-1}
+              >
+                {t("home.cta")}
+              </Button>
+
+              <ChevronRight
+                className={`h-6 w-6 shrink-0 sm:hidden ${topic.theme.arrowClass}`}
+                aria-hidden="true"
+              />
+            </Card>
+          ))}
+        </div>
+
+        <div className="mx-auto w-full max-w-3xl">
+          <h3 className="mb-2 text-center text-base font-bold text-purple-800 sm:mb-3 sm:text-xl md:text-2xl">
+            {t("home.featuresTitle")}
+          </h3>
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4">
+            {FEATURES.map(feature => (
+              <div
+                key={feature.key}
+                className="flex items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-left shadow-sm sm:flex-col sm:text-center"
+              >
+                <div className="text-xl sm:text-2xl" aria-hidden="true">
+                  {feature.icon}
+                </div>
+                <div className="text-xs font-bold text-purple-700 sm:text-sm">
+                  {t(feature.key)}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>

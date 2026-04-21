@@ -1,44 +1,341 @@
-# TanStack Router - File-Based Routing Example
+# 🌟 nth-kids — Learn & Play
 
-An example demonstrating file-based routing with TanStack Router.
+An interactive educational web app for young children, built with **React 19**, **TypeScript**, **Vite**, and **TanStack Router**. Kids learn **numbers**, **letters**, **colors**, **shapes**, and more through colourful mini-games with rich audio feedback.
 
-- [TanStack Router Docs](https://tanstack.com/router)
+> "Learning through play" — every topic is paired with mini-games, lively sound, and a child-friendly interface.
 
-## Start a new project based on this example
+🌐 **Live demo**: [nth-kids.vercel.app](https://nth-kids.vercel.app)
 
-To start a new project based on this example, run:
+---
 
-```sh
-npx gitpick TanStack/router/tree/main/examples/react/basic-file-based basic-file-based
+## 📚 Table of Contents
+
+- [Features](#-features)
+- [Technology Stack](#-technology-stack)
+- [Architecture](#-architecture)
+- [Getting Started](#-getting-started)
+- [Available Scripts](#-available-scripts)
+- [Project Structure](#-project-structure)
+- [Code Conventions](#-code-conventions)
+- [Build & Deploy](#-build--deploy)
+- [Internationalisation](#-internationalisation-i18n)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+| Topic | Description | Route |
+|---|---|---|
+| 🔢 **Numbers** | Count from 1 to 100 (configurable upper bound), with an interactive counting game and sequencing game. | `/numbers` |
+| 🔤 **Letters** | Explore the A–Z alphabet with pronunciation and letter-matching games. | `/letters` |
+| 🎨 **Colors** | Recognise colours, play a colour-matching game, and try the free-form coloring activity. | `/colors` |
+| 🔷 **Shapes** | Discover common shapes with a learning mode and mini-game. | `/shapes` |
+| 🃏 **Flashcards** | Review vocabulary and concepts via quick-fire flashcards. | `/flashcards` |
+
+Cross-cutting features:
+
+- 🎮 **Interactive mini-games** — counting, sequencing, alphabet matching, colour matching, coloring, shape recognition, flashcards, plus an onboarding tutorial.
+- 🔊 **Rich audio** — powered by the Web Audio API via a custom `useSound` hook. Uses a single shared `AudioContext` with per-topic audio sprites (`public/assets/*.m4a`) indexed by `src/data/audioSpriteManifest.json`.
+- 🌐 **Bilingual UI** — Vietnamese (default) and English, driven by `i18next` + `react-i18next` with automatic browser-language detection.
+- ⚙️ **Persistent preferences** — difficulty settings (e.g. max number), sound toggle, and language are saved to `localStorage` via the `usePreferences` hook.
+- 📱 **Responsive design** — Tailwind CSS v4, mobile-first, smooth on phones and tablets.
+- 🚀 **Static prerender** — every route is emitted as its own `dist/<route>/index.html`, deployable to any static host.
+
+---
+
+## 🛠 Technology Stack
+
+### Core
+
+- **React** `^19.2.5` + **React DOM** `^19.2.5`
+- **TypeScript** `^6.0.3` (strict mode)
+- **Vite** `^8.0.9` — dev server & build tool
+- **TanStack Router** `^1.168.23` — type-safe, file-based routing with automatic code-splitting
+
+### UI & Styling
+
+- **Tailwind CSS** `^4.2.2` (+ `@tailwindcss/vite`, `@tailwindcss/typography`)
+- **Radix UI** `^1.4.3` — unstyled, accessible primitives
+- **lucide-react** — icon set
+- **class-variance-authority** + **tailwind-merge** — variant-aware className utilities
+
+### Data, i18n & Utilities
+
+- **i18next** `^26` + **react-i18next** `^17` + **i18next-browser-languagedetector**
+- **Zod** `^4.3.6` — runtime schema validation
+- **redaxios** `^0.5.1` — lightweight HTTP client
+
+### Tooling
+
+- **ESLint** `^10` + `typescript-eslint` + `eslint-plugin-react-hooks` + `eslint-plugin-react-refresh` + `eslint-plugin-unused-imports`
+- **Prettier** `^3.8.3` + `prettier-plugin-tailwindcss` + `@trivago/prettier-plugin-sort-imports`
+- **Yarn** (package manager — do not use `npm` / `npx`)
+
+---
+
+## 🏗 Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│             Browser (SPA + Static Prerender)            │
+└─────────────────────────────────────────────────────────┘
+                           │
+    ┌──────────┬──────────┼──────────┬────────────┐
+    ▼          ▼          ▼          ▼            ▼
+/numbers   /letters    /colors    /shapes    /flashcards
+    │          │          │          │            │
+ Counting   Alphabet    Color      Shapes    Flashcards
+ Sequence   Learning  Matching    Learning      Game
+   Game       Game    Coloring      Game
+    │          │          │          │            │
+    └──────────┴──────────┼──────────┴────────────┘
+                          ▼
+              ┌───────────────────────┐
+              │    Shared Layer       │
+              │ ─ Header / Footer     │
+              │ ─ UI primitives       │
+              │   (button, card…)     │
+              │ ─ Game scaffolding    │
+              │   (HUD, feedback,     │
+              │    tutorial, result)  │
+              │ ─ Hooks:              │
+              │   useSound            │
+              │   useGameEngine       │
+              │   usePreferences      │
+              │ ─ i18n (vi / en)      │
+              └───────────────────────┘
 ```
 
-## Getting Started
+**Architectural highlights:**
 
-Install dependencies:
+- **File-based routing** — each file in `src/routes/` maps to a URL; `routeTree.gen.ts` is auto-generated by `@tanstack/router-plugin`. **Never edit it by hand.**
+- **Static prerender** — a custom Vite plugin (`scripts/vite-plugin-static-routes.mjs`) copies `dist/index.html` to `dist/<route>/index.html` for each static route, enabling deployment to any static host (Vercel, GitHub Pages, Netlify, Cloudflare Pages…) without a server.
+- **Path alias `@/*`** — maps to `./src/*` (configured in both `tsconfig.json` and `vite.config.js`).
+- **Layered composition** — `ui/` (primitives), `layout/` (page scaffolding), `games/` (shared game chrome), `settings/` (preferences UI), and feature components at the root of `src/components/`.
+- **Shared audio engine** — a single `AudioContext` is reused across the app; sound effects and speech samples are loaded from audio sprite files described by a JSON manifest.
 
-```sh
-pnpm install
+---
+
+## 🚀 Getting Started
+
+### Requirements
+
+- **Node.js** ≥ 20 (latest LTS recommended)
+- **Yarn** (the repo ships with `yarn.lock`)
+
+### Install
+
+```bash
+yarn install
 ```
 
-Start the development server:
+### Run the dev server
 
-```sh
-pnpm dev
+```bash
+yarn dev
 ```
 
-## Build
+Open the URL Vite prints (defaults to `http://localhost:5173`).
 
-Build for production:
+---
 
-```sh
-pnpm build
+## 📜 Available Scripts
+
+All scripts are defined in `package.json`:
+
+| Script | Description |
+|---|---|
+| `yarn dev` | Start the Vite dev server with HMR. |
+| `yarn start` | Alias of `yarn dev`. |
+| `yarn build` | Production build + type check (`vite build && tsc --noEmit`). |
+| `yarn preview` | Serve the production build locally. |
+| `yarn lint` | Run ESLint against `./src`. |
+| `yarn type-check` | Run `tsc --noEmit` only. |
+| `yarn format` | Format `./src` with Prettier. |
+
+> There is no test script yet. If you add tests, **Vitest** is the recommended fit for this Vite-based stack.
+
+---
+
+## 📂 Project Structure
+
+```
+nth-kids/
+├── index.html                         # HTML entry (meta, favicon, manifest)
+├── vite.config.js                     # Vite + Tailwind + TanStack Router + prerender plugin
+├── tsconfig.json                      # TypeScript (strict, path alias @/*)
+├── eslint.config.mjs                  # Flat ESLint config
+├── .prettierrc / .prettierignore      # Prettier config
+├── package.json                       # Scripts & dependencies (Yarn)
+│
+├── public/                            # Static assets copied as-is to dist/
+│   ├── assets/                        # Audio sprites: alphabet / colors / numbers / shapes (.m4a)
+│   ├── favicon*.{ico,svg,png}
+│   └── site.webmanifest
+│
+├── scripts/                           # Custom build tooling
+│   ├── extract-static-routes.mjs      # Parses routeTree.gen.ts for static routes
+│   └── vite-plugin-static-routes.mjs  # Vite plugin that prerenders HTML per route
+│
+└── src/
+    ├── main.tsx                       # Creates the router & mounts RouterProvider
+    ├── routeTree.gen.ts               # AUTO-GENERATED — do not edit
+    ├── styles.css                     # Tailwind directives + global styles
+    ├── vite-env.d.ts
+    │
+    ├── routes/                        # File-based routes (TanStack Router)
+    │   ├── __root.tsx                 # Root layout & devtools
+    │   ├── index.tsx                  # /
+    │   ├── numbers.tsx                # /numbers
+    │   ├── letters.tsx                # /letters
+    │   ├── colors.tsx                 # /colors
+    │   ├── shapes.tsx                 # /shapes
+    │   └── flashcards.tsx             # /flashcards
+    │
+    ├── components/
+    │   ├── ui/                        # Primitives (button, card, …)
+    │   ├── layout/                    # header, footer, page-layout
+    │   ├── games/                     # Shared game chrome: HUD, feedback, tutorial, result
+    │   ├── settings/                  # Settings UIs (e.g. number-range, language, sound)
+    │   ├── alphabet-game.tsx
+    │   ├── alphabet-learning.tsx
+    │   ├── color-game.tsx
+    │   ├── color-learning.tsx
+    │   ├── color-matching-game.tsx
+    │   ├── coloring-game.tsx
+    │   ├── counting-game.tsx
+    │   ├── sequence-game.tsx
+    │   ├── shapes-game.tsx
+    │   ├── shapes-learning.tsx
+    │   ├── flashcards-game.tsx
+    │   └── recommendation-card.tsx
+    │
+    ├── hooks/
+    │   ├── useSound.ts                # Web Audio wrapper (tone + sprite playback)
+    │   ├── useGameEngine.ts           # Shared game state/flow
+    │   └── usePreferences.ts          # localStorage-backed user preferences
+    │
+    ├── data/                          # Static learning content + audio manifest
+    │   ├── alphabet.ts
+    │   ├── colors.ts
+    │   ├── shapes.ts
+    │   ├── topics.ts
+    │   ├── coloringTemplates.ts
+    │   ├── audioSprites.ts
+    │   └── audioSpriteManifest.json
+    │
+    ├── i18n/                          # i18next setup + resources (vi.json, en.json)
+    ├── config/                        # App configuration (e.g. games.ts)
+    ├── lib/
+    │   └── utils.ts                   # cn() and other helpers
+    └── utils/
+        └── numberGenerator.ts         # Data generator for the counting game
 ```
 
-## About This Example
+---
 
-This example demonstrates:
+## 🧹 Code Conventions
 
-- File-based route generation
-- Automatic route tree creation
-- Route file conventions
-- Type-safe routing with file-based routes
+- **Imports** — automatically sorted by `@trivago/prettier-plugin-sort-imports`. Order: `react` → third-party → `@/` or `~/` → `src/...` → relative. Use `import type { … }` for type-only imports (enforced by `@typescript-eslint/consistent-type-imports`).
+- **Tailwind classes** — automatically sorted by `prettier-plugin-tailwindcss`.
+- **Path aliases** — always prefer `@/...` over long relative paths.
+- **ESLint rules** — see `eslint.config.mjs`:
+  - `@typescript-eslint/recommended`
+  - `eslint-plugin-react-hooks` (Rules of Hooks)
+  - `eslint-plugin-react-refresh` (HMR-safe boundaries)
+  - `eslint-plugin-unused-imports` (auto-remove unused imports; prefix intentional with `_`)
+  - Style: double quotes, required semicolons, Unix line endings.
+- **Routes** — only add new files under `src/routes/`; do not hand-edit `routeTree.gen.ts`.
+- **Hooks over globals** — use `useSound` for audio, `usePreferences` for persisted user settings, and `useGameEngine` for shared game state instead of reimplementing.
+- **i18n** — user-facing copy belongs in `src/i18n/locales/{vi,en}.json`; do not hardcode strings in components.
+- **Commits** — [Conventional Commits](https://www.conventionalcommits.org/) recommended (`feat:`, `fix:`, `chore:`, …).
+
+Run before committing:
+
+```bash
+yarn lint && yarn type-check && yarn build
+```
+
+---
+
+## 📦 Build & Deploy
+
+### Production build
+
+```bash
+yarn build
+```
+
+Output lands in `dist/`:
+
+- `dist/index.html` — main SPA shell.
+- `dist/<route>/index.html` — prerendered shell for each static route (`/numbers`, `/letters`, `/colors`, `/shapes`, `/flashcards`).
+- `dist/assets/…` — chunked JS/CSS bundle.
+
+### Environment variables
+
+- `VITE_BASE_URL` — use when deploying to a subpath (e.g. GitHub Pages at `/nth-kids/`). In `development` mode it is always `/`.
+
+```bash
+VITE_BASE_URL=/nth-kids/ yarn build
+```
+
+### Preview locally
+
+```bash
+yarn preview
+```
+
+### Hosting
+
+Any static host works: **Vercel** (current live deployment), **GitHub Pages**, **Netlify**, **Cloudflare Pages**, **S3 + CloudFront**, etc.
+
+---
+
+## 🌐 Internationalisation (i18n)
+
+- **Default language**: Vietnamese (`vi`).
+- **Supported languages**: Vietnamese (`vi`) and English (`en`).
+- **Detection**: powered by `i18next-browser-languagedetector`, with the user's selection persisted via `usePreferences`.
+- **Translation files**: `src/i18n/locales/vi.json` and `src/i18n/locales/en.json`.
+
+To add a new language, create a new `src/i18n/locales/<code>.json` file, register it in `src/i18n/index.ts`, and add a toggle in the settings UI.
+
+---
+
+## 🤝 Contributing
+
+1. Fork and clone the repo.
+2. Create a feature branch: `git checkout -b feat/your-feature`.
+3. Install dependencies: `yarn install`.
+4. Follow the conventions in [Code Conventions](#-code-conventions).
+5. Make sure `yarn lint && yarn type-check && yarn build` all pass.
+6. Open a Pull Request with a clear description and screenshots/recordings for any UI changes.
+
+Suggested contribution ideas:
+
+- Add a new topic (e.g. animals, body parts, numbers-beyond-100).
+- Add an end-of-topic quiz that blends multiple game types.
+- Add unit tests (Vitest + `@testing-library/react`).
+- Add additional languages to the i18n catalogue.
+- Add a PWA/offline layer on top of the existing `site.webmanifest`.
+
+---
+
+## 📄 License
+
+Released under the **MIT License**. See the `license` field in `package.json`.
+
+Author: **Hung Nguyen** ([@nthung2112](https://github.com/nthung2112))
+
+---
+
+## 🔗 References
+
+- [TanStack Router — File-Based Routing](https://tanstack.com/router/latest/docs/framework/react/routing/file-based-routing)
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [Vite](https://vite.dev/)
+- [React 19](https://react.dev/)
+- [i18next](https://www.i18next.com/)

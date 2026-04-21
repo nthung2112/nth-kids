@@ -1,0 +1,518 @@
+{
+  "app": {
+    "title": "🌟 Learn With Me",
+    "subtitle": "Explore the world of numbers, letters and colors"
+  },
+  "nav": {
+    "numbers": "Numbers",
+    "letters": "Letters",
+    "colors": "Colors",
+    "shapes": "Shapes",
+    "flashcards": "Review",
+    "settings": "Settings"
+  },
+  "header": {
+    "titles": {
+      "home": "🌟 Learn With Me",
+      "numbers": "🔢 Learn Numbers",
+      "letters": "🔤 Learn Letters",
+      "colors": "🎨 Learn Colors",
+      "shapes": "🔷 Learn Shapes",
+      "flashcards": "📚 Mixed Review"
+    }
+  },
+  "language": {
+    "label": "Language",
+    "switchTo": "Switch to {{name}}"
+  },
+  "home": {
+    "topics": {
+      "numbers": {
+        "title": "Numbers",
+        "description": "Count 1 to 100 with fun games"
+      },
+      "letters": {
+        "title": "Alphabet",
+        "description": "Vibrant A to Z letters"
+      },
+      "colors": {
+        "title": "Colors",
+        "description": "Recognise colors and color creatively"
+      },
+      "shapes": {
+        "title": "Shapes",
+        "description": "Circles, squares, triangles and more"
+      }
+    },
+    "cta": "Start",
+    "featuresTitle": "🎯 Key Features",
+    "features": {
+      "interactive": "Interactive Games",
+      "sound": "Lively Sounds",
+      "flexible": "Flexible Settings",
+      "mobile": "Mobile Friendly"
+    },
+    "recommend": {
+      "title": "✨ Pick up where you left off",
+      "continue": "Continue last topic",
+      "tryNew": "Try a new game",
+      "tryFlashcards": "Mixed review",
+      "newcomer": "Start with your first lesson"
+    }
+  },
+  "footer": {
+    "cheer": "Have fun learning!",
+    "age": "👶 For kids ages 2+"
+  },
+  "common": {
+    "loading": "Loading...",
+    "close": "Close",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "listen": "Listen",
+    "correct": "That's right!",
+    "playGame": "🎮 Play Game",
+    "playLesson": "📚 Lesson",
+    "playAgain": "Play Again",
+    "soundOn": "Turn sound on",
+    "soundOff": "Turn sound off",
+    "touch": "👆",
+    "more": "Show more",
+    "less": "Show less",
+    "next": "Next",
+    "back": "Back"
+  },
+  "numbers": {
+    "rangeLabel": "{{range}} · {{level}}",
+    "levels": {
+      "basic": "Basic",
+      "intermediate": "Intermediate",
+      "hard": "Advanced"
+    },
+    "learning": {
+      "instructionsTitle": "Tap a number to learn!",
+      "instructionsSubtitle": "Learn to count from 1 to {{max}}",
+      "prev": "Previous",
+      "next": "Next"
+    }
+  },
+  "letters": {
+    "modes": {
+      "basic": "🎯 Basic",
+      "sequence": "🧠 Sequence"
+    },
+    "learning": {
+      "instructionsTitle": "Tap a letter to learn!",
+      "instructionsSubtitle": "Learn the alphabet from A to Z",
+      "prev": "Previous",
+      "next": "Next"
+    }
+  },
+  "colors": {
+    "modes": {
+      "identify": "🎯 Identify",
+      "matching": "🧩 Matching",
+      "coloring": "🎨 Coloring"
+    },
+    "learning": {
+      "instructionsTitle": "Tap a color to learn!",
+      "instructionsSubtitle": "Explore 7 basic colors with fun examples",
+      "exampleLabel": "Examples:",
+      "prev": "Previous",
+      "next": "Next"
+    }
+  },
+  "games": {
+    "common": {
+      "loading": "Loading...",
+      "results": {
+        "super": "Super Amazing!",
+        "good": "Great Job!",
+        "tryHarder": "Keep Trying!"
+      },
+      "stats": {
+        "score": "🎯 Score: {{score}}",
+        "scoreOutOf": "🎯 Score: {{score}}/{{max}}",
+        "answered": "📝 Answered: {{answered}}/{{total}}",
+        "stars": "⭐ Stars earned: {{count}}",
+        "rainbowStars": "🌈 Stars earned: {{count}}",
+        "matched": "🎨 Matched pairs: {{matched}}/{{total}}"
+      },
+      "encouragements": [
+        "🎉 Well done!",
+        "⭐ Fantastic!",
+        "🌟 Correct!",
+        "🎊 Excellent!",
+        "💖 So smart!",
+        "🏆 Awesome!"
+      ],
+      "tryAgainMessages": [
+        "💪 Try again!",
+        "🤗 No worries, keep going!",
+        "😊 You can do it!",
+        "🌈 Next time for sure!"
+      ],
+      "tutorialButton": "How to play",
+      "aria": {
+        "score": "Score: {{score}}",
+        "lives": "{{lives}} of {{total}} lives left",
+        "progress": "Question {{current}} of {{total}}"
+      }
+    },
+    "counting": {
+      "question": "How many do you see?",
+      "instructionsTitle": "Tap the correct number!",
+      "instructionsSubtitle": "Count the items and pick the number (1-{{max}})"
+    },
+    "alphabet": {
+      "question": "Which letter does this word start with?",
+      "instructionsTitle": "Pick the right letter!",
+      "instructionsSubtitle": "Find the starting letter of the word"
+    },
+    "sequence": {
+      "question": "What letter comes next?",
+      "instructionsTitle": "Find the next letter in the sequence!",
+      "instructionsSubtitle": "Watch the order and pick the right letter",
+      "completeSequence": "Complete sequence:"
+    },
+    "colorGuess": {
+      "question": "What color is this?",
+      "instructionsTitle": "Look at the color and pick the right name!",
+      "instructionsSubtitle": "Recognise colors using emojis and color dots"
+    },
+    "colorMatching": {
+      "title": "Match the Same Colors!",
+      "instructionsTitle": "Flip the cards and match the same colors!",
+      "instructionsSubtitle": "Remember the positions to match them all",
+      "hiddenCard": "Hidden card"
+    },
+    "coloring": {
+      "palette": "Color Palette",
+      "templates": "Pick a Picture",
+      "progressTitle": "Coloring Progress:",
+      "progressStatus": "Filled: {{filled}}/{{total}} areas",
+      "showReference": "Show color hints",
+      "hideReference": "Hide color hints",
+      "useReferenceColor": "Use suggested color",
+      "saveToGallery": "Save to gallery",
+      "savedToGallery": "Saved!",
+      "gallery": "Your gallery",
+      "galleryEmpty": "Nothing saved yet — color and save!",
+      "deleteFromGallery": "Delete",
+      "tools": {
+        "eraseOff": "Eraser",
+        "eraseOn": "Erasing",
+        "clearAll": "Clear All",
+        "download": "Download"
+      },
+      "canvas": {
+        "hintErasing": "🧽 Tap an area to erase",
+        "hintColoring": "🎨 Tap an area to color",
+        "pickFromPalette": "Pick a color from the palette on the left"
+      },
+      "howTo": {
+        "title": "🎨 How To Color 🎨",
+        "steps": [
+          { "label": "1. Pick a color:", "text": "Tap your favorite color" },
+          { "label": "2. Color it:", "text": "Tap an area on the picture" },
+          { "label": "3. Finish:", "text": "Download your beautiful art!" }
+        ]
+      },
+      "downloadFilename": "coloring-{{name}}.png"
+    }
+  },
+  "tutorial": {
+    "prev": "← Back",
+    "next": "Next →",
+    "start": "Start!",
+    "sequence": {
+      "steps": [
+        {
+          "title": "🎯 Letter Sequence Game",
+          "content": "Hi there! Today we'll learn to find the next letter in a sequence!"
+        },
+        {
+          "title": "📝 How to Play",
+          "content": "You'll see 3 letters in order — find the letter that comes next!"
+        },
+        {
+          "title": "🌟 Another Example",
+          "content": "If you see G H I, the next letter is J!"
+        },
+        {
+          "title": "🎮 Ready to Play!",
+          "content": "You've got it! Let's start and find the next letters!"
+        }
+      ]
+    },
+    "counting": {
+      "steps": [
+        {
+          "title": "🔢 Counting Game",
+          "content": "You'll see a group of items. Count how many there are!"
+        },
+        {
+          "title": "👆 How to Play",
+          "content": "Count the items on screen, then tap the matching number below."
+        },
+        {
+          "title": "🎯 Example",
+          "content": "If you see 3 apples, tap the number 3."
+        },
+        {
+          "title": "🎮 Ready!",
+          "content": "Count carefully and pick the right number!"
+        }
+      ]
+    },
+    "alphabet": {
+      "steps": [
+        {
+          "title": "🔤 Starting Letter Game",
+          "content": "You'll see a picture and a word. Pick the letter the word starts with!"
+        },
+        {
+          "title": "👀 How to Play",
+          "content": "Look at the word under the picture. The first letter is the answer."
+        },
+        {
+          "title": "🍎 Example",
+          "content": "If you see 🍎 Apple, the first letter is A."
+        },
+        {
+          "title": "🎮 Let's Go!",
+          "content": "Pick the starting letter of the word!"
+        }
+      ]
+    },
+    "colorGuess": {
+      "steps": [
+        {
+          "title": "🎨 Color Guessing Game",
+          "content": "You'll see a colored circle and a hint emoji. Pick the color name!"
+        },
+        {
+          "title": "👀 How to Play",
+          "content": "Look at the colored circle, then pick the right name below."
+        },
+        {
+          "title": "🍎 Example",
+          "content": "Red circle with 🍎 → answer is Red."
+        },
+        {
+          "title": "🎮 Let's Go!",
+          "content": "Time to identify some colors!"
+        }
+      ]
+    },
+    "colorMatching": {
+      "steps": [
+        {
+          "title": "🧩 Color Matching",
+          "content": "Each color appears twice. Find the matching pairs!"
+        },
+        {
+          "title": "👆 How to Play",
+          "content": "Flip one card, then flip the next. Matching pairs stay open."
+        },
+        {
+          "title": "🧠 Tip",
+          "content": "Remember which cards you've seen to match faster!"
+        },
+        {
+          "title": "🎮 Ready!",
+          "content": "Try to match all pairs with as few tries as possible!"
+        }
+      ]
+    },
+    "coloring": {
+      "steps": [
+        {
+          "title": "🎨 Creative Coloring",
+          "content": "Pick your favorite color and fill in the picture!"
+        },
+        {
+          "title": "👆 How to Color",
+          "content": "Step 1: pick a color from the palette. Step 2: tap an area to color it."
+        },
+        {
+          "title": "🧽 Erase & Switch",
+          "content": "Tap the eraser to remove a color from an area. Change colors anytime!"
+        },
+        {
+          "title": "📥 Finish",
+          "content": "When you're done, download your masterpiece to share!"
+        }
+      ]
+    },
+    "shapes": {
+      "steps": [
+        {
+          "title": "🔷 Shapes Game",
+          "content": "You'll see a shape. Pick the right name for it!"
+        },
+        {
+          "title": "👀 How to Play",
+          "content": "Look at the shape and choose the matching name below."
+        },
+        {
+          "title": "🎮 Let's Go!",
+          "content": "Time to learn the basic shapes!"
+        }
+      ]
+    },
+    "flashcards": {
+      "steps": [
+        {
+          "title": "📚 Mixed Review",
+          "content": "Review numbers, letters, colors and shapes — all in one game!"
+        },
+        {
+          "title": "👆 How to Play",
+          "content": "Each round shows a card. Pick the correct answer from the choices."
+        },
+        {
+          "title": "🎮 Let's Go!",
+          "content": "Let's see what you remember!"
+        }
+      ]
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customise the experience",
+    "selected": "Selected: 1 - {{max}}",
+    "sections": {
+      "sound": "Sound",
+      "language": "Language",
+      "numberRange": "Number range (Numbers page)",
+      "accessibility": "Experience"
+    },
+    "soundOn": "Sound on",
+    "soundOff": "Sound off",
+    "reduceMotion": "Reduce motion",
+    "reduceMotionHelp": "Tone down bouncing and spinning effects",
+    "trigger": "Settings",
+    "difficulty": {
+      "veryEasy": "Very easy",
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "hints": {
+      "level1": "Perfect for learning basic counting",
+      "level2": "Great for building counting skills",
+      "level3": "A nice challenge for older kids",
+      "level4": "For children confident with counting"
+    },
+    "ranges": {
+      "r10": "Basic for ages 2-3",
+      "r20": "Growing for ages 3-4",
+      "r30": "Advanced for ages 4-5",
+      "r50": "Challenge for ages 5-6",
+      "r80": "Hard for ages 6+",
+      "r100": "Super hard for clever kids"
+    }
+  },
+  "data": {
+    "colors": {
+      "red": { "name": "Red", "english": "Red", "description": "Color of apples and roses" },
+      "yellow": {
+        "name": "Yellow",
+        "english": "Yellow",
+        "description": "Color of the sun and bananas"
+      },
+      "green": { "name": "Green", "english": "Green", "description": "Color of leaves and frogs" },
+      "blue": { "name": "Blue", "english": "Blue", "description": "Color of the sea and whales" },
+      "purple": {
+        "name": "Purple",
+        "english": "Purple",
+        "description": "Color of grapes and unicorns"
+      },
+      "orange": {
+        "name": "Orange",
+        "english": "Orange",
+        "description": "Color of oranges and pumpkins"
+      },
+      "pink": {
+        "name": "Pink",
+        "english": "Pink",
+        "description": "Color of cherry blossoms and cotton candy"
+      },
+      "brown": {
+        "name": "Brown",
+        "english": "Brown",
+        "description": "Color of chocolate and wood"
+      },
+      "black": { "name": "Black", "english": "Black", "description": "Color of penguins" },
+      "white": { "name": "White", "english": "White", "description": "Color of clouds and sheep" },
+      "gray": { "name": "Gray", "english": "Gray", "description": "Color of rocks and sharks" }
+    },
+    "alphabet": {
+      "A": { "word": "Apple", "vietnamese": "Apple" },
+      "B": { "word": "Ball", "vietnamese": "Ball" },
+      "C": { "word": "Cat", "vietnamese": "Cat" },
+      "D": { "word": "Dog", "vietnamese": "Dog" },
+      "E": { "word": "Elephant", "vietnamese": "Elephant" },
+      "F": { "word": "Fish", "vietnamese": "Fish" },
+      "G": { "word": "Grape", "vietnamese": "Grape" },
+      "H": { "word": "Horse", "vietnamese": "Horse" },
+      "I": { "word": "Ice cream", "vietnamese": "Ice cream" },
+      "J": { "word": "Jelly", "vietnamese": "Jelly" },
+      "K": { "word": "Kite", "vietnamese": "Kite" },
+      "L": { "word": "Lion", "vietnamese": "Lion" },
+      "M": { "word": "Monkey", "vietnamese": "Monkey" },
+      "N": { "word": "Nest", "vietnamese": "Nest" },
+      "O": { "word": "Orange", "vietnamese": "Orange" },
+      "P": { "word": "Panda", "vietnamese": "Panda" },
+      "Q": { "word": "Queen", "vietnamese": "Queen" },
+      "R": { "word": "Rabbit", "vietnamese": "Rabbit" },
+      "S": { "word": "Sun", "vietnamese": "Sun" },
+      "T": { "word": "Tree", "vietnamese": "Tree" },
+      "U": { "word": "Umbrella", "vietnamese": "Umbrella" },
+      "V": { "word": "Vase", "vietnamese": "Vase" },
+      "W": { "word": "Whale", "vietnamese": "Whale" },
+      "X": { "word": "X-ray", "vietnamese": "X-ray" },
+      "Y": { "word": "Yarn", "vietnamese": "Yarn" },
+      "Z": { "word": "Zebra", "vietnamese": "Zebra" }
+    },
+    "templates": {
+      "sun": { "name": "Sun" },
+      "house": { "name": "House" },
+      "tree": { "name": "Tree" }
+    },
+    "shapes": {
+      "circle": { "name": "Circle", "description": "Round like the sun or a ball" },
+      "square": { "name": "Square", "description": "Four equal sides" },
+      "triangle": { "name": "Triangle", "description": "Three sides and three corners" },
+      "rectangle": { "name": "Rectangle", "description": "Four sides; two are longer" },
+      "star": { "name": "Star", "description": "Five sparkly points" },
+      "heart": { "name": "Heart", "description": "The shape of love" },
+      "diamond": { "name": "Diamond", "description": "Four sides with crossing diagonals" },
+      "oval": { "name": "Oval", "description": "Round and stretched, like an egg" }
+    }
+  },
+  "shapes": {
+    "learning": {
+      "instructionsTitle": "Tap a shape to learn!",
+      "instructionsSubtitle": "Discover the basic shapes with fun examples",
+      "exampleLabel": "Examples:",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "game": {
+      "question": "What shape is this?",
+      "instructionsTitle": "Pick the right name!",
+      "instructionsSubtitle": "Look at the shape and choose the matching name"
+    }
+  },
+  "flashcards": {
+    "intro": "Each round is a flashcard. Pick the correct answer!",
+    "questionLabels": {
+      "number": "Which number is this?",
+      "letter": "Which letter?",
+      "color": "What color is this?",
+      "shape": "What shape is this?"
+    }
+  }
+}

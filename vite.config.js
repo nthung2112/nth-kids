@@ -1,22 +1,33 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import tailwindcss from "@tailwindcss/vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import react from "@vitejs/plugin-react";
 import path from "path";
+import { defineConfig, loadEnv } from "vite";
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    tanstackRouter({
-      target: "react",
-      autoCodeSplitting: true,
-    }),
-    react(),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+import { staticRoutesPrerender } from "./scripts/vite-plugin-static-routes.mjs";
+
+// https://vite.dev/config/
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+  const baseUrl = mode === "development" ? "/" : env.VITE_BASE_URL || "/";
+
+  return {
+    base: baseUrl,
+    plugins: [
+      tailwindcss(),
+      tanstackRouter({
+        target: "react",
+        autoCodeSplitting: true,
+      }),
+      react(),
+      staticRoutesPrerender({
+        routeTreePath: path.resolve(__dirname, "./src/routeTree.gen.ts"),
+      }),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
-  },
+  };
 });
