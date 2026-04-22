@@ -1,13 +1,17 @@
-import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { Link, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+
+import AppShell from "@/components/layout/app-shell";
 
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: () => {
     return (
-      <div>
-        <p>This is the notFoundComponent configured on root route</p>
-        <Link to="/">Start Over</Link>
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-3 p-6 text-center">
+        <p className="text-lg font-semibold text-purple-800">Không tìm thấy trang.</p>
+        <Link to="/" className="font-semibold text-purple-600 underline">
+          Về trang chủ
+        </Link>
       </div>
     );
   },
@@ -16,9 +20,8 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <>
-      <Outlet />
-      {/* Start rendering router matches */}
-      <TanStackRouterDevtools position="bottom-right" />
+      <AppShell />
+      <TanStackRouterDevtools position="top-right" />
     </>
   );
 }

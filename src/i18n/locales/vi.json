@@ -9,7 +9,11 @@
     "colors": "Màu",
     "shapes": "Hình",
     "flashcards": "Ôn Tập",
-    "settings": "Cài Đặt"
+    "settings": "Cài Đặt",
+    "home": "Trang Chủ",
+    "learn": "Học Bài",
+    "game": "Chơi Game",
+    "mainNav": "Điều hướng chính"
   },
   "header": {
     "titles": {
@@ -26,6 +30,10 @@
     "switchTo": "Chuyển sang {{name}}"
   },
   "home": {
+    "welcome": "Chào mừng trở lại!",
+    "tapToStart": "Chạm vào một ô bên dưới để bắt đầu",
+    "quickPick": "Bắt đầu nhanh",
+    "exploreTopics": "Khám phá",
     "topics": {
       "numbers": {
         "title": "Học Số",
@@ -42,6 +50,10 @@
       "shapes": {
         "title": "Học Hình Khối",
         "description": "Nhận biết hình tròn, vuông, tam giác..."
+      },
+      "flashcards": {
+        "title": "Ôn Tập Tổng Hợp",
+        "description": "Kiểm tra tất cả chủ đề đã học"
       }
     },
     "cta": "Bắt Đầu",
@@ -59,6 +71,14 @@
       "tryFlashcards": "Ôn tập tổng hợp",
       "newcomer": "Bắt đầu với trò chơi đầu tiên"
     }
+  },
+  "learn": {
+    "title": "📚 Chọn bài để học",
+    "subtitle": "Chạm vào chủ đề để vào bài học"
+  },
+  "game": {
+    "title": "🎮 Chọn trò chơi",
+    "subtitle": "Chạm vào chủ đề để bắt đầu chơi"
   },
   "footer": {
     "cheer": "Chúc bé học tập vui vẻ!",
@@ -80,7 +100,10 @@
     "more": "Xem thêm",
     "less": "Thu gọn",
     "next": "Tiếp theo",
-    "back": "Quay lại"
+    "back": "Quay lại",
+    "exit": "Thoát",
+    "previous": "Trước",
+    "settings": "Cài đặt"
   },
   "numbers": {
     "rangeLabel": "{{range}} · {{level}}",

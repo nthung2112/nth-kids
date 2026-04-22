@@ -4,11 +4,11 @@ import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Card } from "@/components/ui/card";
-import { TOPICS } from "@/data/topics";
+import { TOPICS, type GameTopicPath, type TopicMode, type TopicPath } from "@/data/topics";
 
 interface RecommendationCardProps {
   recentTopicKey: string;
-  onNavigate: (path: string) => void;
+  onNavigate: (path: TopicPath | GameTopicPath, mode: TopicMode) => void;
 }
 
 export default function RecommendationCard({
@@ -38,11 +38,11 @@ export default function RecommendationCard({
         </h3>
       </div>
 
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2">
         {continueTopic ? (
           <button
             type="button"
-            onClick={() => onNavigate(continueTopic.path)}
+            onClick={() => onNavigate(continueTopic.path, "learn")}
             className="flex items-center gap-3 rounded-xl border-2 border-blue-300 bg-blue-50 p-3 text-left transition-all hover:scale-[1.02] hover:bg-blue-100 motion-reduce:transition-none"
           >
             <span className="text-3xl" aria-hidden="true">
@@ -59,7 +59,7 @@ export default function RecommendationCard({
         ) : (
           <button
             type="button"
-            onClick={() => onNavigate(TOPICS[0].path)}
+            onClick={() => onNavigate(TOPICS[0].path, "learn")}
             className="flex items-center gap-3 rounded-xl border-2 border-blue-300 bg-blue-50 p-3 text-left transition-all hover:scale-[1.02] hover:bg-blue-100 motion-reduce:transition-none"
           >
             <span className="text-3xl" aria-hidden="true">
@@ -77,7 +77,7 @@ export default function RecommendationCard({
 
         <button
           type="button"
-          onClick={() => onNavigate(newSuggestion.path)}
+          onClick={() => onNavigate(newSuggestion.path, "game")}
           className="flex items-center gap-3 rounded-xl border-2 border-pink-300 bg-pink-50 p-3 text-left transition-all hover:scale-[1.02] hover:bg-pink-100 motion-reduce:transition-none"
         >
           <span className="text-3xl" aria-hidden="true">
@@ -94,7 +94,7 @@ export default function RecommendationCard({
 
         <button
           type="button"
-          onClick={() => onNavigate("/flashcards")}
+          onClick={() => onNavigate("/flashcards", "game")}
           className="flex items-center gap-3 rounded-xl border-2 border-orange-300 bg-orange-50 p-3 text-left transition-all hover:scale-[1.02] hover:bg-orange-100 motion-reduce:transition-none"
         >
           <BookOpen className="text-orange-500" aria-hidden="true" />
@@ -102,9 +102,7 @@ export default function RecommendationCard({
             <span className="block text-xs text-orange-600">
               {t("home.recommend.tryFlashcards")}
             </span>
-            <span className="block text-sm font-bold text-orange-800">
-              {t("nav.flashcards")}
-            </span>
+            <span className="block text-sm font-bold text-orange-800">{t("nav.flashcards")}</span>
           </span>
           <ArrowRight className="h-4 w-4 text-orange-500" aria-hidden="true" />
         </button>

@@ -10,8 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShapesRouteImport } from './routes/shapes'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as NumbersRouteImport } from './routes/numbers'
 import { Route as LettersRouteImport } from './routes/letters'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as GameRouteImport } from './routes/game'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ColorsRouteImport } from './routes/colors'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +22,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const ShapesRoute = ShapesRouteImport.update({
   id: '/shapes',
   path: '/shapes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NumbersRoute = NumbersRouteImport.update({
@@ -29,6 +37,16 @@ const NumbersRoute = NumbersRouteImport.update({
 const LettersRoute = LettersRouteImport.update({
   id: '/letters',
   path: '/letters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameRoute = GameRouteImport.update({
+  id: '/game',
+  path: '/game',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlashcardsRoute = FlashcardsRouteImport.update({
@@ -51,16 +69,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
   '/flashcards': typeof FlashcardsRoute
+  '/game': typeof GameRoute
+  '/learn': typeof LearnRoute
   '/letters': typeof LettersRoute
   '/numbers': typeof NumbersRoute
+  '/settings': typeof SettingsRoute
   '/shapes': typeof ShapesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
   '/flashcards': typeof FlashcardsRoute
+  '/game': typeof GameRoute
+  '/learn': typeof LearnRoute
   '/letters': typeof LettersRoute
   '/numbers': typeof NumbersRoute
+  '/settings': typeof SettingsRoute
   '/shapes': typeof ShapesRoute
 }
 export interface FileRoutesById {
@@ -68,8 +92,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
   '/flashcards': typeof FlashcardsRoute
+  '/game': typeof GameRoute
+  '/learn': typeof LearnRoute
   '/letters': typeof LettersRoute
   '/numbers': typeof NumbersRoute
+  '/settings': typeof SettingsRoute
   '/shapes': typeof ShapesRoute
 }
 export interface FileRouteTypes {
@@ -78,18 +105,33 @@ export interface FileRouteTypes {
     | '/'
     | '/colors'
     | '/flashcards'
+    | '/game'
+    | '/learn'
     | '/letters'
     | '/numbers'
+    | '/settings'
     | '/shapes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/colors' | '/flashcards' | '/letters' | '/numbers' | '/shapes'
+  to:
+    | '/'
+    | '/colors'
+    | '/flashcards'
+    | '/game'
+    | '/learn'
+    | '/letters'
+    | '/numbers'
+    | '/settings'
+    | '/shapes'
   id:
     | '__root__'
     | '/'
     | '/colors'
     | '/flashcards'
+    | '/game'
+    | '/learn'
     | '/letters'
     | '/numbers'
+    | '/settings'
     | '/shapes'
   fileRoutesById: FileRoutesById
 }
@@ -97,8 +139,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ColorsRoute: typeof ColorsRoute
   FlashcardsRoute: typeof FlashcardsRoute
+  GameRoute: typeof GameRoute
+  LearnRoute: typeof LearnRoute
   LettersRoute: typeof LettersRoute
   NumbersRoute: typeof NumbersRoute
+  SettingsRoute: typeof SettingsRoute
   ShapesRoute: typeof ShapesRoute
 }
 
@@ -109,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/shapes'
       fullPath: '/shapes'
       preLoaderRoute: typeof ShapesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/numbers': {
@@ -123,6 +175,20 @@ declare module '@tanstack/react-router' {
       path: '/letters'
       fullPath: '/letters'
       preLoaderRoute: typeof LettersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/flashcards': {
@@ -153,8 +219,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ColorsRoute: ColorsRoute,
   FlashcardsRoute: FlashcardsRoute,
+  GameRoute: GameRoute,
+  LearnRoute: LearnRoute,
   LettersRoute: LettersRoute,
   NumbersRoute: NumbersRoute,
+  SettingsRoute: SettingsRoute,
   ShapesRoute: ShapesRoute,
 }
 export const routeTree = rootRouteImport

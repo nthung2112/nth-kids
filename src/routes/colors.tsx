@@ -7,19 +7,21 @@ import ColorGame from "@/components/color-game";
 import ColorLearning from "@/components/color-learning";
 import ColorMatchingGame from "@/components/color-matching-game";
 import ColoringGame from "@/components/coloring-game";
-import PageLayout from "@/components/layout/page-layout";
+import ImmersiveView from "@/components/layout/immersive-view";
 import { Button } from "@/components/ui/button";
 import { useSound } from "@/hooks/useSound";
 import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
+import { validateTopicSearch } from "./-topic-search";
 
 export const Route = createFileRoute("/colors")({
   component: ColorsPage,
+  validateSearch: validateTopicSearch,
 });
 
-type ColorMode = "basic" | "matching" | "coloring";
+type ColorGameMode = "basic" | "matching" | "coloring";
 
 const COLOR_MODES: Array<{
-  id: ColorMode;
+  id: ColorGameMode;
   labelKey: string;
   active: string;
   inactive: string;
@@ -47,60 +49,55 @@ const COLOR_MODES: Array<{
 function ColorsPage() {
   const { t } = useTranslation();
   const { playClickSound } = useSound();
-  const [showGame, setShowGame] = useState(false);
-  const [colorGameMode, setColorGameMode] = useState<ColorMode>("basic");
+  const { mode } = Route.useSearch();
+  const [gameMode, setGameMode] = useState<ColorGameMode>("basic");
 
   useEffect(() => {
     preloadSpriteTopic("colors");
   }, []);
 
-  return (
-    <PageLayout>
-      <div className="mb-3 flex flex-wrap items-center justify-center gap-2 sm:mb-4 sm:gap-3">
-        <Button
-          onClick={() => {
-            playClickSound();
-            setShowGame(!showGame);
-          }}
-          className="h-11 rounded-full bg-linear-to-r from-pink-500 to-purple-600 px-4 text-sm font-semibold text-white shadow-md hover:from-pink-600 hover:to-purple-700 sm:px-5 sm:text-base"
-        >
-          {showGame ? t("common.playLesson") : t("common.playGame")}
-        </Button>
+  const exitTo = mode === "game" ? "/game" : "/learn";
 
-        {showGame && (
-          <div className="flex flex-wrap justify-center gap-2" role="tablist">
-            {COLOR_MODES.map(mode => {
-              const isActive = colorGameMode === mode.id;
+  return (
+    <ImmersiveView exitTo={exitTo}>
+      {mode === "learn" ? (
+        <ColorLearning />
+      ) : (
+        <>
+          <div
+            className="mb-3 flex flex-wrap items-center justify-center gap-2 sm:mb-4 sm:gap-3"
+            role="tablist"
+          >
+            {COLOR_MODES.map(item => {
+              const isActive = gameMode === item.id;
               return (
                 <Button
-                  key={mode.id}
+                  key={item.id}
                   onClick={() => {
                     playClickSound();
-                    setColorGameMode(mode.id);
+                    setGameMode(item.id);
                   }}
                   className={`h-11 rounded-full px-3 text-xs font-semibold sm:px-4 sm:text-sm ${
-                    isActive ? mode.active : mode.inactive
+                    isActive ? item.active : item.inactive
                   }`}
                   aria-pressed={isActive}
                   role="tab"
                 >
-                  {t(mode.labelKey)}
+                  {t(item.labelKey)}
                 </Button>
               );
             })}
           </div>
-        )}
-      </div>
 
-      {!showGame ? (
-        <ColorLearning />
-      ) : colorGameMode === "basic" ? (
-        <ColorGame />
-      ) : colorGameMode === "matching" ? (
-        <ColorMatchingGame />
-      ) : (
-        <ColoringGame />
+          {gameMode === "basic" ? (
+            <ColorGame />
+          ) : gameMode === "matching" ? (
+            <ColorMatchingGame />
+          ) : (
+            <ColoringGame />
+          )}
+        </>
       )}
-    </PageLayout>
+    </ImmersiveView>
   );
 }

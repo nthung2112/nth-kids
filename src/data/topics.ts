@@ -1,5 +1,10 @@
 export type TopicId = "numbers" | "letters" | "colors" | "shapes";
+export type GameTopicId = TopicId | "flashcards";
+
 export type TopicPath = "/numbers" | "/letters" | "/colors" | "/shapes";
+export type GameTopicPath = TopicPath | "/flashcards";
+
+export type TopicMode = "learn" | "game";
 
 export interface TopicTheme {
   active: string;
@@ -9,11 +14,23 @@ export interface TopicTheme {
   descClass: string;
   buttonClass: string;
   arrowClass: string;
+  ringClass: string;
 }
 
 export interface TopicMeta {
   id: TopicId;
   path: TopicPath;
+  icon: string;
+  navLabelKey: string;
+  homeTitleKey: string;
+  homeDescriptionKey: string;
+  headerTitleKey: string;
+  theme: TopicTheme;
+}
+
+export interface GameTopicMeta {
+  id: GameTopicId;
+  path: GameTopicPath;
   icon: string;
   navLabelKey: string;
   homeTitleKey: string;
@@ -39,6 +56,7 @@ export const TOPICS: TopicMeta[] = [
       descClass: "text-blue-700/80",
       buttonClass: "bg-blue-500 hover:bg-blue-600",
       arrowClass: "text-blue-500",
+      ringClass: "ring-blue-400",
     },
   },
   {
@@ -57,6 +75,7 @@ export const TOPICS: TopicMeta[] = [
       descClass: "text-green-700/80",
       buttonClass: "bg-green-500 hover:bg-green-600",
       arrowClass: "text-green-500",
+      ringClass: "ring-green-400",
     },
   },
   {
@@ -75,6 +94,7 @@ export const TOPICS: TopicMeta[] = [
       descClass: "text-pink-700/80",
       buttonClass: "bg-pink-500 hover:bg-pink-600",
       arrowClass: "text-pink-500",
+      ringClass: "ring-pink-400",
     },
   },
   {
@@ -93,9 +113,48 @@ export const TOPICS: TopicMeta[] = [
       descClass: "text-indigo-700/80",
       buttonClass: "bg-indigo-500 hover:bg-indigo-600",
       arrowClass: "text-indigo-500",
+      ringClass: "ring-indigo-400",
     },
   },
 ];
 
+const FLASHCARDS_TOPIC: GameTopicMeta = {
+  id: "flashcards",
+  path: "/flashcards",
+  icon: "📚",
+  navLabelKey: "nav.flashcards",
+  homeTitleKey: "home.topics.flashcards.title",
+  homeDescriptionKey: "home.topics.flashcards.description",
+  headerTitleKey: "header.titles.flashcards",
+  theme: {
+    active: "bg-orange-500 text-white shadow-md hover:bg-orange-600",
+    inactive: "border-2 border-orange-400 bg-white/80 text-orange-600 hover:bg-white",
+    cardClass: "border-orange-300 bg-gradient-to-br from-orange-100 to-orange-200",
+    titleClass: "text-orange-800",
+    descClass: "text-orange-700/80",
+    buttonClass: "bg-orange-500 hover:bg-orange-600",
+    arrowClass: "text-orange-500",
+    ringClass: "ring-orange-400",
+  },
+};
+
+export const LEARN_TOPICS: TopicMeta[] = TOPICS;
+
+export const GAME_TOPICS: GameTopicMeta[] = [...TOPICS, FLASHCARDS_TOPIC];
+
+export const IMMERSIVE_PATHS: readonly GameTopicPath[] = [
+  "/numbers",
+  "/letters",
+  "/colors",
+  "/shapes",
+  "/flashcards",
+];
+
 export const getTopicByPath = (path: string): TopicMeta | undefined =>
   TOPICS.find(topic => topic.path === path);
+
+export const getGameTopicByPath = (path: string): GameTopicMeta | undefined =>
+  GAME_TOPICS.find(topic => topic.path === path);
+
+export const isImmersivePath = (pathname: string): boolean =>
+  IMMERSIVE_PATHS.some(path => pathname === path || pathname.startsWith(`${path}/`));

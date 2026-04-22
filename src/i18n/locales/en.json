@@ -9,7 +9,11 @@
     "colors": "Colors",
     "shapes": "Shapes",
     "flashcards": "Review",
-    "settings": "Settings"
+    "settings": "Settings",
+    "home": "Home",
+    "learn": "Learn",
+    "game": "Play",
+    "mainNav": "Main navigation"
   },
   "header": {
     "titles": {
@@ -26,6 +30,10 @@
     "switchTo": "Switch to {{name}}"
   },
   "home": {
+    "welcome": "Welcome back!",
+    "tapToStart": "Tap a tile below to begin",
+    "quickPick": "Jump right in",
+    "exploreTopics": "Explore",
     "topics": {
       "numbers": {
         "title": "Numbers",
@@ -42,6 +50,10 @@
       "shapes": {
         "title": "Shapes",
         "description": "Circles, squares, triangles and more"
+      },
+      "flashcards": {
+        "title": "Mixed Review",
+        "description": "Test everything you've learned"
       }
     },
     "cta": "Start",
@@ -59,6 +71,14 @@
       "tryFlashcards": "Mixed review",
       "newcomer": "Start with your first lesson"
     }
+  },
+  "learn": {
+    "title": "📚 Choose a lesson",
+    "subtitle": "Tap a topic to start learning"
+  },
+  "game": {
+    "title": "🎮 Choose a game",
+    "subtitle": "Tap a topic to start playing"
   },
   "footer": {
     "cheer": "Have fun learning!",
@@ -80,7 +100,10 @@
     "more": "Show more",
     "less": "Show less",
     "next": "Next",
-    "back": "Back"
+    "back": "Back",
+    "exit": "Exit",
+    "previous": "Previous",
+    "settings": "Settings"
   },
   "numbers": {
     "rangeLabel": "{{range}} · {{level}}",

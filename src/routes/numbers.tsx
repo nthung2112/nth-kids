@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, RotateCcw, Volume2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Volume2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import CountingGame from "@/components/counting-game";
-import PageLayout from "@/components/layout/page-layout";
+import ImmersiveView from "@/components/layout/immersive-view";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePreferences } from "@/hooks/usePreferences";
@@ -17,19 +17,21 @@ import {
   getNumberName,
   type NumberData,
 } from "@/utils/numberGenerator";
+import { validateTopicSearch } from "./-topic-search";
 
 export const Route = createFileRoute("/numbers")({
   component: NumbersPage,
+  validateSearch: validateTopicSearch,
 });
 
 function NumbersPage() {
   const { t, i18n } = useTranslation();
   const { playClickSound, playNumberSound } = useSound();
   const { prefs } = usePreferences();
+  const { mode } = Route.useSearch();
   const maxNumber = prefs.maxNumber;
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
-  const [showGame, setShowGame] = useState(false);
   const [numbers, setNumbers] = useState<NumberData[]>([]);
 
   useEffect(() => {
@@ -69,145 +71,136 @@ function NumbersPage() {
       : maxNumber <= 30
         ? "numbers.levels.intermediate"
         : "numbers.levels.hard";
+  const exitTo = mode === "game" ? "/game" : "/learn";
 
   return (
-    <PageLayout>
-      <div className="mb-3 flex flex-wrap items-center justify-center gap-2 sm:mb-4 sm:gap-3">
-        <Button
-          onClick={() => {
-            playClickSound();
-            setShowGame(!showGame);
-          }}
-          className="h-11 rounded-full bg-linear-to-r from-pink-500 to-purple-600 px-4 text-sm font-semibold text-white shadow-md hover:from-pink-600 hover:to-purple-700 sm:h-11 sm:px-5 sm:text-base"
-        >
-          {showGame ? t("common.playLesson") : t("common.playGame")}
-        </Button>
+    <ImmersiveView exitTo={exitTo}>
+      {mode === "learn" ? (
+        <>
+          <div className="mb-3 flex items-center justify-center">
+            <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm sm:text-sm">
+              {t("numbers.rangeLabel", { range: `1 - ${maxNumber}`, level: t(levelKey) })}
+            </span>
+          </div>
 
-        <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm sm:text-sm">
-          {t("numbers.rangeLabel", { range: `1 - ${maxNumber}`, level: t(levelKey) })}
-        </span>
-      </div>
+          {selectedNumber !== null && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+              role="dialog"
+              aria-modal="true"
+            >
+              <Card className="relative w-full max-w-md p-6 text-center sm:p-8">
+                <button
+                  type="button"
+                  onClick={resetSelection}
+                  className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-purple-400"
+                  aria-label={t("common.close")}
+                >
+                  <X className="h-5 w-5" />
+                </button>
 
-      {selectedNumber && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <Card className="relative mx-4 max-w-md p-8 text-center">
-            {showCelebration && (
-              <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
-                <div className="animate-bounce text-6xl motion-reduce:animate-none">🎉</div>
-                <div className="absolute top-4 right-4 animate-spin text-4xl motion-reduce:animate-none">
-                  ⭐
+                {showCelebration && (
+                  <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
+                    <div className="animate-bounce text-6xl motion-reduce:animate-none">🎉</div>
+                    <div className="absolute top-4 right-4 animate-spin text-4xl motion-reduce:animate-none">
+                      ⭐
+                    </div>
+                    <div className="absolute bottom-4 left-4 animate-pulse text-4xl motion-reduce:animate-none">
+                      🎊
+                    </div>
+                  </div>
+                )}
+
+                <div className="mb-2 text-7xl font-bold text-purple-800 sm:text-8xl">
+                  {selectedNumber}
                 </div>
-                <div className="absolute bottom-4 left-4 animate-pulse text-4xl motion-reduce:animate-none">
-                  🎊
+
+                <div className="mb-3 text-2xl font-bold text-purple-600 sm:text-3xl">
+                  {getNumberName(selectedNumber, i18n.language)}
                 </div>
-              </div>
-            )}
 
-            <div className="mb-4 text-8xl font-bold text-purple-800">{selectedNumber}</div>
-
-            <div className="mb-4 text-3xl font-bold text-purple-600">
-              {getNumberName(selectedNumber, i18n.language)}
-            </div>
-
-            <div className="mb-6 flex flex-wrap justify-center gap-2">
-              <div className="text-center">
-                <div className="mb-2 text-6xl">
+                <div className="mb-4 text-5xl sm:text-6xl" aria-hidden="true">
                   {numbers.find(n => n.number === selectedNumber)?.emoji}
                 </div>
-                <div className="text-lg text-purple-600">
-                  {selectedNumber} {numbers.find(n => n.number === selectedNumber)?.emoji}
+
+                <div className="mt-4 flex items-center justify-center gap-3">
+                  <Button
+                    onClick={() => stepNumber(-1)}
+                    className="h-14 w-14 rounded-full bg-blue-500 p-0 text-white shadow-md hover:bg-blue-600"
+                    aria-label={t("numbers.learning.prev")}
+                    title={t("numbers.learning.prev")}
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      playClickSound();
+                      playNumberSound(selectedNumber);
+                    }}
+                    className="h-16 w-16 rounded-full bg-green-500 p-0 text-white shadow-lg hover:bg-green-600"
+                    aria-label={t("common.listen")}
+                    title={t("common.listen")}
+                  >
+                    <Volume2 className="h-7 w-7" />
+                  </Button>
+
+                  <Button
+                    onClick={() => stepNumber(1)}
+                    className="h-14 w-14 rounded-full bg-blue-500 p-0 text-white shadow-md hover:bg-blue-600"
+                    aria-label={t("numbers.learning.next")}
+                    title={t("numbers.learning.next")}
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </Button>
                 </div>
-              </div>
+              </Card>
             </div>
+          )}
 
-            <div className="flex flex-wrap justify-center gap-3">
-              <Button
-                onClick={() => stepNumber(-1)}
-                className="bg-blue-500 px-4 py-3 text-base text-white hover:bg-blue-600"
-                aria-label={t("numbers.learning.prev")}
-              >
-                <ChevronLeft className="mr-1" />
-                {t("numbers.learning.prev")}
-              </Button>
-
-              <Button
-                onClick={() => {
-                  playClickSound();
-                  playNumberSound(selectedNumber);
+          <div className={`grid ${displayInfo.gridCols} mx-auto w-full max-w-7xl gap-2 sm:gap-3`}>
+            {numbers.map(item => (
+              <Card
+                key={item.number}
+                role="button"
+                tabIndex={0}
+                aria-label={getNumberName(item.number, i18n.language)}
+                className={`${item.color} transform cursor-pointer border-4 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 motion-reduce:transition-none ${displayInfo.cardSize} text-center`}
+                onClick={() => handleNumberClick(item.number)}
+                onKeyDown={event => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleNumberClick(item.number);
+                  }
                 }}
-                className="bg-green-500 px-6 py-3 text-base text-white hover:bg-green-600"
               >
-                <Volume2 className="mr-2" />
-                {t("common.listen")}
-              </Button>
-
-              <Button
-                onClick={() => stepNumber(1)}
-                className="bg-blue-500 px-4 py-3 text-base text-white hover:bg-blue-600"
-                aria-label={t("numbers.learning.next")}
-              >
-                {t("numbers.learning.next")}
-                <ChevronRight className="ml-1" />
-              </Button>
-
-              <Button
-                onClick={() => {
-                  playClickSound();
-                  resetSelection();
-                }}
-                className="bg-purple-500 px-6 py-3 text-base text-white hover:bg-purple-600"
-              >
-                <RotateCcw className="mr-2" />
-                {t("common.close")}
-              </Button>
-            </div>
-          </Card>
-        </div>
-      )}
-
-      {!showGame ? (
-        <div className={`grid ${displayInfo.gridCols} mx-auto max-w-7xl gap-3`}>
-          {numbers.map(item => (
-            <Card
-              key={item.number}
-              role="button"
-              tabIndex={0}
-              aria-label={getNumberName(item.number, i18n.language)}
-              className={`${item.color} transform cursor-pointer border-4 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 motion-reduce:transition-none ${displayInfo.cardSize} text-center`}
-              onClick={() => handleNumberClick(item.number)}
-              onKeyDown={event => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  handleNumberClick(item.number);
-                }
-              }}
-            >
-              <div className={`${displayInfo.numberSize} mb-2 font-bold text-gray-800`}>
-                {item.number}
-              </div>
-              <div className="mb-2 text-lg leading-tight font-bold text-gray-700 md:text-xl">
-                {item.name}
-              </div>
-              <div className={`${displayInfo.emojiSize} mb-2`} aria-hidden="true">
-                {item.emoji}
-              </div>
-
-              {item.number <= 10 && displayInfo.showAllItems && (
-                <div className="flex flex-wrap justify-center gap-1" aria-hidden="true">
-                  {item.items.slice(0, Math.min(5, item.items.length)).map((emoji, index) => (
-                    <span key={`${item.number}-grid-${index}-${emoji}`} className="text-sm">
-                      {emoji}
-                    </span>
-                  ))}
-                  {item.items.length > 5 && <span className="text-xs text-gray-600">...</span>}
+                <div className={`${displayInfo.numberSize} mb-1 font-bold text-gray-800`}>
+                  {item.number}
                 </div>
-              )}
-            </Card>
-          ))}
-        </div>
+                <div className="mb-1 text-sm leading-tight font-bold text-gray-700 sm:text-base">
+                  {item.name}
+                </div>
+                <div className={`${displayInfo.emojiSize} mb-1`} aria-hidden="true">
+                  {item.emoji}
+                </div>
+
+                {item.number <= 10 && displayInfo.showAllItems && (
+                  <div className="flex flex-wrap justify-center gap-0.5" aria-hidden="true">
+                    {item.items.slice(0, Math.min(5, item.items.length)).map((emoji, index) => (
+                      <span key={`${item.number}-grid-${index}-${emoji}`} className="text-xs">
+                        {emoji}
+                      </span>
+                    ))}
+                    {item.items.length > 5 && <span className="text-xs text-gray-600">...</span>}
+                  </div>
+                )}
+              </Card>
+            ))}
+          </div>
+        </>
       ) : (
         <CountingGame maxNumber={maxNumber} />
       )}
-    </PageLayout>
+    </ImmersiveView>
   );
 }
