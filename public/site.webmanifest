@@ -1,6 +1,7 @@
 {
-  "name": "Kids Learning",
-  "short_name": "Kids Learning",
+  "name": "NTH Kids",
+  "short_name": "NTH Kids",
+  "description": "NTH Kids is a fun and educational app designed to engage children in interactive learning experiences",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
