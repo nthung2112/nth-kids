@@ -8,7 +8,6 @@ import AlphabetLearning from "@/components/alphabet-learning";
 import ImmersiveView from "@/components/layout/immersive-view";
 import SequenceGame from "@/components/sequence-game";
 import { Button } from "@/components/ui/button";
-import { useSound } from "@/hooks/useSound";
 import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
 import { validateTopicSearch } from "./-topic-search";
 
@@ -21,7 +20,6 @@ type LettersGameMode = "basic" | "sequence";
 
 function LettersPage() {
   const { t } = useTranslation();
-  const { playClickSound } = useSound();
   const { mode } = Route.useSearch();
   const [gameMode, setGameMode] = useState<LettersGameMode>("basic");
 
@@ -43,10 +41,7 @@ function LettersPage() {
             aria-label={t("letters.modes.basic")}
           >
             <Button
-              onClick={() => {
-                playClickSound();
-                setGameMode("basic");
-              }}
+              onClick={() => setGameMode("basic")}
               className={`h-11 rounded-full px-4 text-sm font-semibold sm:text-base ${
                 gameMode === "basic"
                   ? "bg-orange-500 text-white shadow-md hover:bg-orange-600"
@@ -59,10 +54,7 @@ function LettersPage() {
             </Button>
 
             <Button
-              onClick={() => {
-                playClickSound();
-                setGameMode("sequence");
-              }}
+              onClick={() => setGameMode("sequence")}
               className={`h-11 rounded-full px-4 text-sm font-semibold sm:text-base ${
                 gameMode === "sequence"
                   ? "bg-purple-500 text-white shadow-md hover:bg-purple-600"

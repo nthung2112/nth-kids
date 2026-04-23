@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import RecommendationCard from "@/components/recommendation-card";
 import { Card } from "@/components/ui/card";
 import { GAME_TOPICS, LEARN_TOPICS, type GameTopicPath, type TopicPath } from "@/data/topics";
-import { useSound } from "@/hooks/useSound";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -21,12 +20,10 @@ const FEATURES = [
 ];
 
 function Home() {
-  const { playClickSound } = useSound();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const goToTopic = (path: TopicPath | GameTopicPath, mode: "learn" | "game") => {
-    playClickSound();
     try {
       window.localStorage.setItem(RECENT_TOPIC_KEY, path);
     } catch {
@@ -36,7 +33,6 @@ function Home() {
   };
 
   const goToHub = (to: "/learn" | "/game") => {
-    playClickSound();
     navigate({ to });
   };
 
@@ -44,7 +40,7 @@ function Home() {
   const flashcardsTopic = GAME_TOPICS.find(topic => topic.id === "flashcards");
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col px-4 pt-[max(env(safe-area-inset-top),16px)] pb-4">
+    <div className="flex flex-col px-4 pt-[max(env(safe-area-inset-top),16px)] pb-4">
       <header className="mb-4 text-center sm:mb-5">
         <h1 className="text-2xl font-bold text-purple-800 sm:text-3xl">{t("app.title")}</h1>
         <p className="mt-1 text-sm font-semibold text-purple-600 sm:text-base">

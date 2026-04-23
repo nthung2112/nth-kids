@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSound } from "@/hooks/useSound";
+import { useSpeakOnChange } from "@/hooks/useTts";
 
 interface SequenceQuestion {
   sequence: string[];
@@ -24,11 +24,14 @@ const config = { ...GAME_CONFIGS.sequence, feedbackMs: 2500 };
 
 export default function SequenceGame() {
   const { t } = useTranslation();
-  const { playClickSound, playLetterSound, playSequenceSound } = useSound();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<SequenceQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  const questionPrompt = t("games.sequence.question");
+  useSpeakOnChange(questionPrompt, currentQuestion ? questionId : null, { delayMs: 250 });
 
   const generateQuestion = () => {
     const startIndex = Math.floor(Math.random() * 20);
@@ -53,13 +56,11 @@ export default function SequenceGame() {
     const options = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
 
     setCurrentQuestion({ sequence, correctAnswer, options });
-
-    setTimeout(() => playSequenceSound(sequence), 1000);
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedAnswer: string) => {
     if (!currentQuestion) return;
-    playClickSound();
 
     if (selectedAnswer === currentQuestion.correctAnswer) {
       engine.handleCorrect({ onAdvance: generateQuestion });
@@ -93,19 +94,19 @@ export default function SequenceGame() {
 
   const correctSequence = (
     <div>
-      <div className="mb-2 text-lg text-purple-600">{t("games.sequence.completeSequence")}</div>
-      <div className="flex items-center justify-center gap-2">
+      <div className="mb-2 text-base text-purple-600 sm:text-lg">
+        {t("games.sequence.completeSequence")}
+      </div>
+      <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
         {currentQuestion.sequence.map((letter, index) => (
-          <div key={index} className="flex items-center">
-            <div className="rounded-lg border-2 border-blue-300 bg-blue-100 p-2 text-2xl font-bold text-blue-600">
+          <Fragment key={index}>
+            <div className="rounded-lg border-2 border-blue-300 bg-blue-100 px-2 py-1 text-xl font-bold text-blue-600 sm:text-2xl">
               {letter}
             </div>
-            {index < currentQuestion.sequence.length && (
-              <ArrowRight className="mx-1 text-blue-500" aria-hidden="true" />
-            )}
-          </div>
+            <ArrowRight className="h-3 w-3 shrink-0 text-blue-500 sm:h-4 sm:w-4" aria-hidden="true" />
+          </Fragment>
         ))}
-        <div className="rounded-lg border-2 border-green-300 bg-green-100 p-2 text-2xl font-bold text-green-600">
+        <div className="rounded-lg border-2 border-green-300 bg-green-100 px-2 py-1 text-xl font-bold text-green-600 sm:text-2xl">
           {currentQuestion.correctAnswer}
         </div>
       </div>
@@ -113,7 +114,7 @@ export default function SequenceGame() {
   );
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto w-full max-w-2xl">
       <GameHud
         score={engine.score}
         lives={engine.lives}
@@ -131,57 +132,58 @@ export default function SequenceGame() {
         />
       )}
 
-      <Card className="mb-8 border-4 border-purple-300 bg-linear-to-br from-purple-100 to-pink-100 p-8">
-        <h2 className="mb-6 text-center text-3xl font-bold text-purple-800">
+      <Card className="mb-4 border-4 border-purple-300 bg-linear-to-br from-purple-100 to-pink-100 p-4 @md:mb-6 @md:p-6 @lg:p-8">
+        <h2 className="mb-3 text-center text-lg font-bold text-purple-800 @sm:text-xl @md:mb-6 @md:text-2xl @lg:text-3xl">
           {t("games.sequence.question")}
         </h2>
 
-        <div className="mb-8 flex items-center justify-center gap-4 rounded-2xl bg-white p-6 shadow-inner">
+        <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5 rounded-2xl bg-white p-3 shadow-inner @sm:gap-2 @md:mb-6 @md:gap-3 @md:p-4 @lg:p-6">
           {currentQuestion.sequence.map((letter, index) => (
-            <div key={index} className="flex items-center">
+            <Fragment key={index}>
               <div
-                className="animate-bounce rounded-2xl border-4 border-purple-300 bg-purple-100 p-4 text-6xl font-bold text-purple-700 motion-reduce:animate-none"
+                className="animate-bounce rounded-xl border-2 border-purple-300 bg-purple-100 px-2 py-1 text-2xl font-bold text-purple-700 motion-reduce:animate-none @sm:px-2.5 @sm:py-1.5 @sm:text-3xl @md:rounded-2xl @md:border-4 @md:p-3 @md:text-4xl @lg:p-4 @lg:text-5xl"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 {letter}
               </div>
-              {index < currentQuestion.sequence.length - 1 && (
-                <ArrowRight className="mx-2 text-purple-500" aria-hidden="true" />
-              )}
-            </div>
+              <ArrowRight
+                className="h-4 w-4 shrink-0 text-purple-500 @sm:h-5 @sm:w-5 @md:h-6 @md:w-6 @lg:h-7 @lg:w-7"
+                aria-hidden="true"
+              />
+            </Fragment>
           ))}
-          <ArrowRight className="mx-2 text-purple-500" aria-hidden="true" />
-          <div className="rounded-2xl border-4 border-dashed border-gray-300 bg-gray-100 p-4 text-6xl font-bold text-gray-400">
+          <div className="rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 px-2 py-1 text-2xl font-bold text-gray-400 @sm:px-2.5 @sm:py-1.5 @sm:text-3xl @md:rounded-2xl @md:border-4 @md:p-3 @md:text-4xl @lg:p-4 @lg:text-5xl">
             ?
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-2 @sm:gap-3 @md:gap-4">
           {currentQuestion.options.map(letter => (
             <Button
               key={letter}
               onClick={() => handleAnswer(letter)}
-              onMouseEnter={() => playLetterSound(letter)}
-              className="h-24 transform rounded-2xl border-4 border-purple-300 bg-linear-to-br from-purple-200 to-pink-200 text-4xl font-bold text-purple-800 transition-all duration-300 hover:scale-105 hover:from-purple-300 hover:to-pink-300 active:scale-95"
+              className="h-20 transform rounded-2xl border-4 border-purple-300 bg-linear-to-br from-purple-200 to-pink-200 text-2xl font-bold text-purple-800 transition-all duration-300 hover:scale-105 hover:from-purple-300 hover:to-pink-300 active:scale-95 @sm:text-3xl @md:h-24 @md:text-4xl"
               disabled={engine.showResult !== null}
               aria-label={letter}
             >
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center leading-tight">
                 <div>{letter}</div>
-                <div className="text-2xl">{letter.toLowerCase()}</div>
+                <div className="text-base @sm:text-lg @md:text-2xl">{letter.toLowerCase()}</div>
               </div>
             </Button>
           ))}
         </div>
       </Card>
 
-      <div className="rounded-2xl bg-white p-4 text-center text-lg text-purple-600 shadow-lg">
-        <div className="mb-2 flex items-center justify-center gap-2">
+      <div className="rounded-2xl bg-white p-3 text-center text-purple-600 shadow-lg @md:p-4">
+        <div className="mb-1 flex items-center justify-center gap-2 text-sm @md:text-base">
           <span aria-hidden="true">🧠</span>
           <span className="font-semibold">{t("games.sequence.instructionsTitle")}</span>
           <span aria-hidden="true">🧠</span>
         </div>
-        <div className="text-sm text-purple-500">{t("games.sequence.instructionsSubtitle")}</div>
+        <div className="text-xs text-purple-500 @md:text-sm">
+          {t("games.sequence.instructionsSubtitle")}
+        </div>
       </div>
 
       {showTutorial && (

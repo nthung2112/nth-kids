@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { COLOR_DEFS, COLOR_PALETTE_IDS, type ColorId } from "@/data/colors";
 import { COLORING_TEMPLATES } from "@/data/coloringTemplates";
-import { useSound } from "@/hooks/useSound";
+import { useTts } from "@/hooks/useTts";
 
 const GALLERY_KEY = "nthkids:coloring-gallery";
 const GALLERY_LIMIT = 6;
@@ -45,7 +45,7 @@ const saveGallery = (entries: GalleryEntry[]) => {
 
 export default function ColoringGame() {
   const { t } = useTranslation();
-  const { playClickSound, playColorSound, playSuccessSound } = useSound();
+  const tts = useTts();
   const [selectedHex, setSelectedHex] = useState(COLOR_DEFS[COLOR_PALETTE_IDS[0]].hex);
   const [selectedTemplateIdx, setSelectedTemplateIdx] = useState(0);
   const [coloredPaths, setColoredPaths] = useState<{ [key: number]: string }>({});
@@ -61,31 +61,28 @@ export default function ColoringGame() {
   }, []);
 
   const handleColorSelect = (colorId: ColorId, hex: string) => {
-    playClickSound();
-    playColorSound(colorId);
+    if (tts.canSpeakInstantly) {
+      tts.speak(t(`data.colors.${colorId}.name`));
+    }
     setSelectedHex(hex);
     setIsErasing(false);
   };
 
   const handlePathClick = (pathIndex: number) => {
-    playClickSound();
     if (isErasing) {
       const next = { ...coloredPaths };
       delete next[pathIndex];
       setColoredPaths(next);
     } else {
       setColoredPaths({ ...coloredPaths, [pathIndex]: selectedHex });
-      playSuccessSound();
     }
   };
 
   const clearAll = () => {
-    playClickSound();
     setColoredPaths({});
   };
 
   const changeTemplate = (templateIndex: number) => {
-    playClickSound();
     setSelectedTemplateIdx(templateIndex);
     setColoredPaths({});
   };
@@ -122,8 +119,6 @@ export default function ColoringGame() {
 
   const saveCurrentToGallery = () => {
     if (Object.keys(coloredPaths).length === 0) return;
-    playClickSound();
-    playSuccessSound();
     const entry: GalleryEntry = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       templateId: currentTemplate.id,
@@ -138,14 +133,12 @@ export default function ColoringGame() {
   };
 
   const deleteFromGallery = (id: string) => {
-    playClickSound();
     const next = gallery.filter(entry => entry.id !== id);
     setGallery(next);
     saveGallery(next);
   };
 
   const loadFromGallery = (entry: GalleryEntry) => {
-    playClickSound();
     const idx = COLORING_TEMPLATES.findIndex(template => template.id === entry.templateId);
     if (idx >= 0) {
       setSelectedTemplateIdx(idx);
@@ -185,10 +178,7 @@ export default function ColoringGame() {
     <div className="mx-auto max-w-6xl">
       <div className="mb-3 flex flex-wrap items-center justify-end gap-2">
         <Button
-          onClick={() => {
-            playClickSound();
-            setShowReference(prev => !prev);
-          }}
+          onClick={() => setShowReference(prev => !prev)}
           className={`h-11 rounded-full px-4 text-sm ${
             showReference
               ? "bg-purple-500 text-white hover:bg-purple-600"
@@ -205,10 +195,7 @@ export default function ColoringGame() {
         </Button>
 
         <Button
-          onClick={() => {
-            playClickSound();
-            setShowTutorial(true);
-          }}
+          onClick={() => setShowTutorial(true)}
           className="h-11 rounded-full bg-blue-500 px-4 text-sm text-white hover:bg-blue-600"
           aria-label={t("games.common.tutorialButton")}
         >
@@ -249,10 +236,7 @@ export default function ColoringGame() {
 
           <div className="space-y-3">
             <Button
-              onClick={() => {
-                playClickSound();
-                setIsErasing(!isErasing);
-              }}
+              onClick={() => setIsErasing(!isErasing)}
               className={`h-12 w-full ${
                 isErasing
                   ? "bg-red-500 text-white hover:bg-red-600"

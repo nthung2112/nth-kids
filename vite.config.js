@@ -15,7 +15,20 @@ export default defineConfig(() => {
         autoCodeSplitting: true,
       }),
       react(),
-      VitePWA({ registerType: "autoUpdate" }),
+      VitePWA({
+        registerType: "autoUpdate",
+        workbox: {
+          // Local TTS fallback assets are huge and should only be fetched on demand
+          // when the user opts in (Settings -> Download local voice). Precaching
+          // them would bloat the PWA install by tens of MB for everyone.
+          globIgnores: [
+            "**/ort-wasm*.wasm",
+            "**/ort-wasm*.js",
+            "**/kokoro-*.js",
+          ],
+          maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
+        },
+      }),
     ],
     resolve: {
       alias: {

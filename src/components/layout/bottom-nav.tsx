@@ -52,7 +52,7 @@ export default function BottomNav() {
   return (
     <nav
       aria-label={t("nav.mainNav")}
-      className="relative z-30 grid shrink-0 grid-cols-4 border-t border-purple-200/70 bg-white/90 backdrop-blur-md pb-[max(env(safe-area-inset-bottom),6px)]"
+      className="absolute inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-purple-200/70 bg-white/90 backdrop-blur-md pb-[max(env(safe-area-inset-bottom),6px)]"
     >
       {NAV_ITEMS.map(item => {
         const active = isActivePath(pathname, item);

@@ -6,20 +6,21 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SHAPE_DEFS, SHAPE_LEARNING_IDS, type ShapeId } from "@/data/shapes";
-import { useSound } from "@/hooks/useSound";
+import { useTts } from "@/hooks/useTts";
 
 export default function ShapesLearning() {
   const { t } = useTranslation();
-  const { playClickSound, playShapeSound } = useSound();
+  const tts = useTts();
   const [selectedId, setSelectedId] = useState<ShapeId | null>(null);
-  const [showCelebration, setShowCelebration] = useState(false);
+
+  const speakLocalisedName = (id: ShapeId) => {
+    if (!tts.canSpeakInstantly) return;
+    tts.speak(t(`data.shapes.${id}.name`));
+  };
 
   const handleClick = (id: ShapeId) => {
-    playClickSound();
-    playShapeSound(id);
+    speakLocalisedName(id);
     setSelectedId(id);
-    setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 2000);
   };
 
   const stepShape = (delta: number) => {
@@ -43,20 +44,11 @@ export default function ShapesLearning() {
             <button
               type="button"
               onClick={() => setSelectedId(null)}
-              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-purple-400"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:outline-hidden"
               aria-label={t("common.close")}
             >
               <X className="h-5 w-5" />
             </button>
-
-            {showCelebration && (
-              <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
-                <div className="animate-bounce text-6xl motion-reduce:animate-none">🎉</div>
-                <div className="absolute top-4 right-4 animate-spin text-4xl motion-reduce:animate-none">
-                  ⭐
-                </div>
-              </div>
-            )}
 
             <div className="mb-3 text-7xl sm:text-8xl" aria-hidden="true">
               {selected.emoji}
@@ -99,8 +91,7 @@ export default function ShapesLearning() {
 
               <Button
                 onClick={() => {
-                  playClickSound();
-                  playShapeSound(selectedId);
+                  speakLocalisedName(selectedId);
                 }}
                 className="h-16 w-16 rounded-full bg-green-500 p-0 text-white shadow-lg hover:bg-green-600"
                 aria-label={t("common.listen")}

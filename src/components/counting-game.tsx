@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getCountingGameConfig } from "@/config/games";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSound } from "@/hooks/useSound";
+import { useSpeakOnChange } from "@/hooks/useTts";
 
 const gameEmojis = ["🍎", "🐱", "🌸", "🦋", "⭐", "🐠", "🎈", "🎁", "🌈", "🐝"];
 
@@ -28,7 +28,6 @@ interface CountingGameProps {
 
 export default function CountingGame({ maxNumber }: CountingGameProps) {
   const { t } = useTranslation();
-  const { playClickSound, playNumberSound, playCountingSound } = useSound();
 
   const tier = getCountingGameConfig(maxNumber);
   const engine = useGameEngine({
@@ -39,6 +38,10 @@ export default function CountingGame({ maxNumber }: CountingGameProps) {
 
   const [currentQuestion, setCurrentQuestion] = useState<GameQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  const questionPrompt = t("games.counting.question");
+  useSpeakOnChange(questionPrompt, currentQuestion ? questionId : null, { delayMs: 250 });
 
   const generateQuestion = () => {
     const count = Math.floor(Math.random() * tier.maxCount) + 1;
@@ -58,15 +61,11 @@ export default function CountingGame({ maxNumber }: CountingGameProps) {
     const options = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
 
     setCurrentQuestion({ emoji, count, options, correctAnswer });
-
-    if (count <= 10) {
-      setTimeout(() => playCountingSound(count), 1000);
-    }
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedAnswer: number) => {
     if (!currentQuestion) return;
-    playClickSound();
 
     if (selectedAnswer === currentQuestion.correctAnswer) {
       engine.handleCorrect({ onAdvance: generateQuestion });
@@ -134,7 +133,6 @@ export default function CountingGame({ maxNumber }: CountingGameProps) {
             <Button
               key={option}
               onClick={() => handleAnswer(option)}
-              onMouseEnter={() => playNumberSound(option)}
               className="h-24 transform rounded-2xl border-4 border-purple-300 bg-linear-to-br from-pink-200 to-purple-200 text-4xl font-bold text-purple-800 transition-all duration-300 hover:scale-105 hover:from-pink-300 hover:to-purple-300 active:scale-95"
               disabled={engine.showResult !== null}
               aria-label={String(option)}

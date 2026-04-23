@@ -6,28 +6,27 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ALPHABET } from "@/data/alphabet";
-import { useSound } from "@/hooks/useSound";
+import { useTts } from "@/hooks/useTts";
 
 export default function AlphabetLearning() {
   const { t } = useTranslation();
-  const { playClickSound, playLetterSound } = useSound();
+  const tts = useTts();
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
-  const [showCelebration, setShowCelebration] = useState(false);
+
+  const speakLetterWord = (letter: string) => {
+    if (!tts.canSpeakInstantly) return;
+    // Speak the word the picture represents (e.g., "Apple") so the kid
+    // associates the letter with a familiar sound.
+    tts.speak(t(`data.alphabet.${letter}.word`));
+  };
 
   const handleLetterClick = (letter: string) => {
-    playClickSound();
-    playLetterSound(letter);
+    speakLetterWord(letter);
     setSelectedLetter(letter);
-    setShowCelebration(true);
-
-    setTimeout(() => {
-      setShowCelebration(false);
-    }, 2000);
   };
 
   const resetSelection = () => {
     setSelectedLetter(null);
-    setShowCelebration(false);
   };
 
   const stepLetter = (delta: number) => {
@@ -51,23 +50,11 @@ export default function AlphabetLearning() {
             <button
               type="button"
               onClick={resetSelection}
-              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-purple-400"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:outline-hidden"
               aria-label={t("common.close")}
             >
               <X className="h-5 w-5" />
             </button>
-
-            {showCelebration && (
-              <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
-                <div className="animate-bounce text-6xl motion-reduce:animate-none">🎉</div>
-                <div className="absolute top-4 right-4 animate-spin text-4xl motion-reduce:animate-none">
-                  ⭐
-                </div>
-                <div className="absolute bottom-4 left-4 animate-pulse text-4xl motion-reduce:animate-none">
-                  🎊
-                </div>
-              </div>
-            )}
 
             <div className="mb-4 flex items-center justify-center gap-3">
               <div className="text-7xl font-bold text-purple-800 sm:text-8xl">{selectedLetter}</div>
@@ -96,8 +83,7 @@ export default function AlphabetLearning() {
 
               <Button
                 onClick={() => {
-                  playClickSound();
-                  playLetterSound(selectedLetter);
+                  speakLetterWord(selectedLetter);
                 }}
                 className="h-16 w-16 rounded-full bg-green-500 p-0 text-white shadow-lg hover:bg-green-600"
                 aria-label={t("common.listen")}
@@ -119,7 +105,7 @@ export default function AlphabetLearning() {
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-6 lg:grid-cols-7">
+      <div className="grid grid-cols-3 gap-2 @sm:grid-cols-4 @sm:gap-3 @md:grid-cols-6 @lg:grid-cols-7">
         {ALPHABET.map(item => (
           <Card
             key={item.letter}

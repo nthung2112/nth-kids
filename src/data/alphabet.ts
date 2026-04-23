@@ -33,4 +33,4 @@ export const ALPHABET: AlphabetEntry[] = [
   { letter: "Z", emoji: "🦓", color: "bg-orange-100 border-orange-300 hover:bg-orange-200" },
 ];
 
-export const ALPHABET_GAME_SUBSET: AlphabetEntry[] = ALPHABET.slice(0, 10);
+export const ALPHABET_GAME_SUBSET: AlphabetEntry[] = ALPHABET;

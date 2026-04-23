@@ -9,7 +9,7 @@ import ImmersiveView from "@/components/layout/immersive-view";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePreferences } from "@/hooks/usePreferences";
-import { useSound } from "@/hooks/useSound";
+import { useTts } from "@/hooks/useTts";
 import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
 import {
   generateNumberData,
@@ -17,6 +17,7 @@ import {
   getNumberName,
   type NumberData,
 } from "@/utils/numberGenerator";
+
 import { validateTopicSearch } from "./-topic-search";
 
 export const Route = createFileRoute("/numbers")({
@@ -26,12 +27,11 @@ export const Route = createFileRoute("/numbers")({
 
 function NumbersPage() {
   const { t, i18n } = useTranslation();
-  const { playClickSound, playNumberSound } = useSound();
   const { prefs } = usePreferences();
+  const tts = useTts();
   const { mode } = Route.useSearch();
   const maxNumber = prefs.maxNumber;
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
-  const [showCelebration, setShowCelebration] = useState(false);
   const [numbers, setNumbers] = useState<NumberData[]>([]);
 
   useEffect(() => {
@@ -42,20 +42,18 @@ function NumbersPage() {
     preloadSpriteTopic("numbers");
   }, []);
 
-  const handleNumberClick = (num: number) => {
-    playClickSound();
-    playNumberSound(num);
-    setSelectedNumber(num);
-    setShowCelebration(true);
+  const speakNumberName = (num: number) => {
+    if (!tts.canSpeakInstantly) return;
+    tts.speak(getNumberName(num, i18n.language));
+  };
 
-    setTimeout(() => {
-      setShowCelebration(false);
-    }, 2000);
+  const handleNumberClick = (num: number) => {
+    speakNumberName(num);
+    setSelectedNumber(num);
   };
 
   const resetSelection = () => {
     setSelectedNumber(null);
-    setShowCelebration(false);
   };
 
   const stepNumber = (delta: number) => {
@@ -93,23 +91,11 @@ function NumbersPage() {
                 <button
                   type="button"
                   onClick={resetSelection}
-                  className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-purple-400"
+                  className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:outline-hidden"
                   aria-label={t("common.close")}
                 >
                   <X className="h-5 w-5" />
                 </button>
-
-                {showCelebration && (
-                  <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
-                    <div className="animate-bounce text-6xl motion-reduce:animate-none">🎉</div>
-                    <div className="absolute top-4 right-4 animate-spin text-4xl motion-reduce:animate-none">
-                      ⭐
-                    </div>
-                    <div className="absolute bottom-4 left-4 animate-pulse text-4xl motion-reduce:animate-none">
-                      🎊
-                    </div>
-                  </div>
-                )}
 
                 <div className="mb-2 text-7xl font-bold text-purple-800 sm:text-8xl">
                   {selectedNumber}
@@ -135,8 +121,7 @@ function NumbersPage() {
 
                   <Button
                     onClick={() => {
-                      playClickSound();
-                      playNumberSound(selectedNumber);
+                      speakNumberName(selectedNumber);
                     }}
                     className="h-16 w-16 rounded-full bg-green-500 p-0 text-white shadow-lg hover:bg-green-600"
                     aria-label={t("common.listen")}
@@ -158,7 +143,7 @@ function NumbersPage() {
             </div>
           )}
 
-          <div className={`grid ${displayInfo.gridCols} mx-auto w-full max-w-7xl gap-2 sm:gap-3`}>
+          <div className={`grid ${displayInfo.gridCols} mx-auto w-full max-w-7xl gap-2 @sm:gap-3`}>
             {numbers.map(item => (
               <Card
                 key={item.number}

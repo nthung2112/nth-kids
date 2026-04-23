@@ -12,7 +12,7 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { ALPHABET_GAME_SUBSET } from "@/data/alphabet";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSound } from "@/hooks/useSound";
+import { useSpeakOnChange } from "@/hooks/useTts";
 
 interface AlphabetQuestion {
   emoji: string;
@@ -25,11 +25,17 @@ const config = GAME_CONFIGS.alphabet;
 
 export default function AlphabetGame() {
   const { t } = useTranslation();
-  const { playClickSound, playLetterSound } = useSound();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<AlphabetQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  // Read the displayed word so the kid can connect picture, sound and letter.
+  const wordToSpeak = currentQuestion
+    ? `${t("games.alphabet.question")} ${t(`data.alphabet.${currentQuestion.correctLetter}.word`)}`
+    : null;
+  useSpeakOnChange(wordToSpeak, currentQuestion ? questionId : null, { delayMs: 300 });
 
   const generateQuestion = () => {
     const randomEntry =
@@ -53,11 +59,11 @@ export default function AlphabetGame() {
       correctLetter,
       options,
     });
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedLetter: string) => {
     if (!currentQuestion) return;
-    playClickSound();
 
     if (selectedLetter === currentQuestion.correctLetter) {
       engine.handleCorrect({ onAdvance: generateQuestion });
@@ -100,7 +106,9 @@ export default function AlphabetGame() {
         onTutorial={() => setShowTutorial(true)}
       />
 
-      {engine.showResult && <FeedbackModal kind={engine.showResult} message={engine.resultMessage} />}
+      {engine.showResult && (
+        <FeedbackModal kind={engine.showResult} message={engine.resultMessage} />
+      )}
 
       <Card className="mb-8 border-4 border-green-300 bg-linear-to-br from-green-100 to-blue-100 p-8">
         <h2 className="mb-6 text-center text-3xl font-bold text-purple-800">
@@ -108,11 +116,8 @@ export default function AlphabetGame() {
         </h2>
 
         <div className="mb-8 rounded-2xl bg-white p-6 text-center shadow-inner">
-          <div className="mb-4 animate-bounce text-8xl motion-reduce:animate-none" aria-hidden="true">
+          <div className="animate-bounce text-8xl motion-reduce:animate-none" aria-hidden="true">
             {currentQuestion.emoji}
-          </div>
-          <div className="text-2xl font-bold text-purple-700">
-            {t(`data.alphabet.${currentQuestion.letter}.word`)}
           </div>
         </div>
 
@@ -121,7 +126,6 @@ export default function AlphabetGame() {
             <Button
               key={letter}
               onClick={() => handleAnswer(letter)}
-              onMouseEnter={() => playLetterSound(letter)}
               className="h-24 transform rounded-2xl border-4 border-green-300 bg-linear-to-br from-green-200 to-blue-200 text-4xl font-bold text-purple-800 transition-all duration-300 hover:scale-105 hover:from-green-300 hover:to-blue-300 active:scale-95"
               disabled={engine.showResult !== null}
               aria-label={letter}

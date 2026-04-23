@@ -409,13 +409,44 @@
       "sound": "Sound",
       "language": "Language",
       "numberRange": "Number range (Numbers page)",
-      "accessibility": "Experience"
+      "accessibility": "Experience",
+      "voice": "Voice"
     },
     "soundOn": "Sound on",
     "soundOff": "Sound off",
     "reduceMotion": "Reduce motion",
     "reduceMotionHelp": "Tone down bouncing and spinning effects",
     "trigger": "Settings",
+    "tts": {
+      "enable": "Read questions out loud",
+      "enableHelp": "Use a friendly voice to speak each question",
+      "autoSpeak": "Auto read on new questions",
+      "autoSpeakHelp": "Turn off if your child prefers tapping to listen",
+      "voiceMode": {
+        "label": "Voice selection",
+        "nativeFirst": "Auto",
+        "nativeFirstHelp": "Prefer the browser's built-in voice; fall back to a downloaded voice when needed.",
+        "nativeOnly": "Browser only",
+        "nativeOnlyHelp": "Only use voices provided by the browser; never use downloaded models.",
+        "fallbackOnly": "Local only",
+        "fallbackOnlyHelp": "Always use the downloaded voice (Kokoro for English, Piper for Vietnamese) for a consistent voice across browsers."
+      },
+      "currentVoiceLabel": "Current voice",
+      "engine": {
+        "native": "Built-in browser voice",
+        "kokoro": "Downloaded English voice (Kokoro)",
+        "piper": "Downloaded Vietnamese voice (Piper)",
+        "none": "Not ready"
+      },
+      "fallbackHint": "Your browser does not have a suitable voice for this language. Download the local voice (~80MB on first use, cached afterwards).",
+      "downloadFallback": "Download local voice",
+      "downloadingFallback": "Downloading voice...",
+      "fallbackReady": "Local voice is ready",
+      "previewVoice": "Preview voice",
+      "previewSampleEn": "Hello! Let's learn together.",
+      "previewSampleVi": "Xin chào! Cùng học vui nhé.",
+      "unavailable": "This browser does not support speech synthesis"
+    },
     "difficulty": {
       "veryEasy": "Very easy",
       "easy": "Easy",

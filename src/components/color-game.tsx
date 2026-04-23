@@ -13,7 +13,7 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { COLOR_DEFS, COLOR_GUESS_IDS, type ColorId } from "@/data/colors";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSound } from "@/hooks/useSound";
+import { useSpeakOnChange } from "@/hooks/useTts";
 
 interface ColorQuestion {
   emoji: string;
@@ -25,11 +25,14 @@ const config = GAME_CONFIGS.colorGuess;
 
 export default function ColorGame() {
   const { t } = useTranslation();
-  const { playClickSound, playColorSound } = useSound();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<ColorQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  const questionPrompt = t("games.colorGuess.question");
+  useSpeakOnChange(questionPrompt, currentQuestion ? questionId : null, { delayMs: 250 });
 
   const generateQuestion = () => {
     const correctId = COLOR_GUESS_IDS[Math.floor(Math.random() * COLOR_GUESS_IDS.length)];
@@ -47,11 +50,11 @@ export default function ColorGame() {
     const options = [correctId, ...wrongIds].sort(() => Math.random() - 0.5);
 
     setCurrentQuestion({ emoji: randomEmoji, correctId, options });
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedId: ColorId) => {
     if (!currentQuestion) return;
-    playClickSound();
 
     if (selectedId === currentQuestion.correctId) {
       engine.handleCorrect({ onAdvance: generateQuestion });
@@ -127,14 +130,12 @@ export default function ColorGame() {
         </h2>
 
         <div className="mb-8 rounded-2xl bg-white p-6 text-center shadow-inner">
-          <div className="mb-4 animate-bounce text-8xl motion-reduce:animate-none" aria-hidden="true">
+          <div
+            className="mb-4 animate-bounce text-8xl motion-reduce:animate-none"
+            aria-hidden="true"
+          >
             {currentQuestion.emoji}
           </div>
-          <div
-            className="mx-auto h-24 w-24 rounded-full border-4 border-gray-300 shadow-lg"
-            style={{ backgroundColor: correctDef.hex }}
-            aria-hidden="true"
-          />
         </div>
 
         <div className="grid grid-cols-3 gap-4">
@@ -145,7 +146,6 @@ export default function ColorGame() {
               <Button
                 key={id}
                 onClick={() => handleAnswer(id)}
-                onMouseEnter={() => playColorSound(id)}
                 className="h-24 transform rounded-2xl border-4 border-gray-300 bg-linear-to-br from-white to-gray-100 text-xl font-bold text-gray-800 transition-all duration-300 hover:scale-105 hover:from-gray-100 hover:to-gray-200 active:scale-95"
                 disabled={engine.showResult !== null}
                 aria-label={colorName}

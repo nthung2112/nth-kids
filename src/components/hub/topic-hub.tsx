@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 
 import { Card } from "@/components/ui/card";
 import type { GameTopicMeta, TopicMeta, TopicMode } from "@/data/topics";
-import { useSound } from "@/hooks/useSound";
 
 interface TopicHubProps {
   title: string;
@@ -16,11 +15,9 @@ interface TopicHubProps {
 
 export default function TopicHub({ title, subtitle, topics, mode, recentKey }: TopicHubProps) {
   const { t } = useTranslation();
-  const { playClickSound } = useSound();
   const navigate = useNavigate();
 
   const handlePick = (topic: TopicMeta | GameTopicMeta) => {
-    playClickSound();
     try {
       window.localStorage.setItem(recentKey, topic.path);
     } catch {
@@ -30,7 +27,7 @@ export default function TopicHub({ title, subtitle, topics, mode, recentKey }: T
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col px-4 pt-[max(env(safe-area-inset-top),16px)] pb-4">
+    <div className="flex flex-col px-4 pt-[max(env(safe-area-inset-top),16px)] pb-4">
       <header className="mb-4 text-center sm:mb-5">
         <h1 className="text-2xl font-bold text-purple-800 sm:text-3xl">{title}</h1>
         <p className="mt-1 text-sm text-purple-600 sm:text-base">{subtitle}</p>

@@ -6,28 +6,25 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { COLOR_DEFS, COLOR_LEARNING_IDS, type ColorId } from "@/data/colors";
-import { useSound } from "@/hooks/useSound";
+import { useTts } from "@/hooks/useTts";
 
 export default function ColorLearning() {
   const { t } = useTranslation();
-  const { playClickSound, playColorSound } = useSound();
+  const tts = useTts();
   const [selectedId, setSelectedId] = useState<ColorId | null>(null);
-  const [showCelebration, setShowCelebration] = useState(false);
+
+  const speakLocalisedName = (id: ColorId) => {
+    if (!tts.canSpeakInstantly) return;
+    tts.speak(t(`data.colors.${id}.name`));
+  };
 
   const handleColorClick = (id: ColorId) => {
-    playClickSound();
-    playColorSound(id);
+    speakLocalisedName(id);
     setSelectedId(id);
-    setShowCelebration(true);
-
-    setTimeout(() => {
-      setShowCelebration(false);
-    }, 2000);
   };
 
   const resetSelection = () => {
     setSelectedId(null);
-    setShowCelebration(false);
   };
 
   const stepColor = (delta: number) => {
@@ -51,23 +48,11 @@ export default function ColorLearning() {
             <button
               type="button"
               onClick={resetSelection}
-              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-purple-400"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 shadow-sm hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:outline-hidden"
               aria-label={t("common.close")}
             >
               <X className="h-5 w-5" />
             </button>
-
-            {showCelebration && (
-              <div className="pointer-events-none absolute -top-4 -right-4 -bottom-4 -left-4">
-                <div className="animate-bounce text-6xl motion-reduce:animate-none">🎨</div>
-                <div className="absolute top-4 right-4 animate-spin text-4xl motion-reduce:animate-none">
-                  🌈
-                </div>
-                <div className="absolute bottom-4 left-4 animate-pulse text-4xl motion-reduce:animate-none">
-                  ✨
-                </div>
-              </div>
-            )}
 
             <div
               className={`mx-auto mb-3 h-24 w-24 rounded-full border-8 ${selected.borderClass} shadow-lg sm:h-28 sm:w-28`}
@@ -111,8 +96,7 @@ export default function ColorLearning() {
 
               <Button
                 onClick={() => {
-                  playClickSound();
-                  playColorSound(selectedId);
+                  speakLocalisedName(selectedId);
                 }}
                 className="h-16 w-16 rounded-full bg-green-500 p-0 text-white shadow-lg hover:bg-green-600"
                 aria-label={t("common.listen")}

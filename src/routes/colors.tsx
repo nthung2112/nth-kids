@@ -9,7 +9,6 @@ import ColorMatchingGame from "@/components/color-matching-game";
 import ColoringGame from "@/components/coloring-game";
 import ImmersiveView from "@/components/layout/immersive-view";
 import { Button } from "@/components/ui/button";
-import { useSound } from "@/hooks/useSound";
 import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
 import { validateTopicSearch } from "./-topic-search";
 
@@ -48,7 +47,6 @@ const COLOR_MODES: Array<{
 
 function ColorsPage() {
   const { t } = useTranslation();
-  const { playClickSound } = useSound();
   const { mode } = Route.useSearch();
   const [gameMode, setGameMode] = useState<ColorGameMode>("basic");
 
@@ -73,10 +71,7 @@ function ColorsPage() {
               return (
                 <Button
                   key={item.id}
-                  onClick={() => {
-                    playClickSound();
-                    setGameMode(item.id);
-                  }}
+                  onClick={() => setGameMode(item.id)}
                   className={`h-11 rounded-full px-3 text-xs font-semibold sm:px-4 sm:text-sm ${
                     isActive ? item.active : item.inactive
                   }`}

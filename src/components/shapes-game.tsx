@@ -12,7 +12,7 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { SHAPE_DEFS, SHAPE_GAME_IDS, type ShapeId } from "@/data/shapes";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSound } from "@/hooks/useSound";
+import { useSpeakOnChange } from "@/hooks/useTts";
 
 interface ShapeQuestion {
   correctId: ShapeId;
@@ -23,11 +23,14 @@ const config = GAME_CONFIGS.shapes;
 
 export default function ShapesGame() {
   const { t } = useTranslation();
-  const { playClickSound, playShapeSound } = useSound();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<ShapeQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  const questionPrompt = t("shapes.game.question");
+  useSpeakOnChange(questionPrompt, currentQuestion ? questionId : null, { delayMs: 250 });
 
   const generateQuestion = () => {
     const correctId = SHAPE_GAME_IDS[Math.floor(Math.random() * SHAPE_GAME_IDS.length)];
@@ -40,11 +43,11 @@ export default function ShapesGame() {
     }
     const options = [correctId, ...wrongIds].sort(() => Math.random() - 0.5);
     setCurrentQuestion({ correctId, options });
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedId: ShapeId) => {
     if (!currentQuestion) return;
-    playClickSound();
     if (selectedId === currentQuestion.correctId) {
       engine.handleCorrect({ onAdvance: generateQuestion });
     } else {
@@ -114,7 +117,6 @@ export default function ShapesGame() {
               <Button
                 key={id}
                 onClick={() => handleAnswer(id)}
-                onMouseEnter={() => playShapeSound(id)}
                 className="h-24 transform rounded-2xl border-4 border-indigo-300 bg-white text-base font-bold text-indigo-800 transition-all duration-300 hover:scale-105 hover:bg-indigo-50 active:scale-95"
                 disabled={engine.showResult !== null}
                 aria-label={name}

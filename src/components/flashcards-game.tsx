@@ -14,7 +14,7 @@ import { ALPHABET_GAME_SUBSET } from "@/data/alphabet";
 import { COLOR_DEFS, COLOR_GUESS_IDS } from "@/data/colors";
 import { SHAPE_DEFS, SHAPE_GAME_IDS } from "@/data/shapes";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSound } from "@/hooks/useSound";
+import { useSpeakOnChange, useTts } from "@/hooks/useTts";
 
 type CardKind = "number" | "letter" | "color" | "shape";
 
@@ -128,11 +128,18 @@ interface FlashcardsGameProps {
 
 export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
   const { t } = useTranslation();
-  const { playClickSound, playNumberSound, playLetterSound, playColorSound, playShapeSound } = useSound();
+  const tts = useTts();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<FlashcardQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  // The flashcard prompt varies between rounds, so speak whatever the current
+  // question asks for.
+  useSpeakOnChange(currentQuestion?.prompt ?? null, currentQuestion ? questionId : null, {
+    delayMs: 200,
+  });
 
   const generateQuestion = () => {
     const builders = [
@@ -143,30 +150,23 @@ export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
     ];
     const question = builders[Math.floor(Math.random() * builders.length)]();
     setCurrentQuestion(question);
-    // Speak the prompt so the kid can hear what to look for
-    setTimeout(() => playOptionPreview(question.kind, question.correctOptionId), 350);
+    setQuestionId(prev => prev + 1);
+    // After the spoken prompt, speak the correct answer's label so the kid
+    // first hears the question, then the answer cue (only if engine is ready
+    // to avoid triggering a model download mid-game).
+    setTimeout(() => {
+      if (!tts.canSpeakInstantly) return;
+      const correct = question.options.find(option => option.id === question.correctOptionId);
+      if (correct) tts.speak(correct.label);
+    }, 1500);
   };
 
   const handleAnswer = (optionId: string) => {
     if (!currentQuestion) return;
-    playClickSound();
     if (optionId === currentQuestion.correctOptionId) {
       engine.handleCorrect({ onAdvance: generateQuestion });
     } else {
       engine.handleWrong({ onAdvance: generateQuestion });
-    }
-  };
-
-  const playOptionPreview = (kind: CardKind, optionId: string) => {
-    if (kind === "number") {
-      const n = Number.parseInt(optionId, 10);
-      if (!Number.isNaN(n)) playNumberSound(n);
-    } else if (kind === "letter") {
-      playLetterSound(optionId);
-    } else if (kind === "color") {
-      playColorSound(optionId);
-    } else if (kind === "shape") {
-      playShapeSound(optionId);
     }
   };
 
@@ -232,7 +232,6 @@ export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
             <Button
               key={option.id}
               onClick={() => handleAnswer(option.id)}
-              onMouseEnter={() => playOptionPreview(currentQuestion.kind, option.id)}
               className="h-24 transform rounded-2xl border-4 border-orange-300 bg-white text-base font-bold text-orange-800 transition-all duration-300 hover:scale-105 hover:bg-orange-50 active:scale-95"
               disabled={engine.showResult !== null}
               aria-label={option.label}
