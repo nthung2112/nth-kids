@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getCountingGameConfig } from "@/config/games";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSpeakOnChange } from "@/hooks/useTts";
 
 const gameEmojis = ["🍎", "🐱", "🌸", "🦋", "⭐", "🐠", "🎈", "🎁", "🌈", "🐝"];
 
@@ -38,10 +37,6 @@ export default function CountingGame({ maxNumber }: CountingGameProps) {
 
   const [currentQuestion, setCurrentQuestion] = useState<GameQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [questionId, setQuestionId] = useState(0);
-
-  const questionPrompt = t("games.counting.question");
-  useSpeakOnChange(questionPrompt, currentQuestion ? questionId : null, { delayMs: 250 });
 
   const generateQuestion = () => {
     const count = Math.floor(Math.random() * tier.maxCount) + 1;
@@ -61,7 +56,6 @@ export default function CountingGame({ maxNumber }: CountingGameProps) {
     const options = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
 
     setCurrentQuestion({ emoji, count, options, correctAnswer });
-    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedAnswer: number) => {

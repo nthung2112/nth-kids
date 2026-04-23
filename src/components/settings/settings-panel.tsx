@@ -1,10 +1,9 @@
-import { Download, Languages, Mic, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Languages, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { usePreferences, type TtsVoicePreference } from "@/hooks/usePreferences";
-import { useTts } from "@/hooks/useTts";
+import { usePreferences } from "@/hooks/usePreferences";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
 
 interface PresetRange {
@@ -24,30 +23,6 @@ const PRESET_RANGES: PresetRange[] = [
   { max: 100, label: "1-100", descriptionKey: "settings.ranges.r100", emoji: "🏆", color: "bg-yellow-100 border-yellow-300" },
 ];
 
-interface VoiceModeOption {
-  id: TtsVoicePreference;
-  labelKey: string;
-  helpKey: string;
-}
-
-const VOICE_MODES: VoiceModeOption[] = [
-  {
-    id: "native-first",
-    labelKey: "settings.tts.voiceMode.nativeFirst",
-    helpKey: "settings.tts.voiceMode.nativeFirstHelp",
-  },
-  {
-    id: "native-only",
-    labelKey: "settings.tts.voiceMode.nativeOnly",
-    helpKey: "settings.tts.voiceMode.nativeOnlyHelp",
-  },
-  {
-    id: "fallback-only",
-    labelKey: "settings.tts.voiceMode.fallbackOnly",
-    helpKey: "settings.tts.voiceMode.fallbackOnlyHelp",
-  },
-];
-
 const difficultyKey = (max: number) => {
   if (max <= 10) return "settings.difficulty.veryEasy";
   if (max <= 30) return "settings.difficulty.easy";
@@ -65,55 +40,8 @@ const hintKey = (max: number) => {
 export default function SettingsPanel() {
   const { t, i18n } = useTranslation();
   const { prefs, update } = usePreferences();
-  const tts = useTts();
 
   const currentBase = (i18n.language ?? "vi").split("-")[0];
-
-  const handleDownloadFallback = async () => {
-    try {
-      await tts.preloadFallback();
-    } catch (error) {
-      console.warn("TTS fallback download failed", error);
-    }
-  };
-
-  const handlePreviewVoice = () => {
-    const sample =
-      tts.currentLocale === "vi"
-        ? t("settings.tts.previewSampleVi")
-        : t("settings.tts.previewSampleEn");
-    tts.speak(sample);
-  };
-
-  const engineLabelKey =
-    tts.resolvedEngine === "native"
-      ? "settings.tts.engine.native"
-      : tts.resolvedEngine === "kokoro"
-        ? "settings.tts.engine.kokoro"
-        : tts.resolvedEngine === "piper"
-          ? "settings.tts.engine.piper"
-          : "settings.tts.engine.none";
-
-  // Fallback download is needed whenever the resolved engine is not native.
-  // This covers both "no suitable native voice" and "user explicitly picked
-  // fallback-only" without surprising downloads happening behind the scenes.
-  const showFallbackHint =
-    tts.isAvailable &&
-    tts.resolvedEngine !== null &&
-    tts.resolvedEngine !== "native" &&
-    !tts.isFallbackLoaded &&
-    prefs.ttsEnabled &&
-    !prefs.soundMuted;
-
-  const downloadingFallback = tts.preloadProgress !== null && tts.status === "loading";
-  const downloadRatioPct =
-    tts.preloadProgress && Number.isFinite(tts.preloadProgress.ratio)
-      ? Math.round(tts.preloadProgress.ratio * 100)
-      : null;
-
-  const selectedVoiceMode =
-    VOICE_MODES.find(mode => mode.id === prefs.ttsPreferredVoiceMode) ?? VOICE_MODES[0];
-  const voiceModeDisabled = !prefs.ttsEnabled || prefs.soundMuted;
 
   const sectionTitle = (key: string, icon: string) => (
     <div className="mb-3 flex items-center gap-2">
@@ -143,140 +71,6 @@ export default function SettingsPanel() {
           {prefs.soundMuted ? <VolumeX className="mr-2" /> : <Volume2 className="mr-2" />}
           {prefs.soundMuted ? t("settings.soundOn") : t("settings.soundOff")}
         </Button>
-      </section>
-
-      <section className="mb-5">
-        {sectionTitle("settings.sections.voice", "🎙️")}
-        {!tts.isAvailable ? (
-          <div className="rounded-xl bg-yellow-50 p-3 text-sm text-yellow-800">
-            {t("settings.tts.unavailable")}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <Button
-              onClick={() => update({ ttsEnabled: !prefs.ttsEnabled })}
-              className={`h-auto w-full justify-start rounded-xl border-4 px-4 py-3 text-left ${
-                prefs.ttsEnabled
-                  ? "border-purple-500 bg-purple-100 text-purple-800"
-                  : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-              }`}
-              aria-pressed={prefs.ttsEnabled}
-            >
-              <Mic className="mr-3 h-5 w-5 shrink-0" />
-              <div className="flex flex-col items-start text-left">
-                <span className="font-semibold">{t("settings.tts.enable")}</span>
-                <span className="text-xs opacity-80">{t("settings.tts.enableHelp")}</span>
-              </div>
-            </Button>
-
-            <Button
-              onClick={() => update({ ttsAutoSpeakQuestions: !prefs.ttsAutoSpeakQuestions })}
-              disabled={!prefs.ttsEnabled || prefs.soundMuted}
-              className={`h-auto w-full justify-start rounded-xl border-4 px-4 py-3 text-left disabled:opacity-50 ${
-                prefs.ttsAutoSpeakQuestions
-                  ? "border-purple-500 bg-purple-100 text-purple-800"
-                  : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-              }`}
-              aria-pressed={prefs.ttsAutoSpeakQuestions}
-            >
-              <Sparkles className="mr-3 h-5 w-5 shrink-0" />
-              <div className="flex flex-col items-start text-left">
-                <span className="font-semibold">{t("settings.tts.autoSpeak")}</span>
-                <span className="text-xs opacity-80">{t("settings.tts.autoSpeakHelp")}</span>
-              </div>
-            </Button>
-
-            <div
-              role="radiogroup"
-              aria-label={t("settings.tts.voiceMode.label")}
-              aria-disabled={voiceModeDisabled}
-              className={voiceModeDisabled ? "opacity-50" : undefined}
-            >
-              <div className="mb-1.5 text-xs font-semibold text-purple-700">
-                {t("settings.tts.voiceMode.label")}
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {VOICE_MODES.map(mode => {
-                  const isActive = prefs.ttsPreferredVoiceMode === mode.id;
-                  return (
-                    <Button
-                      key={mode.id}
-                      type="button"
-                      role="radio"
-                      aria-checked={isActive}
-                      disabled={voiceModeDisabled}
-                      onClick={() => update({ ttsPreferredVoiceMode: mode.id })}
-                      className={`h-12 rounded-xl border-4 px-2 text-xs font-semibold disabled:cursor-not-allowed sm:text-sm ${
-                        isActive
-                          ? "border-purple-500 bg-purple-100 text-purple-800"
-                          : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-                      }`}
-                    >
-                      {t(mode.labelKey)}
-                    </Button>
-                  );
-                })}
-              </div>
-              <div className="mt-2 text-xs text-purple-600">{t(selectedVoiceMode.helpKey)}</div>
-            </div>
-
-            <Card className="border-2 border-purple-200 bg-purple-50/40 p-3 text-sm text-purple-800">
-              <div className="mb-1 text-xs font-semibold text-purple-700">
-                {t("settings.tts.currentVoiceLabel")}
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold">{t(engineLabelKey)}</div>
-                  {tts.resolvedVoiceName && (
-                    <div className="truncate text-xs text-purple-600">
-                      {tts.resolvedVoiceName}
-                    </div>
-                  )}
-                </div>
-                <Button
-                  type="button"
-                  onClick={handlePreviewVoice}
-                  disabled={!prefs.ttsEnabled || prefs.soundMuted || tts.status === "loading"}
-                  className="h-10 shrink-0 rounded-lg bg-green-500 px-3 text-white hover:bg-green-600 disabled:opacity-50"
-                >
-                  <Play className="mr-1 h-4 w-4" />
-                  <span>{t("settings.tts.previewVoice")}</span>
-                </Button>
-              </div>
-            </Card>
-
-            {showFallbackHint && (
-              <Card className="border-2 border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-                <div className="mb-2">{t("settings.tts.fallbackHint")}</div>
-                <Button
-                  type="button"
-                  onClick={handleDownloadFallback}
-                  disabled={downloadingFallback}
-                  className="h-10 rounded-lg bg-amber-500 px-3 text-white hover:bg-amber-600 disabled:opacity-50"
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  {downloadingFallback
-                    ? t("settings.tts.downloadingFallback")
-                    : t("settings.tts.downloadFallback")}
-                </Button>
-                {downloadingFallback && downloadRatioPct !== null && (
-                  <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-amber-200">
-                    <div
-                      className="h-full rounded-full bg-amber-500 transition-all"
-                      style={{ width: `${downloadRatioPct}%` }}
-                    />
-                  </div>
-                )}
-              </Card>
-            )}
-
-            {tts.isFallbackLoaded && tts.resolvedEngine !== "native" && (
-              <div className="rounded-xl bg-green-50 p-2 text-center text-xs font-semibold text-green-800">
-                {t("settings.tts.fallbackReady")}
-              </div>
-            )}
-          </div>
-        )}
       </section>
 
       <section className="mb-5">

@@ -14,7 +14,7 @@ import { ALPHABET_GAME_SUBSET } from "@/data/alphabet";
 import { COLOR_DEFS, COLOR_GUESS_IDS } from "@/data/colors";
 import { SHAPE_DEFS, SHAPE_GAME_IDS } from "@/data/shapes";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSpeakOnChange, useTts } from "@/hooks/useTts";
+import { useSound } from "@/hooks/useSound";
 
 type CardKind = "number" | "letter" | "color" | "shape";
 
@@ -128,18 +128,30 @@ interface FlashcardsGameProps {
 
 export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
   const { t } = useTranslation();
-  const tts = useTts();
+  const { playNumberSound, playLetterSound, playColorSound, playShapeSound } = useSound();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<FlashcardQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [questionId, setQuestionId] = useState(0);
 
-  // The flashcard prompt varies between rounds, so speak whatever the current
-  // question asks for.
-  useSpeakOnChange(currentQuestion?.prompt ?? null, currentQuestion ? questionId : null, {
-    delayMs: 200,
-  });
+  // Play the sprite for the correct answer so the kid gets a concrete audio
+  // cue tied to the item being asked about.
+  const playAnswerCue = (question: FlashcardQuestion) => {
+    switch (question.kind) {
+      case "number":
+        playNumberSound(Number(question.correctOptionId));
+        return;
+      case "letter":
+        playLetterSound(question.correctOptionId);
+        return;
+      case "color":
+        playColorSound(question.correctOptionId);
+        return;
+      case "shape":
+        playShapeSound(question.correctOptionId);
+        return;
+    }
+  };
 
   const generateQuestion = () => {
     const builders = [
@@ -150,15 +162,7 @@ export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
     ];
     const question = builders[Math.floor(Math.random() * builders.length)]();
     setCurrentQuestion(question);
-    setQuestionId(prev => prev + 1);
-    // After the spoken prompt, speak the correct answer's label so the kid
-    // first hears the question, then the answer cue (only if engine is ready
-    // to avoid triggering a model download mid-game).
-    setTimeout(() => {
-      if (!tts.canSpeakInstantly) return;
-      const correct = question.options.find(option => option.id === question.correctOptionId);
-      if (correct) tts.speak(correct.label);
-    }, 1500);
+    setTimeout(() => playAnswerCue(question), 400);
   };
 
   const handleAnswer = (optionId: string) => {

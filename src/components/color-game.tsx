@@ -13,7 +13,6 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { COLOR_DEFS, COLOR_GUESS_IDS, type ColorId } from "@/data/colors";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSpeakOnChange } from "@/hooks/useTts";
 
 interface ColorQuestion {
   emoji: string;
@@ -29,10 +28,6 @@ export default function ColorGame() {
 
   const [currentQuestion, setCurrentQuestion] = useState<ColorQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [questionId, setQuestionId] = useState(0);
-
-  const questionPrompt = t("games.colorGuess.question");
-  useSpeakOnChange(questionPrompt, currentQuestion ? questionId : null, { delayMs: 250 });
 
   const generateQuestion = () => {
     const correctId = COLOR_GUESS_IDS[Math.floor(Math.random() * COLOR_GUESS_IDS.length)];
@@ -50,7 +45,6 @@ export default function ColorGame() {
     const options = [correctId, ...wrongIds].sort(() => Math.random() - 0.5);
 
     setCurrentQuestion({ emoji: randomEmoji, correctId, options });
-    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedId: ColorId) => {

@@ -409,44 +409,13 @@
       "sound": "Âm thanh",
       "language": "Ngôn ngữ",
       "numberRange": "Phạm vi số (trang Số)",
-      "accessibility": "Trải nghiệm",
-      "voice": "Giọng đọc"
+      "accessibility": "Trải nghiệm"
     },
     "soundOn": "Bật âm thanh",
     "soundOff": "Tắt âm thanh",
     "reduceMotion": "Giảm hiệu ứng chuyển động",
     "reduceMotionHelp": "Bớt nảy/xoay khi bé dễ phân tâm",
     "trigger": "Cài đặt",
-    "tts": {
-      "enable": "Đọc câu hỏi cho bé",
-      "enableHelp": "Dùng giọng đọc thân thiện đọc to câu hỏi",
-      "autoSpeak": "Tự động đọc khi đổi câu",
-      "autoSpeakHelp": "Bỏ chọn nếu bé thích tự bấm để nghe",
-      "voiceMode": {
-        "label": "Cách chọn giọng",
-        "nativeFirst": "Tự động",
-        "nativeFirstHelp": "Ưu tiên giọng có sẵn của trình duyệt, nếu không có sẽ dùng giọng tải về.",
-        "nativeOnly": "Chỉ giọng có sẵn",
-        "nativeOnlyHelp": "Chỉ dùng giọng do trình duyệt cung cấp, không dùng giọng tải về máy.",
-        "fallbackOnly": "Chỉ giọng tải về",
-        "fallbackOnlyHelp": "Luôn dùng giọng tải về (Kokoro cho tiếng Anh, Piper cho tiếng Việt) để cho ra chất giọng đồng nhất giữa các trình duyệt."
-      },
-      "currentVoiceLabel": "Giọng đang dùng",
-      "engine": {
-        "native": "Giọng có sẵn của trình duyệt",
-        "kokoro": "Giọng tiếng Anh tải về (Kokoro)",
-        "piper": "Giọng tiếng Việt tải về (Piper)",
-        "none": "Chưa sẵn sàng"
-      },
-      "fallbackHint": "Trình duyệt không có giọng phù hợp cho ngôn ngữ này. Tải giọng đọc về máy để dùng (~80MB lần đầu, lưu lại cho lần sau).",
-      "downloadFallback": "Tải giọng đọc về máy",
-      "downloadingFallback": "Đang tải giọng đọc...",
-      "fallbackReady": "Giọng đọc tải về đã sẵn sàng",
-      "previewVoice": "Nghe thử giọng",
-      "previewSampleEn": "Hello! Let's learn together.",
-      "previewSampleVi": "Xin chào! Cùng học vui nhé.",
-      "unavailable": "Trình duyệt không hỗ trợ đọc thành tiếng"
-    },
     "difficulty": {
       "veryEasy": "Rất dễ",
       "easy": "Dễ",

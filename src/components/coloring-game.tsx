@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { COLOR_DEFS, COLOR_PALETTE_IDS, type ColorId } from "@/data/colors";
 import { COLORING_TEMPLATES } from "@/data/coloringTemplates";
-import { useTts } from "@/hooks/useTts";
+import { useSound } from "@/hooks/useSound";
 
 const GALLERY_KEY = "nthkids:coloring-gallery";
 const GALLERY_LIMIT = 6;
@@ -45,7 +45,7 @@ const saveGallery = (entries: GalleryEntry[]) => {
 
 export default function ColoringGame() {
   const { t } = useTranslation();
-  const tts = useTts();
+  const { playColorSound } = useSound();
   const [selectedHex, setSelectedHex] = useState(COLOR_DEFS[COLOR_PALETTE_IDS[0]].hex);
   const [selectedTemplateIdx, setSelectedTemplateIdx] = useState(0);
   const [coloredPaths, setColoredPaths] = useState<{ [key: number]: string }>({});
@@ -61,9 +61,7 @@ export default function ColoringGame() {
   }, []);
 
   const handleColorSelect = (colorId: ColorId, hex: string) => {
-    if (tts.canSpeakInstantly) {
-      tts.speak(t(`data.colors.${colorId}.name`));
-    }
+    playColorSound(colorId);
     setSelectedHex(hex);
     setIsErasing(false);
   };

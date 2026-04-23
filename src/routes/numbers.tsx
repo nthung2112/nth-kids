@@ -9,7 +9,7 @@ import ImmersiveView from "@/components/layout/immersive-view";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePreferences } from "@/hooks/usePreferences";
-import { useTts } from "@/hooks/useTts";
+import { useSound } from "@/hooks/useSound";
 import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
 import {
   generateNumberData,
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/numbers")({
 function NumbersPage() {
   const { t, i18n } = useTranslation();
   const { prefs } = usePreferences();
-  const tts = useTts();
+  const { playNumberSound } = useSound();
   const { mode } = Route.useSearch();
   const maxNumber = prefs.maxNumber;
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
@@ -43,8 +43,7 @@ function NumbersPage() {
   }, []);
 
   const speakNumberName = (num: number) => {
-    if (!tts.canSpeakInstantly) return;
-    tts.speak(getNumberName(num, i18n.language));
+    playNumberSound(num);
   };
 
   const handleNumberClick = (num: number) => {

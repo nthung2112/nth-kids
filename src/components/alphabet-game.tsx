@@ -12,7 +12,6 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { ALPHABET_GAME_SUBSET } from "@/data/alphabet";
 import { useGameEngine } from "@/hooks/useGameEngine";
-import { useSpeakOnChange } from "@/hooks/useTts";
 
 interface AlphabetQuestion {
   emoji: string;
@@ -29,13 +28,6 @@ export default function AlphabetGame() {
 
   const [currentQuestion, setCurrentQuestion] = useState<AlphabetQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [questionId, setQuestionId] = useState(0);
-
-  // Read the displayed word so the kid can connect picture, sound and letter.
-  const wordToSpeak = currentQuestion
-    ? `${t("games.alphabet.question")} ${t(`data.alphabet.${currentQuestion.correctLetter}.word`)}`
-    : null;
-  useSpeakOnChange(wordToSpeak, currentQuestion ? questionId : null, { delayMs: 300 });
 
   const generateQuestion = () => {
     const randomEntry =
@@ -59,7 +51,6 @@ export default function AlphabetGame() {
       correctLetter,
       options,
     });
-    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedLetter: string) => {

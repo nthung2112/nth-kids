@@ -6,18 +6,15 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ALPHABET } from "@/data/alphabet";
-import { useTts } from "@/hooks/useTts";
+import { useSound } from "@/hooks/useSound";
 
 export default function AlphabetLearning() {
   const { t } = useTranslation();
-  const tts = useTts();
+  const { playLetterSound } = useSound();
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
 
   const speakLetterWord = (letter: string) => {
-    if (!tts.canSpeakInstantly) return;
-    // Speak the word the picture represents (e.g., "Apple") so the kid
-    // associates the letter with a familiar sound.
-    tts.speak(t(`data.alphabet.${letter}.word`));
+    playLetterSound(letter);
   };
 
   const handleLetterClick = (letter: string) => {

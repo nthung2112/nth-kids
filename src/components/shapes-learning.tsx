@@ -6,16 +6,15 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SHAPE_DEFS, SHAPE_LEARNING_IDS, type ShapeId } from "@/data/shapes";
-import { useTts } from "@/hooks/useTts";
+import { useSound } from "@/hooks/useSound";
 
 export default function ShapesLearning() {
   const { t } = useTranslation();
-  const tts = useTts();
+  const { playShapeSound } = useSound();
   const [selectedId, setSelectedId] = useState<ShapeId | null>(null);
 
   const speakLocalisedName = (id: ShapeId) => {
-    if (!tts.canSpeakInstantly) return;
-    tts.speak(t(`data.shapes.${id}.name`));
+    playShapeSound(id);
   };
 
   const handleClick = (id: ShapeId) => {

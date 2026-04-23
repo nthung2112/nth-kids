@@ -6,16 +6,15 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { COLOR_DEFS, COLOR_LEARNING_IDS, type ColorId } from "@/data/colors";
-import { useTts } from "@/hooks/useTts";
+import { useSound } from "@/hooks/useSound";
 
 export default function ColorLearning() {
   const { t } = useTranslation();
-  const tts = useTts();
+  const { playColorSound } = useSound();
   const [selectedId, setSelectedId] = useState<ColorId | null>(null);
 
   const speakLocalisedName = (id: ColorId) => {
-    if (!tts.canSpeakInstantly) return;
-    tts.speak(t(`data.colors.${id}.name`));
+    playColorSound(id);
   };
 
   const handleColorClick = (id: ColorId) => {

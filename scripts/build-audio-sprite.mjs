@@ -7,16 +7,15 @@
 //
 // Usage:
 //   node scripts/build-audio-sprite.mjs
-
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, "..");
 const wavDir = "/tmp/nthkids-audio";
-const m4aDir = resolve(repoRoot, "public/assets");
+const m4aDir = resolve(repoRoot, "public/assets/audio");
 
 const TOPICS = [
   { name: "alphabet", minSilenceMs: 250 },
@@ -152,7 +151,16 @@ const SHAPE_ORDER_IN_RECORDING = [
   "cylinder",
 ];
 
-const APP_SHAPES = ["circle", "square", "triangle", "rectangle", "star", "heart", "diamond", "oval"];
+const APP_SHAPES = [
+  "circle",
+  "square",
+  "triangle",
+  "rectangle",
+  "star",
+  "heart",
+  "diamond",
+  "oval",
+];
 
 const shapeIndex = {};
 APP_SHAPES.forEach(appShape => {
@@ -160,7 +168,18 @@ APP_SHAPES.forEach(appShape => {
   if (idx >= 0) shapeIndex[appShape] = idx;
 });
 
-const APP_COLORS = ["red", "yellow", "green", "blue", "purple", "orange", "pink", "brown", "black", "white"];
+const APP_COLORS = [
+  "red",
+  "yellow",
+  "green",
+  "blue",
+  "purple",
+  "orange",
+  "pink",
+  "brown",
+  "black",
+  "white",
+];
 const colorIndex = {};
 APP_COLORS.forEach((color, i) => {
   // Assume each color said twice in the recording -> pick the first take.
