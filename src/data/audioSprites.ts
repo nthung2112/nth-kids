@@ -28,86 +28,86 @@ export type AudioSprite = Partial<Record<SpriteLocale, AudioSpriteLocale>>;
 export const AUDIO_SPRITES = {
   numbers: {
     vi: {
-      src: "assets/audio/numbers-vi.m4a",
-      duration: 209.76,
+      src: "assets/audio/numbers-vi.mp3",
+      duration: 115.128,
       sampleRate: 22050,
-      segments: [{"start":0.33,"end":0.72},{"start":1.921,"end":2.312},{"start":3.543,"end":3.993},{"start":5.194,"end":5.644},{"start":6.965,"end":7.446},{"start":8.647,"end":9.157},{"start":10.388,"end":10.898},{"start":12.129,"end":12.519},{"start":13.75,"end":14.141},{"start":15.342,"end":15.762},{"start":17.533,"end":18.194},{"start":19.425,"end":20.205},{"start":21.406,"end":22.127},{"start":23.328,"end":24.138},{"start":25.309,"end":26.03},{"start":27.231,"end":28.071},{"start":29.242,"end":30.113},{"start":31.284,"end":32.094},{"start":33.265,"end":33.986},{"start":35.187,"end":35.817},{"start":37.588,"end":38.399},{"start":39.63,"end":40.471},{"start":41.762,"end":42.602},{"start":43.833,"end":44.734},{"start":45.995,"end":46.835},{"start":48.036,"end":49.027},{"start":50.228,"end":51.189},{"start":52.39,"end":53.32},{"start":54.491,"end":55.362},{"start":56.533,"end":57.223},{"start":58.995,"end":59.835},{"start":61.066,"end":61.967},{"start":63.198,"end":64.098},{"start":65.329,"end":66.26},{"start":67.521,"end":68.362},{"start":69.593,"end":70.613},{"start":71.784,"end":72.805},{"start":73.976,"end":74.967},{"start":76.138,"end":77.038},{"start":78.239,"end":78.93},{"start":80.701,"end":81.572},{"start":82.833,"end":83.733},{"start":84.934,"end":85.865},{"start":87.066,"end":87.996},{"start":89.257,"end":90.128},{"start":91.359,"end":92.41},{"start":93.611,"end":94.631},{"start":95.832,"end":96.793},{"start":97.964,"end":98.895},{"start":100.066,"end":100.726},{"start":102.527,"end":103.338},{"start":104.569,"end":105.5},{"start":106.731,"end":107.631},{"start":108.862,"end":109.763},{"start":111.054,"end":111.924},{"start":113.156,"end":114.206},{"start":115.407,"end":116.458},{"start":117.659,"end":118.65},{"start":119.821,"end":120.751},{"start":121.952,"end":122.673},{"start":124.474,"end":125.315},{"start":126.576,"end":127.476},{"start":128.737,"end":129.638},{"start":130.899,"end":131.83},{"start":133.121,"end":133.991},{"start":135.222,"end":136.273},{"start":137.504,"end":138.495},{"start":139.726,"end":140.686},{"start":141.887,"end":142.818},{"start":143.989,"end":144.709},{"start":146.481,"end":147.321},{"start":148.522,"end":149.453},{"start":150.654,"end":151.584},{"start":152.755,"end":153.716},{"start":154.947,"end":155.818},{"start":157.019,"end":158.069},{"start":159.24,"end":160.231},{"start":161.402,"end":162.393},{"start":163.534,"end":164.494},{"start":165.665,"end":166.296},{"start":168.037,"end":168.847},{"start":170.079,"end":170.949},{"start":172.15,"end":172.991},{"start":174.222,"end":175.092},{"start":176.353,"end":177.194},{"start":178.425,"end":179.415},{"start":180.586,"end":181.517},{"start":182.718,"end":183.649},{"start":184.82,"end":185.69},{"start":186.861,"end":187.522},{"start":189.263,"end":190.043},{"start":191.305,"end":192.145},{"start":193.376,"end":194.187},{"start":195.418,"end":196.258},{"start":197.519,"end":198.36},{"start":199.591,"end":200.551},{"start":201.752,"end":202.653},{"start":203.884,"end":204.785},{"start":205.986,"end":206.826},{"start":208.027,"end":208.778}],
+      segments: [{"start":0.09,"end":0.751},{"start":1.561,"end":2.372},{"start":3.152,"end":3.903},{"start":4.684,"end":5.494},{"start":6.275,"end":6.995},{"start":7.776,"end":9.037},{"start":9.817,"end":11.108},{"start":11.889,"end":13.3},{"start":14.081,"end":15.312},{"start":16.092,"end":17.323},{"start":18.104,"end":19.665},{"start":20.476,"end":21.977},{"start":22.787,"end":24.378},{"start":25.159,"end":26.72},{"start":27.501,"end":29.032},{"start":29.843,"end":31.494},{"start":32.304,"end":33.956},{"start":34.766,"end":36.508},{"start":37.288,"end":38.969},{"start":39.75,"end":41.221},{"start":42.032,"end":43.683},{"start":44.494,"end":46.205},{"start":47.016,"end":48.817},{"start":49.598,"end":51.249},{"start":52.029,"end":53.5},{"start":54.281,"end":55.902},{"start":56.713,"end":58.334},{"start":59.145,"end":60.856},{"start":61.637,"end":63.198},{"start":64.008,"end":65.449},{"start":66.35,"end":67.941},{"start":68.812,"end":70.433},{"start":71.304,"end":72.955},{"start":73.826,"end":75.477},{"start":76.318,"end":77.789},{"start":78.599,"end":80.281},{"start":81.091,"end":82.802},{"start":83.613,"end":85.444},{"start":86.225,"end":87.966},{"start":88.747,"end":90.308},{"start":91.119,"end":92.65},{"start":93.491,"end":95.112},{"start":95.922,"end":97.694},{"start":98.474,"end":100.036},{"start":100.846,"end":102.287},{"start":103.098,"end":104.629},{"start":105.44,"end":107.151},{"start":107.962,"end":109.703},{"start":110.483,"end":112.135},{"start":112.945,"end":114.326}],
     },
     en: {
-      src: "assets/audio/numbers-en.m4a",
-      duration: 208.416,
+      src: "assets/audio/numbers-en.mp3",
+      duration: 131.352,
       sampleRate: 22050,
-      segments: [{"start":0.15,"end":0.66},{"start":1.651,"end":2.102},{"start":3.182,"end":3.663},{"start":4.744,"end":5.254},{"start":6.335,"end":6.845},{"start":7.896,"end":8.677},{"start":10.388,"end":11.108},{"start":12.099,"end":12.459},{"start":13.6,"end":14.171},{"start":15.192,"end":15.702},{"start":16.723,"end":17.503},{"start":18.494,"end":19.124},{"start":21.016,"end":21.766},{"start":22.847,"end":23.718},{"start":24.769,"end":25.639},{"start":26.66,"end":27.651},{"start":28.672,"end":29.752},{"start":30.713,"end":31.494},{"start":33.235,"end":34.076},{"start":35.067,"end":35.847},{"start":36.838,"end":37.829},{"start":38.819,"end":39.84},{"start":40.831,"end":41.852},{"start":42.842,"end":43.833},{"start":45.544,"end":46.595},{"start":47.646,"end":48.847},{"start":49.808,"end":51.008},{"start":51.999,"end":52.84},{"start":53.891,"end":54.911},{"start":56.022,"end":56.563},{"start":58.334,"end":59.175},{"start":60.226,"end":61.036},{"start":62.117,"end":62.988},{"start":64.038,"end":64.909},{"start":65.93,"end":66.83},{"start":67.911,"end":68.962},{"start":70.703,"end":71.754},{"start":72.835,"end":73.495},{"start":74.606,"end":75.477},{"start":76.588,"end":77.218},{"start":78.329,"end":79.17},{"start":80.251,"end":81.121},{"start":82.923,"end":83.853},{"start":84.964,"end":85.835},{"start":87.636,"end":88.537},{"start":90.398,"end":91.509},{"start":92.59,"end":93.641},{"start":94.722,"end":95.442},{"start":97.364,"end":98.234},{"start":99.315,"end":100.005},{"start":101.056,"end":102.017},{"start":103.068,"end":104.029},{"start":105.079,"end":106.07},{"start":107.151,"end":108.112},{"start":109.883,"end":110.874},{"start":111.985,"end":113.185},{"start":114.206,"end":115.347},{"start":116.398,"end":117.239},{"start":118.349,"end":119.37},{"start":120.421,"end":121.232},{"start":122.973,"end":124.024},{"start":125.044,"end":126.095},{"start":127.116,"end":128.197},{"start":129.218,"end":130.298},{"start":131.319,"end":132.43},{"start":133.481,"end":134.742},{"start":136.453,"end":137.684},{"start":138.705,"end":139.635},{"start":140.716,"end":141.827},{"start":142.878,"end":143.779},{"start":144.769,"end":145.88},{"start":146.901,"end":148.042},{"start":149.783,"end":150.954},{"start":151.945,"end":153.116},{"start":154.106,"end":155.337},{"start":156.418,"end":157.769},{"start":158.76,"end":160.081},{"start":161.102,"end":162.092},{"start":163.894,"end":165.035},{"start":166.055,"end":166.596},{"start":167.587,"end":168.367},{"start":169.358,"end":170.199},{"start":171.189,"end":172.03},{"start":173.021,"end":173.861},{"start":175.573,"end":176.443},{"start":177.464,"end":178.485},{"start":179.476,"end":180.496},{"start":181.457,"end":182.118},{"start":183.198,"end":184.009},{"start":185.03,"end":185.72},{"start":187.432,"end":188.392},{"start":189.413,"end":190.344},{"start":191.365,"end":192.355},{"start":193.346,"end":194.367},{"start":195.358,"end":196.378},{"start":197.429,"end":198.63},{"start":200.311,"end":201.482},{"start":202.473,"end":203.283},{"start":204.364,"end":205.325},{"start":206.376,"end":207.397}],
+      segments: [{"start":0.12,"end":0.54},{"start":0.661,"end":1.081},{"start":2.012,"end":2.432},{"start":2.582,"end":3.002},{"start":3.933,"end":5.194},{"start":6.005,"end":7.025},{"start":7.956,"end":9.007},{"start":9.847,"end":11.168},{"start":12.129,"end":13.63},{"start":14.531,"end":16.272},{"start":17.113,"end":18.764},{"start":19.605,"end":21.076},{"start":21.887,"end":23.748},{"start":24.559,"end":26.51},{"start":27.321,"end":28.221},{"start":28.401,"end":29.452},{"start":30.233,"end":32.124},{"start":32.995,"end":33.986},{"start":34.136,"end":34.646},{"start":35.487,"end":36.267},{"start":36.448,"end":37.228},{"start":38.099,"end":38.939},{"start":39.15,"end":39.96},{"start":40.801,"end":41.611},{"start":41.822,"end":42.782},{"start":43.653,"end":44.584},{"start":44.794,"end":45.454},{"start":46.385,"end":47.886},{"start":48.787,"end":50.528},{"start":51.459,"end":52.299},{"start":52.45,"end":53.29},{"start":54.191,"end":55.001},{"start":55.152,"end":56.142},{"start":57.013,"end":58.004},{"start":58.124,"end":58.844},{"start":59.805,"end":61.366},{"start":62.237,"end":64.008},{"start":64.909,"end":65.81},{"start":65.93,"end":66.8},{"start":67.671,"end":68.542},{"start":68.692,"end":69.713},{"start":70.553,"end":71.544},{"start":71.664,"end":72.415},{"start":73.345,"end":75.027},{"start":75.867,"end":77.879},{"start":78.72,"end":80.851},{"start":81.692,"end":83.973},{"start":84.814,"end":86.916},{"start":87.816,"end":89.648},{"start":90.518,"end":92.59},{"start":93.431,"end":95.592},{"start":96.433,"end":97.454},{"start":97.574,"end":98.745},{"start":99.555,"end":101.717},{"start":102.618,"end":104.149},{"start":104.989,"end":106.55},{"start":107.391,"end":109.072},{"start":109.883,"end":111.684},{"start":112.495,"end":114.146},{"start":115.017,"end":116.458},{"start":117.299,"end":119.13},{"start":119.971,"end":121.952},{"start":122.793,"end":123.723},{"start":123.874,"end":124.954},{"start":125.765,"end":127.716},{"start":128.587,"end":130.479}],
     },
   },
   colors: {
     vi: {
-      src: "assets/audio/colors-vi.m4a",
-      duration: 19.152,
+      src: "assets/audio/colors-vi.mp3",
+      duration: 15.48,
       sampleRate: 22050,
-      segments: [{"start":0.18,"end":0.72},{"start":1.952,"end":2.552},{"start":3.843,"end":4.533},{"start":5.704,"end":6.155},{"start":7.296,"end":7.746},{"start":8.947,"end":9.427},{"start":10.598,"end":11.048},{"start":12.249,"end":12.64},{"start":13.84,"end":14.321},{"start":15.522,"end":16.032},{"start":17.773,"end":18.164}],
+      segments: [{"start":0.09,"end":0.57},{"start":1.591,"end":2.102},{"start":3.182,"end":3.843},{"start":4.804,"end":5.164},{"start":6.095,"end":6.515},{"start":7.476,"end":7.926},{"start":8.887,"end":9.277},{"start":10.268,"end":10.658},{"start":11.619,"end":12.009},{"start":13.03,"end":13.39},{"start":14.351,"end":14.681}],
     },
     en: {
-      src: "assets/audio/colors-en.m4a",
-      duration: 18.576,
+      src: "assets/audio/colors-en.mp3",
+      duration: 15.168,
       sampleRate: 22050,
-      segments: [{"start":0.12,"end":0.57},{"start":1.621,"end":2.252},{"start":3.242,"end":3.783},{"start":4.804,"end":5.254},{"start":6.335,"end":6.815},{"start":8.046,"end":8.677},{"start":10.418,"end":11.168},{"start":12.159,"end":12.579},{"start":13.72,"end":14.351},{"start":15.342,"end":15.882},{"start":16.903,"end":17.593}],
+      segments: [{"start":0.12,"end":0.51},{"start":1.381,"end":1.921},{"start":2.762,"end":3.212},{"start":4.083,"end":4.473},{"start":5.374,"end":5.794},{"start":6.815,"end":7.386},{"start":8.226,"end":8.887},{"start":9.727,"end":10.088},{"start":11.048,"end":11.619},{"start":12.429,"end":12.91},{"start":13.75,"end":14.351}],
     },
   },
   shapes: {
     vi: {
-      src: "assets/audio/shapes-vi.m4a",
-      duration: 16.512,
+      src: "assets/audio/shapes-vi.mp3",
+      duration: 14.184,
       sampleRate: 22050,
-      segments: [{"start":0.24,"end":0.931},{"start":2.162,"end":3.032},{"start":4.293,"end":5.224},{"start":6.455,"end":7.145},{"start":8.376,"end":9.217},{"start":10.478,"end":11.469},{"start":12.67,"end":13.6},{"start":14.831,"end":15.552}],
+      segments: [{"start":0.12,"end":0.781},{"start":1.741,"end":2.552},{"start":3.573,"end":4.443},{"start":5.374,"end":6.095},{"start":7.055,"end":7.896},{"start":8.887,"end":9.817},{"start":10.778,"end":11.739},{"start":12.7,"end":13.36}],
     },
     en: {
-      src: "assets/audio/shapes-en.m4a",
-      duration: 15.216,
+      src: "assets/audio/shapes-en.mp3",
+      duration: 12.312,
       sampleRate: 22050,
-      segments: [{"start":0.15,"end":0.871},{"start":1.891,"end":2.912},{"start":3.933,"end":4.894},{"start":5.884,"end":6.695},{"start":7.656,"end":8.346},{"start":9.367,"end":10.088},{"start":11.829,"end":12.309},{"start":13.45,"end":14.231}],
+      segments: [{"start":0.12,"end":0.72},{"start":1.591,"end":2.492},{"start":3.303,"end":4.173},{"start":5.014,"end":5.704},{"start":6.515,"end":7.085},{"start":7.956,"end":8.586},{"start":9.427,"end":9.847},{"start":10.808,"end":11.499}],
     },
   },
   alphabet: {
     vi: {
-      src: "assets/audio/alphabet-vi.m4a",
-      duration: 62.641,
+      src: "assets/audio/alphabet-vi.mp3",
+      duration: 34.896,
       sampleRate: 22050,
-      segments: [{"start":0.18,"end":0.871},{"start":2.642,"end":3.302},{"start":5.074,"end":5.764},{"start":7.506,"end":8.226},{"start":9.998,"end":10.658},{"start":12.429,"end":13},{"start":14.771,"end":15.432},{"start":17.173,"end":17.743},{"start":19.545,"end":20.205},{"start":21.977,"end":22.637},{"start":24.439,"end":25.099},{"start":26.9,"end":27.561},{"start":29.302,"end":29.993},{"start":31.764,"end":32.424},{"start":34.196,"end":34.886},{"start":36.688,"end":37.348},{"start":39.12,"end":39.81},{"start":41.581,"end":42.272},{"start":44.013,"end":44.584},{"start":46.355,"end":47.045},{"start":48.787,"end":49.447},{"start":51.249,"end":51.909},{"start":53.681,"end":54.551},{"start":56.323,"end":56.803},{"start":58.604,"end":59.265},{"start":61.066,"end":61.667}],
+      segments: [{"start":0.12,"end":1.261},{"start":2.252,"end":2.882},{"start":3.843,"end":4.443},{"start":5.434,"end":6.545},{"start":7.536,"end":8.166},{"start":9.157,"end":9.697},{"start":10.658,"end":11.739},{"start":12.73,"end":13.33},{"start":14.291,"end":14.921},{"start":15.912,"end":16.572},{"start":17.593,"end":18.254},{"start":19.245,"end":20.445},{"start":21.406,"end":22.007},{"start":22.967,"end":23.628},{"start":24.619,"end":25.159},{"start":26.12,"end":26.75},{"start":27.711,"end":28.822},{"start":29.813,"end":30.623},{"start":31.584,"end":32.064},{"start":33.025,"end":34.076}],
     },
     en: {
-      src: "assets/audio/alphabet-en.m4a",
-      duration: 44.04,
+      src: "assets/audio/alphabet-en.mp3",
+      duration: 14.28,
       sampleRate: 22050,
-      segments: [{"start":0.09,"end":0.54},{"start":1.531,"end":1.981},{"start":3.002,"end":3.543},{"start":4.533,"end":4.984},{"start":5.975,"end":6.485},{"start":7.476,"end":8.256},{"start":10.118,"end":10.628},{"start":11.589,"end":12.249},{"start":13.18,"end":13.63},{"start":14.621,"end":15.161},{"start":16.152,"end":16.633},{"start":17.623,"end":18.074},{"start":19.785,"end":20.295},{"start":21.286,"end":21.796},{"start":22.757,"end":23.147},{"start":24.198,"end":24.649},{"start":25.669,"end":26.21},{"start":27.201,"end":27.741},{"start":29.452,"end":30.023},{"start":31.013,"end":31.494},{"start":32.515,"end":32.995},{"start":34.736,"end":35.187},{"start":36.177,"end":36.988},{"start":38.669,"end":39.33},{"start":41.041,"end":41.521},{"start":42.542,"end":43.052}],
+      segments: [{"start":0.09,"end":0.42},{"start":0.6,"end":1.471},{"start":1.621,"end":2.402},{"start":2.522,"end":2.882},{"start":3.062,"end":5.014},{"start":5.134,"end":6.545},{"start":6.695,"end":7.596},{"start":7.716,"end":8.076},{"start":8.226,"end":8.677},{"start":8.797,"end":9.637},{"start":9.757,"end":10.178},{"start":10.298,"end":11.078},{"start":11.199,"end":13.42}],
     },
   },
   alphabetWords: {
     en: {
-      src: "assets/audio/alphabet-words-en.m4a",
-      duration: 45.072,
+      src: "assets/audio/alphabet-words-en.mp3",
+      duration: 37.176,
       sampleRate: 22050,
-      segments: [{"start":0.12,"end":0.751},{"start":1.771,"end":2.312},{"start":3.333,"end":3.813},{"start":4.864,"end":5.404},{"start":6.395,"end":7.295},{"start":8.346,"end":8.947},{"start":9.908,"end":10.358},{"start":11.469,"end":12.189},{"start":13.15,"end":14.141},{"start":15.131,"end":15.792},{"start":17.503,"end":17.984},{"start":19.064,"end":19.695},{"start":20.716,"end":21.406},{"start":22.397,"end":22.997},{"start":24.018,"end":24.799},{"start":25.76,"end":26.51},{"start":27.501,"end":28.101},{"start":29.122,"end":29.722},{"start":30.803,"end":31.584},{"start":32.545,"end":33.085},{"start":34.796,"end":35.697},{"start":36.748,"end":37.348},{"start":38.339,"end":38.909},{"start":39.9,"end":40.651},{"start":41.641,"end":42.302},{"start":43.323,"end":44.103}],
+      segments: [{"start":0.09,"end":0.63},{"start":1.471,"end":1.951},{"start":2.822,"end":3.242},{"start":4.143,"end":4.593},{"start":5.434,"end":6.215},{"start":7.085,"end":7.626},{"start":8.406,"end":8.827},{"start":9.757,"end":10.358},{"start":11.168,"end":12.039},{"start":12.85,"end":13.42},{"start":14.261,"end":14.681},{"start":15.582,"end":16.152},{"start":16.963,"end":17.593},{"start":18.404,"end":18.914},{"start":19.785,"end":20.475},{"start":21.286,"end":21.917},{"start":22.757,"end":23.268},{"start":24.108,"end":24.649},{"start":25.549,"end":26.21},{"start":27.05,"end":27.501},{"start":28.311,"end":29.122},{"start":29.993,"end":30.533},{"start":31.344,"end":31.854},{"start":32.665,"end":33.415},{"start":34.256,"end":34.856},{"start":35.697,"end":36.357}],
     },
     vi: {
-      src: "assets/audio/alphabet-words-vi.m4a",
-      duration: 54.144,
+      src: "assets/audio/alphabet-words-vi.mp3",
+      duration: 40.752,
       sampleRate: 22050,
-      segments: [{"start":0.21,"end":0.961},{"start":2.162,"end":2.642},{"start":3.813,"end":4.473},{"start":5.674,"end":6.455},{"start":8.196,"end":8.887},{"start":10.148,"end":10.898},{"start":12.129,"end":12.85},{"start":14.051,"end":14.741},{"start":16.482,"end":16.903},{"start":18.074,"end":18.884},{"start":20.055,"end":20.746},{"start":21.977,"end":22.817},{"start":24.559,"end":25.369},{"start":26.54,"end":27.2},{"start":28.371,"end":29.092},{"start":30.263,"end":30.893},{"start":32.695,"end":33.445},{"start":34.646,"end":35.487},{"start":36.778,"end":37.528},{"start":38.729,"end":39.39},{"start":41.131,"end":41.761},{"start":43.533,"end":44.343},{"start":46.145,"end":46.775},{"start":47.976,"end":48.517},{"start":50.378,"end":51.189},{"start":52.39,"end":53.17}],
+      segments: [{"start":0.09,"end":0.72},{"start":1.651,"end":2.282},{"start":3.242,"end":3.873},{"start":4.864,"end":5.554},{"start":6.515,"end":7.175},{"start":8.136,"end":8.797},{"start":9.727,"end":10.388},{"start":11.349,"end":11.979},{"start":13,"end":13.66},{"start":14.651,"end":15.342},{"start":16.302,"end":16.963},{"start":17.954,"end":18.944},{"start":19.905,"end":20.596},{"start":21.556,"end":22.217},{"start":23.178,"end":23.838},{"start":24.799,"end":25.339},{"start":26.27,"end":27.05},{"start":28.011,"end":28.732},{"start":29.692,"end":30.383},{"start":31.374,"end":31.974},{"start":32.965,"end":34.256},{"start":35.247,"end":35.817},{"start":36.808,"end":37.979},{"start":38.969,"end":39.96}],
     },
   },
   prompts: {
     en: {
-      src: "assets/audio/prompts-en.m4a",
-      duration: 34.176,
+      src: "assets/audio/prompts-en.mp3",
+      duration: 26.592,
       sampleRate: 22050,
-      segments: [{"start":0.12,"end":1.531},{"start":2.522,"end":4.984},{"start":6.095,"end":7.806},{"start":9.577,"end":11.138},{"start":12.129,"end":14.081},{"start":15.041,"end":16.542},{"start":18.254,"end":19.875},{"start":20.866,"end":22.457},{"start":23.418,"end":24.979},{"start":26.69,"end":28.191},{"start":29.933,"end":30.563},{"start":31.614,"end":33.175}],
+      segments: [{"start":0.09,"end":1.321},{"start":2.132,"end":4.233},{"start":5.164,"end":6.635},{"start":7.536,"end":8.887},{"start":9.697,"end":11.349},{"start":12.159,"end":13.45},{"start":14.291,"end":15.702},{"start":16.513,"end":17.863},{"start":18.674,"end":20.025},{"start":20.836,"end":22.127},{"start":22.967,"end":23.538},{"start":24.408,"end":25.759}],
     },
     vi: {
-      src: "assets/audio/prompts-vi.m4a",
-      duration: 30.816,
+      src: "assets/audio/prompts-vi.mp3",
+      duration: 25.464,
       sampleRate: 22050,
-      segments: [{"start":0.18,"end":1.591},{"start":2.822,"end":4.473},{"start":5.674,"end":7.175},{"start":8.376,"end":9.487},{"start":10.718,"end":12.279},{"start":13.33,"end":14.471},{"start":16.392,"end":17.653},{"start":18.884,"end":20.295},{"start":21.496,"end":22.637},{"start":24.589,"end":25.729},{"start":27.681,"end":28.341},{"start":28.552,"end":29.692}],
+      segments: [{"start":0.09,"end":1.411},{"start":2.402,"end":4.143},{"start":5.134,"end":6.665},{"start":7.626,"end":8.797},{"start":9.817,"end":11.138},{"start":11.949,"end":13.09},{"start":14.051,"end":15.221},{"start":16.212,"end":17.563},{"start":18.554,"end":19.695},{"start":20.686,"end":21.826},{"start":22.817,"end":23.478},{"start":23.598,"end":24.649}],
     },
   },
 } satisfies Record<string, AudioSprite>;
@@ -134,9 +134,9 @@ export const LETTER_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<string, nu
 
 export const NUMBER_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<number, number>>> = {"en":{"1":0,"2":1,"3":2,"4":3,"5":4,"6":5,"7":6,"8":7,"9":8,"10":9,"11":10,"12":11,"13":12,"14":13,"15":14,"16":15,"17":16,"18":17,"19":18,"20":19,"21":20,"22":21,"23":22,"24":23,"25":24,"26":25,"27":26,"28":27,"29":28,"30":29,"31":30,"32":31,"33":32,"34":33,"35":34,"36":35,"37":36,"38":37,"39":38,"40":39,"41":40,"42":41,"43":42,"44":43,"45":44,"46":45,"47":46,"48":47,"49":48,"50":49,"51":50,"52":51,"53":52,"54":53,"55":54,"56":55,"57":56,"58":57,"59":58,"60":59,"61":60,"62":61,"63":62,"64":63,"65":64,"66":65,"67":66,"68":67,"69":68,"70":69,"71":70,"72":71,"73":72,"74":73,"75":74,"76":75,"77":76,"78":77,"79":78,"80":79,"81":80,"82":81,"83":82,"84":83,"85":84,"86":85,"87":86,"88":87,"89":88,"90":89,"91":90,"92":91,"93":92,"94":93,"95":94,"96":95,"97":96,"98":97,"99":98,"100":99},"vi":{"1":0,"2":1,"3":2,"4":3,"5":4,"6":5,"7":6,"8":7,"9":8,"10":9,"11":10,"12":11,"13":12,"14":13,"15":14,"16":15,"17":16,"18":17,"19":18,"20":19,"21":20,"22":21,"23":22,"24":23,"25":24,"26":25,"27":26,"28":27,"29":28,"30":29,"31":30,"32":31,"33":32,"34":33,"35":34,"36":35,"37":36,"38":37,"39":38,"40":39,"41":40,"42":41,"43":42,"44":43,"45":44,"46":45,"47":46,"48":47,"49":48,"50":49,"51":50,"52":51,"53":52,"54":53,"55":54,"56":55,"57":56,"58":57,"59":58,"60":59,"61":60,"62":61,"63":62,"64":63,"65":64,"66":65,"67":66,"68":67,"69":68,"70":69,"71":70,"72":71,"73":72,"74":73,"75":74,"76":75,"77":76,"78":77,"79":78,"80":79,"81":80,"82":81,"83":82,"84":83,"85":84,"86":85,"87":86,"88":87,"89":88,"90":89,"91":90,"92":91,"93":92,"94":93,"95":94,"96":95,"97":96,"98":97,"99":98,"100":99}};
 
-export const COLOR_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<ColorId, number>>> = {"en":{"[object Object]":10},"vi":{"red":0,"green":1,"blue":2,"white":3,"black":4,"yellow":5,"orange":6,"pink":7,"brown":8,"gray":9,"purple":10}};
+export const COLOR_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<ColorId, number>>> = {"en":{"red":0,"yellow":1,"green":2,"blue":3,"purple":4,"orange":5,"pink":6,"brown":7,"black":8,"white":9,"gray":10},"vi":{"red":0,"green":1,"blue":2,"white":3,"black":4,"yellow":5,"orange":6,"pink":7,"brown":8,"gray":9,"purple":10}};
 
-export const SHAPE_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<ShapeId, number>>> = {"en":{"[object Object]":7},"vi":{"square":0,"rectangle":1,"triangle":2,"circle":3,"oval":4,"star":5,"heart":6,"diamond":7}};
+export const SHAPE_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<ShapeId, number>>> = {"en":{"circle":0,"square":1,"triangle":2,"rectangle":3,"star":4,"heart":5,"diamond":6,"oval":7},"vi":{"square":0,"rectangle":1,"triangle":2,"circle":3,"oval":4,"star":5,"heart":6,"diamond":7}};
 
 export const PROMPT_SPRITE_INDEX: Record<SpriteLocale, Record<PromptKey, number>> = {"en":{"counting":0,"alphabetGame":1,"sequence":2,"colorGuess":3,"colorMatching":4,"shapesGame":5,"flashcardNumber":6,"flashcardLetter":7,"flashcardColor":8,"flashcardShape":9,"preview":10},"vi":{"counting":0,"alphabetGame":1,"sequence":2,"colorGuess":3,"colorMatching":4,"shapesGame":5,"flashcardNumber":6,"flashcardLetter":7,"flashcardColor":8,"flashcardShape":9,"preview":10}};
 

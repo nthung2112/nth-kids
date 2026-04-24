@@ -333,18 +333,18 @@ const ALPHABET_WORDS_EN = {
 // src/data/alphabet.ts and `data.alphabet.*.vietnamese` strings, favouring
 // short, concrete nouns a Vietnamese child will recognise.
 const ALPHABET_WORDS_VI = {
-  A: "Ăn táo",
-  B: "Bóng",
+  A: "Trái táo",
+  B: "Quả bóng",
   C: "Con mèo",
   D: "Con chó",
   E: "Con voi",
   F: "Con cá",
   G: "Quả nho",
   H: "Con ngựa",
-  I: "Kem",
+  I: "Cây Kem",
   J: "Kẹo dẻo",
   K: "Con diều",
-  L: "Sư tử",
+  L: "Con Sư tử",
   M: "Con khỉ",
   N: "Tổ chim",
   O: "Quả cam",
@@ -358,7 +358,7 @@ const ALPHABET_WORDS_VI = {
   W: "Cá voi",
   X: "Tia X",
   Y: "Sợi len",
-  Z: "Ngựa vằn",
+  Z: "Con Ngựa vằn",
 };
 
 const ALPHABET_WORDS_EN_ITEMS = ALPHABET_VI_LETTERS.map(letter => ({
@@ -427,7 +427,7 @@ export const GENERATION_SPECS = [
     locale: "vi",
     voice: VI_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/numbers-vi.m4a",
+    output: "public/assets/audio/numbers-vi.mp3",
     items: NUMBERS_VI_ITEMS,
   },
   {
@@ -435,7 +435,7 @@ export const GENERATION_SPECS = [
     locale: "vi",
     voice: VI_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/colors-vi.m4a",
+    output: "public/assets/audio/colors-vi.mp3",
     items: COLORS_VI_ITEMS,
   },
   {
@@ -443,7 +443,7 @@ export const GENERATION_SPECS = [
     locale: "vi",
     voice: VI_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/shapes-vi.m4a",
+    output: "public/assets/audio/shapes-vi.mp3",
     items: SHAPES_VI_ITEMS,
   },
   {
@@ -451,7 +451,7 @@ export const GENERATION_SPECS = [
     locale: "vi",
     voice: VI_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/alphabet-vi.m4a",
+    output: "public/assets/audio/alphabet-vi.mp3",
     items: ALPHABET_VI_ITEMS,
     // Vietnamese letter pronunciations ("a", "i", "e") are very short and
     // resist silence-detection batching even with a "Chữ" prefix. Synthesise
@@ -465,7 +465,7 @@ export const GENERATION_SPECS = [
     locale: "en",
     voice: EN_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/numbers-en.m4a",
+    output: "public/assets/audio/numbers-en.mp3",
     items: NUMBERS_EN_ITEMS,
   },
   {
@@ -473,7 +473,7 @@ export const GENERATION_SPECS = [
     locale: "en",
     voice: EN_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/colors-en.m4a",
+    output: "public/assets/audio/colors-en.mp3",
     items: COLORS_EN_ITEMS,
   },
   {
@@ -481,7 +481,7 @@ export const GENERATION_SPECS = [
     locale: "en",
     voice: EN_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/shapes-en.m4a",
+    output: "public/assets/audio/shapes-en.mp3",
     items: SHAPES_EN_ITEMS,
   },
   {
@@ -489,17 +489,15 @@ export const GENERATION_SPECS = [
     locale: "en",
     voice: EN_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/alphabet-en.m4a",
+    output: "public/assets/audio/alphabet-en.mp3",
     items: ALPHABET_EN_ITEMS,
   },
-
-  // Alphabet example words (Phase 2 P2)
   {
     topic: "alphabetWords",
     locale: "en",
     voice: EN_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/alphabet-words-en.m4a",
+    output: "public/assets/audio/alphabet-words-en.mp3",
     items: ALPHABET_WORDS_EN_ITEMS,
   },
   {
@@ -507,7 +505,7 @@ export const GENERATION_SPECS = [
     locale: "vi",
     voice: VI_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/alphabet-words-vi.m4a",
+    output: "public/assets/audio/alphabet-words-vi.mp3",
     items: ALPHABET_WORDS_VI_ITEMS,
   },
 
@@ -518,7 +516,7 @@ export const GENERATION_SPECS = [
     locale: "en",
     voice: EN_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/prompts-en.m4a",
+    output: "public/assets/audio/prompts-en.mp3",
     items: PROMPT_EN_ITEMS,
   },
   {
@@ -526,7 +524,7 @@ export const GENERATION_SPECS = [
     locale: "vi",
     voice: VI_VOICE,
     rate: DEFAULT_RATE,
-    output: "public/assets/audio/prompts-vi.m4a",
+    output: "public/assets/audio/prompts-vi.mp3",
     items: PROMPT_VI_ITEMS,
   },
 ];
@@ -545,15 +543,13 @@ export const SPRITE_INDICES = {
     vi: Object.fromEntries(Array.from({ length: 100 }, (_, i) => [String(i + 1), i])),
   },
   colors: {
-    en: Object.fromEntries(COLORS_EN_ITEMS.map((c, i) => [c, i])),
+    en: Object.fromEntries(Object.keys(COLORS_EN_NAMES).map((c, i) => [c, i])),
     vi: Object.fromEntries(COLORS_VI_ORDER.map((c, i) => [c, i])),
   },
   shapes: {
-    en: Object.fromEntries(SHAPES_EN_ITEMS.map((s, i) => [s, i])),
+    en: Object.fromEntries(Object.keys(SHAPES_EN_NAMES).map((s, i) => [s, i])),
     vi: Object.fromEntries(SHAPES_VI_ORDER.map((s, i) => [s, i])),
   },
-  // Prompts and alphabetWords have no legacy EN sprite, so both locales share
-  // the same content order (0-based).
   prompts: {
     en: Object.fromEntries(PROMPT_KEYS.map((k, i) => [k, i])),
     vi: Object.fromEntries(PROMPT_KEYS.map((k, i) => [k, i])),
