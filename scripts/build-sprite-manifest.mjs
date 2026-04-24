@@ -168,7 +168,7 @@ const analyseAudioFile = (spec, { strict }) => {
   if (segments.length !== spec.items.length) {
     const msg =
       `[${id}] segment count mismatch: detected=${segments.length}, expected=${spec.items.length}. ` +
-      `Index maps in audioSprites.ts assume the expected count.`;
+      "Index maps in audioSprites.ts assume the expected count.";
     if (strict) throw new Error(msg);
     console.warn(`  warn: ${msg}`);
   }

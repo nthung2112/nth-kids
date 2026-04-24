@@ -24,13 +24,14 @@ interface AlphabetQuestion {
 }
 
 const config = GAME_CONFIGS.alphabet;
-const WORD_HINT_DELAY_MS = 1700;
+const WORD_HINT_DELAY_MS = 2900;
 
 export default function AlphabetGame() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const engine = useGameEngine(config);
   const { playAlphabetWord } = useSound();
   const { prefs } = usePreferences();
+  const delayTime = i18n.language === "en" ? WORD_HINT_DELAY_MS : WORD_HINT_DELAY_MS - 800;
 
   const [currentQuestion, setCurrentQuestion] = useState<AlphabetQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -53,7 +54,7 @@ export default function AlphabetGame() {
 
     wordHintTimer.current = window.setTimeout(() => {
       playAlphabetWord(currentQuestion.correctLetter);
-    }, WORD_HINT_DELAY_MS);
+    }, delayTime);
 
     return () => {
       if (wordHintTimer.current !== null) {
