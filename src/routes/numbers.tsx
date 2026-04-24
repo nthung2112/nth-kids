@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePreferences } from "@/hooks/usePreferences";
 import { useSound } from "@/hooks/useSound";
-import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
+import { usePreloadSprite } from "@/hooks/useSpritePreload";
 import {
   generateNumberData,
   getNumberDisplayInfo,
@@ -38,9 +38,7 @@ function NumbersPage() {
     setNumbers(generateNumberData(maxNumber, i18n.language));
   }, [maxNumber, i18n.language]);
 
-  useEffect(() => {
-    preloadSpriteTopic("numbers");
-  }, []);
+  usePreloadSprite("numbers");
 
   const speakNumberName = (num: number) => {
     playNumberSound(num);

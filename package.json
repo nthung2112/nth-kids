@@ -46,7 +46,6 @@
     "@typescript-eslint/eslint-plugin": "^8.58.2",
     "@typescript-eslint/parser": "^8.58.2",
     "@vitejs/plugin-react": "^6.0.1",
-    "edge-tts-universal": "^1.4.0",
     "esbuild": "0.25.12",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",

@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { SHAPE_DEFS, SHAPE_GAME_IDS, type ShapeId } from "@/data/shapes";
 import { useGameEngine } from "@/hooks/useGameEngine";
+import { useSpeakPromptOnChange } from "@/hooks/useSpeakPrompt";
 
 interface ShapeQuestion {
   correctId: ShapeId;
@@ -26,6 +27,9 @@ export default function ShapesGame() {
 
   const [currentQuestion, setCurrentQuestion] = useState<ShapeQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  useSpeakPromptOnChange("shapesGame", currentQuestion ? questionId : null);
 
   const generateQuestion = () => {
     const correctId = SHAPE_GAME_IDS[Math.floor(Math.random() * SHAPE_GAME_IDS.length)];
@@ -38,6 +42,7 @@ export default function ShapesGame() {
     }
     const options = [correctId, ...wrongIds].sort(() => Math.random() - 0.5);
     setCurrentQuestion({ correctId, options });
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedId: ShapeId) => {

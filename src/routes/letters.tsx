@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -8,8 +8,15 @@ import AlphabetLearning from "@/components/alphabet-learning";
 import ImmersiveView from "@/components/layout/immersive-view";
 import SequenceGame from "@/components/sequence-game";
 import { Button } from "@/components/ui/button";
-import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
+import type { SpriteTopic } from "@/data/audioSprites";
+import { usePreloadSprite } from "@/hooks/useSpritePreload";
 import { validateTopicSearch } from "./-topic-search";
+
+const LETTERS_SPRITE_TOPICS: readonly SpriteTopic[] = [
+  "alphabet",
+  "alphabetWords",
+  "prompts",
+];
 
 export const Route = createFileRoute("/letters")({
   component: LettersPage,
@@ -23,9 +30,7 @@ function LettersPage() {
   const { mode } = Route.useSearch();
   const [gameMode, setGameMode] = useState<LettersGameMode>("basic");
 
-  useEffect(() => {
-    preloadSpriteTopic("alphabet");
-  }, []);
+  usePreloadSprite(LETTERS_SPRITE_TOPICS);
 
   const exitTo = mode === "game" ? "/game" : "/learn";
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -9,8 +9,11 @@ import ColorMatchingGame from "@/components/color-matching-game";
 import ColoringGame from "@/components/coloring-game";
 import ImmersiveView from "@/components/layout/immersive-view";
 import { Button } from "@/components/ui/button";
-import { preloadSpriteTopic } from "@/lib/audio-sprite-player";
+import type { SpriteTopic } from "@/data/audioSprites";
+import { usePreloadSprite } from "@/hooks/useSpritePreload";
 import { validateTopicSearch } from "./-topic-search";
+
+const COLORS_SPRITE_TOPICS: readonly SpriteTopic[] = ["colors", "prompts"];
 
 export const Route = createFileRoute("/colors")({
   component: ColorsPage,
@@ -50,9 +53,7 @@ function ColorsPage() {
   const { mode } = Route.useSearch();
   const [gameMode, setGameMode] = useState<ColorGameMode>("basic");
 
-  useEffect(() => {
-    preloadSpriteTopic("colors");
-  }, []);
+  usePreloadSprite(COLORS_SPRITE_TOPICS);
 
   const exitTo = mode === "game" ? "/game" : "/learn";
 

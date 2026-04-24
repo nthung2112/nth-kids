@@ -1,16 +1,24 @@
 import {
   AUDIO_SPRITES,
-  type SpriteTopic,
   type AudioSegment,
+  type AudioSpriteLocale,
+  type SpriteLocale,
+  type SpriteTopic,
 } from "@/data/audioSprites";
 
 const MUTE_STORAGE_KEY = "soundMuted";
 const FADE_SEC = 0.025;
 const VOLUME = 0.85;
 
-const buffers: Partial<Record<SpriteTopic, AudioBuffer | "loading" | "error">> = {};
+type BufferState = AudioBuffer | "loading" | "error";
+
+// Per-locale buffer cache. Each (topic, locale) combination decodes to a
+// dedicated AudioBuffer so VI and EN sprites can coexist when the user
+// switches languages mid-session without reloading.
+const buffers: Partial<Record<SpriteTopic, Partial<Record<SpriteLocale, BufferState>>>> = {};
+
 let sharedContext: AudioContext | null = null;
-let preloadStarted = false;
+const preloadedTopics: Partial<Record<SpriteTopic, Set<SpriteLocale>>> = {};
 
 const isMuted = () => {
   if (typeof window === "undefined") return false;
@@ -36,8 +44,35 @@ const resolveBaseUrl = (src: string): string => {
   return `${normalisedBase}${src.replace(/^\//, "")}`;
 };
 
-const loadBuffer = async (topic: SpriteTopic): Promise<AudioBuffer | null> => {
-  const cached = buffers[topic];
+const getLocaleEntry = (
+  topic: SpriteTopic,
+  locale: SpriteLocale
+): AudioSpriteLocale | null => {
+  const sprite = AUDIO_SPRITES[topic];
+  if (!sprite) return null;
+  // Fall back to EN when a locale-specific recording is not (yet) available.
+  return sprite[locale] ?? sprite.en ?? null;
+};
+
+const setBufferState = (
+  topic: SpriteTopic,
+  locale: SpriteLocale,
+  state: BufferState
+): void => {
+  if (!buffers[topic]) buffers[topic] = {};
+  buffers[topic]![locale] = state;
+};
+
+const getBufferState = (
+  topic: SpriteTopic,
+  locale: SpriteLocale
+): BufferState | undefined => buffers[topic]?.[locale];
+
+const loadBuffer = async (
+  topic: SpriteTopic,
+  locale: SpriteLocale
+): Promise<AudioBuffer | null> => {
+  const cached = getBufferState(topic, locale);
   if (cached === "loading") return null;
   if (cached === "error") return null;
   if (cached) return cached;
@@ -45,20 +80,23 @@ const loadBuffer = async (topic: SpriteTopic): Promise<AudioBuffer | null> => {
   const ctx = getContext();
   if (!ctx) return null;
 
-  buffers[topic] = "loading";
+  const entry = getLocaleEntry(topic, locale);
+  if (!entry) return null;
+
+  setBufferState(topic, locale, "loading");
   try {
-    const url = resolveBaseUrl(AUDIO_SPRITES[topic].src);
+    const url = resolveBaseUrl(entry.src);
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP ${response.status} for ${url}`);
     }
     const data = await response.arrayBuffer();
     const decoded = await ctx.decodeAudioData(data);
-    buffers[topic] = decoded;
+    setBufferState(topic, locale, decoded);
     return decoded;
   } catch (error) {
-    console.warn(`Failed to load audio sprite "${topic}":`, error);
-    buffers[topic] = "error";
+    console.warn(`Failed to load audio sprite "${topic}" (${locale}):`, error);
+    setBufferState(topic, locale, "error");
     return null;
   }
 };
@@ -95,18 +133,21 @@ const startPlayback = (
   return true;
 };
 
-export const preloadSprites = (): void => {
-  if (preloadStarted) return;
-  preloadStarted = true;
+/** Kick off background load of every sprite topic for the given locale. */
+export const preloadSprites = (locale: SpriteLocale): void => {
   (Object.keys(AUDIO_SPRITES) as SpriteTopic[]).forEach(topic => {
-    void loadBuffer(topic);
+    preloadSpriteTopic(topic, locale);
   });
 };
 
-/** Kick off background load of one topic's sprite buffer. Safe to call repeatedly. */
-export const preloadSpriteTopic = (topic: SpriteTopic): void => {
-  if (buffers[topic]) return;
-  void loadBuffer(topic);
+/** Kick off background load of one (topic, locale) sprite. Idempotent. */
+export const preloadSpriteTopic = (topic: SpriteTopic, locale: SpriteLocale): void => {
+  const cached = getBufferState(topic, locale);
+  if (cached) return;
+  if (!preloadedTopics[topic]) preloadedTopics[topic] = new Set();
+  if (preloadedTopics[topic]!.has(locale)) return;
+  preloadedTopics[topic]!.add(locale);
+  void loadBuffer(topic, locale);
 };
 
 export interface PlaySegmentResult {
@@ -116,28 +157,33 @@ export interface PlaySegmentResult {
 
 export const playSpriteSegment = (
   topic: SpriteTopic,
+  locale: SpriteLocale,
   index: number | undefined
 ): PlaySegmentResult => {
   if (index === undefined || index < 0) return { scheduled: false };
   if (isMuted()) return { scheduled: true };
 
-  const sprite = AUDIO_SPRITES[topic];
-  if (!sprite || index >= sprite.segments.length) return { scheduled: false };
+  const entry = getLocaleEntry(topic, locale);
+  if (!entry || index >= entry.segments.length) return { scheduled: false };
 
   const ctx = getContext();
   if (!ctx) return { scheduled: false };
 
-  const cached = buffers[topic];
+  // Resolve which locale actually owns the buffer (handles EN fallback).
+  const sprite = AUDIO_SPRITES[topic];
+  const resolvedLocale: SpriteLocale = sprite?.[locale] ? locale : "en";
+
+  const cached = getBufferState(topic, resolvedLocale);
   if (!cached || cached === "loading" || cached === "error") {
-    if (!cached) void loadBuffer(topic);
+    if (!cached) void loadBuffer(topic, resolvedLocale);
     return { scheduled: false };
   }
 
   try {
-    const ok = startPlayback(ctx, cached, sprite.segments[index]);
+    const ok = startPlayback(ctx, cached, entry.segments[index]);
     return { scheduled: ok };
   } catch (error) {
-    console.warn(`Sprite playback failed (${topic}#${index}):`, error);
+    console.warn(`Sprite playback failed (${topic}/${resolvedLocale}#${index}):`, error);
     return { scheduled: false };
   }
 };

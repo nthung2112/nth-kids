@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
@@ -10,13 +10,25 @@ import { FLASHCARDS_EXAMPLES } from "@/components/games/tutorial-examples";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
+import type { PromptKey } from "@/data/audioSprites";
 import { ALPHABET_GAME_SUBSET } from "@/data/alphabet";
 import { COLOR_DEFS, COLOR_GUESS_IDS } from "@/data/colors";
 import { SHAPE_DEFS, SHAPE_GAME_IDS } from "@/data/shapes";
 import { useGameEngine } from "@/hooks/useGameEngine";
+import { usePreferences } from "@/hooks/usePreferences";
 import { useSound } from "@/hooks/useSound";
 
 type CardKind = "number" | "letter" | "color" | "shape";
+
+const PROMPT_BY_KIND: Record<CardKind, PromptKey> = {
+  number: "flashcardNumber",
+  letter: "flashcardLetter",
+  color: "flashcardColor",
+  shape: "flashcardShape",
+};
+
+const PROMPT_DELAY_MS = 250;
+const ANSWER_CUE_DELAY_MS = 1400;
 
 interface FlashcardOption {
   id: string;
@@ -128,30 +140,64 @@ interface FlashcardsGameProps {
 
 export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
   const { t } = useTranslation();
-  const { playNumberSound, playLetterSound, playColorSound, playShapeSound } = useSound();
+  const { prefs } = usePreferences();
+  const {
+    playNumberSound,
+    playLetterSound,
+    playColorSound,
+    playShapeSound,
+    playPromptSound,
+  } = useSound();
   const engine = useGameEngine(config);
 
   const [currentQuestion, setCurrentQuestion] = useState<FlashcardQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const promptTimer = useRef<number | null>(null);
+  const answerTimer = useRef<number | null>(null);
 
   // Play the sprite for the correct answer so the kid gets a concrete audio
   // cue tied to the item being asked about.
-  const playAnswerCue = (question: FlashcardQuestion) => {
-    switch (question.kind) {
-      case "number":
-        playNumberSound(Number(question.correctOptionId));
-        return;
-      case "letter":
-        playLetterSound(question.correctOptionId);
-        return;
-      case "color":
-        playColorSound(question.correctOptionId);
-        return;
-      case "shape":
-        playShapeSound(question.correctOptionId);
-        return;
-    }
-  };
+  const playAnswerCue = useCallback(
+    (question: FlashcardQuestion) => {
+      switch (question.kind) {
+        case "number":
+          playNumberSound(Number(question.correctOptionId));
+          return;
+        case "letter":
+          playLetterSound(question.correctOptionId);
+          return;
+        case "color":
+          playColorSound(question.correctOptionId);
+          return;
+        case "shape":
+          playShapeSound(question.correctOptionId);
+          return;
+      }
+    },
+    [playNumberSound, playLetterSound, playColorSound, playShapeSound]
+  );
+
+  // Each new question schedules: prompt (locale-aware) → answer cue.
+  // Audio chain stays in one effect so changing question or muting cleans up
+  // both timers together.
+  useEffect(() => {
+    if (!currentQuestion) return;
+    if (prefs.soundMuted) return;
+
+    promptTimer.current = window.setTimeout(() => {
+      playPromptSound(PROMPT_BY_KIND[currentQuestion.kind]);
+    }, PROMPT_DELAY_MS);
+    answerTimer.current = window.setTimeout(() => {
+      playAnswerCue(currentQuestion);
+    }, ANSWER_CUE_DELAY_MS);
+
+    return () => {
+      if (promptTimer.current !== null) window.clearTimeout(promptTimer.current);
+      if (answerTimer.current !== null) window.clearTimeout(answerTimer.current);
+      promptTimer.current = null;
+      answerTimer.current = null;
+    };
+  }, [currentQuestion, prefs.soundMuted, playPromptSound, playAnswerCue]);
 
   const generateQuestion = () => {
     const builders = [
@@ -162,7 +208,6 @@ export default function FlashcardsGame({ maxNumber }: FlashcardsGameProps) {
     ];
     const question = builders[Math.floor(Math.random() * builders.length)]();
     setCurrentQuestion(question);
-    setTimeout(() => playAnswerCue(question), 400);
   };
 
   const handleAnswer = (optionId: string) => {

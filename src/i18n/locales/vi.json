@@ -407,6 +407,7 @@
     "selected": "Đã chọn: 1 - {{max}}",
     "sections": {
       "sound": "Âm thanh",
+      "voice": "Giọng đọc",
       "language": "Ngôn ngữ",
       "numberRange": "Phạm vi số (trang Số)",
       "accessibility": "Trải nghiệm"
@@ -416,6 +417,11 @@
     "reduceMotion": "Giảm hiệu ứng chuyển động",
     "reduceMotionHelp": "Bớt nảy/xoay khi bé dễ phân tâm",
     "trigger": "Cài đặt",
+    "voicePreview": {
+      "label": "Nghe thử giọng đọc",
+      "help": "Phát một câu mẫu bằng ngôn ngữ đang chọn",
+      "button": "Nghe thử"
+    },
     "difficulty": {
       "veryEasy": "Rất dễ",
       "easy": "Dễ",

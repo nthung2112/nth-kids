@@ -1,10 +1,16 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
+
+import { useTranslation } from "react-i18next";
 
 import {
+  ALPHABET_WORDS_SPRITE_INDEX,
   COLOR_SPRITE_INDEX,
   LETTER_SPRITE_INDEX,
   NUMBER_SPRITE_INDEX,
+  PROMPT_SPRITE_INDEX,
   SHAPE_SPRITE_INDEX,
+  type PromptKey,
+  type SpriteLocale,
 } from "@/data/audioSprites";
 import type { ColorId } from "@/data/colors";
 import type { ShapeId } from "@/data/shapes";
@@ -36,6 +42,11 @@ const isMuted = () => {
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
+const normaliseLocale = (input: string | undefined | null): SpriteLocale => {
+  const base = (input ?? "vi").toLowerCase().split("-")[0];
+  return base === "en" ? "en" : "vi";
+};
+
 interface PlayToneOptions {
   type?: OscillatorType;
   volume?: number;
@@ -46,6 +57,14 @@ interface PlayToneOptions {
 }
 
 export const useSound = () => {
+  const { i18n } = useTranslation();
+  const locale = useMemo(() => normaliseLocale(i18n.language), [i18n.language]);
+
+  // Locale needs to be readable inside callbacks without forcing a re-render
+  // dependency chain; ref keeps the latest value while callbacks stay stable.
+  const localeRef = useRef<SpriteLocale>(locale);
+  localeRef.current = locale;
+
   const audioContextRef = useRef<AudioContext | null>(null);
 
   const getAudioContext = useCallback(() => {
@@ -148,7 +167,8 @@ export const useSound = () => {
 
   const playNumberSound = useCallback(
     (number: number) => {
-      const sprite = playSpriteSegment("numbers", NUMBER_SPRITE_INDEX[number]);
+      const lc = localeRef.current;
+      const sprite = playSpriteSegment("numbers", lc, NUMBER_SPRITE_INDEX[lc][number]);
       if (sprite.scheduled) return;
 
       // Fallback synth: pentatonic mod 8 → mọi số đều cho ra note hài hoà
@@ -185,7 +205,8 @@ export const useSound = () => {
   const playLetterSound = useCallback(
     (letter: string) => {
       const upper = letter.toUpperCase();
-      const sprite = playSpriteSegment("alphabet", LETTER_SPRITE_INDEX[upper]);
+      const lc = localeRef.current;
+      const sprite = playSpriteSegment("alphabet", lc, LETTER_SPRITE_INDEX[lc][upper]);
       if (sprite.scheduled) return;
 
       // Fallback synth: A-Z vào pentatonic mod 8
@@ -206,9 +227,10 @@ export const useSound = () => {
       // so the previous letter finishes before the next starts.
       const SPRITE_SPACING_MS = 900;
       const FALLBACK_SPACING_MS = 460;
+      const lc = localeRef.current;
       sequence.forEach((letter, index) => {
         const upper = letter.toUpperCase();
-        const hasSprite = LETTER_SPRITE_INDEX[upper] !== undefined;
+        const hasSprite = LETTER_SPRITE_INDEX[lc][upper] !== undefined;
         const spacing = hasSprite ? SPRITE_SPACING_MS : FALLBACK_SPACING_MS;
         setTimeout(() => playLetterSound(letter), index * spacing);
       });
@@ -251,7 +273,12 @@ export const useSound = () => {
 
   const playColorSound = useCallback(
     (colorId: string) => {
-      const sprite = playSpriteSegment("colors", COLOR_SPRITE_INDEX[colorId as ColorId]);
+      const lc = localeRef.current;
+      const sprite = playSpriteSegment(
+        "colors",
+        lc,
+        COLOR_SPRITE_INDEX[lc][colorId as ColorId]
+      );
       if (sprite.scheduled) return;
 
       // Fallback synth: each color = 1 pentatonic note
@@ -284,7 +311,12 @@ export const useSound = () => {
 
   const playShapeSound = useCallback(
     (shapeId: string) => {
-      const sprite = playSpriteSegment("shapes", SHAPE_SPRITE_INDEX[shapeId as ShapeId]);
+      const lc = localeRef.current;
+      const sprite = playSpriteSegment(
+        "shapes",
+        lc,
+        SHAPE_SPRITE_INDEX[lc][shapeId as ShapeId]
+      );
       if (sprite.scheduled) return;
 
       // Fallback synth: pentatonic note based on stable hash
@@ -302,6 +334,23 @@ export const useSound = () => {
     [playSoftTone]
   );
 
+  // Speak the example word for the given letter ("Apple" for A, "Ăn táo" in
+  // VI). Silent fallback because there is no synth that meaningfully evokes
+  // a word, and the letter sprite already covers the audio cue.
+  const playAlphabetWord = useCallback((letter: string) => {
+    const upper = letter.toUpperCase();
+    const lc = localeRef.current;
+    playSpriteSegment("alphabetWords", lc, ALPHABET_WORDS_SPRITE_INDEX[lc][upper]);
+  }, []);
+
+  // Speak a game-prompt string ("How many do you see?", etc.). Silent fallback
+  // because game prompts exist purely as accessibility cues; missing audio
+  // should never block the visual flow.
+  const playPromptSound = useCallback((key: PromptKey) => {
+    const lc = localeRef.current;
+    playSpriteSegment("prompts", lc, PROMPT_SPRITE_INDEX[lc][key]);
+  }, []);
+
   return {
     playSuccessSound,
     playErrorSound,
@@ -313,5 +362,7 @@ export const useSound = () => {
     playSequenceSound,
     playColorSound,
     playShapeSound,
+    playAlphabetWord,
+    playPromptSound,
   };
 };

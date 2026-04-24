@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
@@ -12,6 +12,9 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { ALPHABET_GAME_SUBSET } from "@/data/alphabet";
 import { useGameEngine } from "@/hooks/useGameEngine";
+import { usePreferences } from "@/hooks/usePreferences";
+import { useSound } from "@/hooks/useSound";
+import { useSpeakPromptOnChange } from "@/hooks/useSpeakPrompt";
 
 interface AlphabetQuestion {
   emoji: string;
@@ -21,13 +24,44 @@ interface AlphabetQuestion {
 }
 
 const config = GAME_CONFIGS.alphabet;
+const WORD_HINT_DELAY_MS = 1700;
 
 export default function AlphabetGame() {
   const { t } = useTranslation();
   const engine = useGameEngine(config);
+  const { playAlphabetWord } = useSound();
+  const { prefs } = usePreferences();
 
   const [currentQuestion, setCurrentQuestion] = useState<AlphabetQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+  const wordHintTimer = useRef<number | null>(null);
+
+  // Speak the question prompt itself ("Which letter does this word start
+  // with?") when a new question appears.
+  useSpeakPromptOnChange("alphabetGame", currentQuestion ? questionId : null);
+
+  // Then chain a second cue that names the example word ("Apple") so the kid
+  // hears prompt → word → expected letter as the audio sequence.
+  useEffect(() => {
+    if (!currentQuestion) return;
+    if (prefs.soundMuted) return;
+
+    if (wordHintTimer.current !== null) {
+      window.clearTimeout(wordHintTimer.current);
+    }
+
+    wordHintTimer.current = window.setTimeout(() => {
+      playAlphabetWord(currentQuestion.correctLetter);
+    }, WORD_HINT_DELAY_MS);
+
+    return () => {
+      if (wordHintTimer.current !== null) {
+        window.clearTimeout(wordHintTimer.current);
+        wordHintTimer.current = null;
+      }
+    };
+  }, [questionId, currentQuestion, prefs.soundMuted, playAlphabetWord]);
 
   const generateQuestion = () => {
     const randomEntry =
@@ -51,6 +85,7 @@ export default function AlphabetGame() {
       correctLetter,
       options,
     });
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedLetter: string) => {

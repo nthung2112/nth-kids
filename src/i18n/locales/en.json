@@ -407,6 +407,7 @@
     "selected": "Selected: 1 - {{max}}",
     "sections": {
       "sound": "Sound",
+      "voice": "Voice",
       "language": "Language",
       "numberRange": "Number range (Numbers page)",
       "accessibility": "Experience"
@@ -416,6 +417,11 @@
     "reduceMotion": "Reduce motion",
     "reduceMotionHelp": "Tone down bouncing and spinning effects",
     "trigger": "Settings",
+    "voicePreview": {
+      "label": "Preview the voice",
+      "help": "Play a short sample in the selected language",
+      "button": "Preview"
+    },
     "difficulty": {
       "veryEasy": "Very easy",
       "easy": "Easy",

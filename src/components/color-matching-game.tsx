@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { COLOR_DEFS, COLOR_MATCHING_IDS, type ColorId } from "@/data/colors";
 import { useGameEngine } from "@/hooks/useGameEngine";
+import { useSpeakPromptOnChange } from "@/hooks/useSpeakPrompt";
 
 interface ColorPair {
   id: number;
@@ -31,6 +32,9 @@ export default function ColorMatchingGame() {
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [sessionId, setSessionId] = useState(0);
+
+  useSpeakPromptOnChange("colorMatching", colorPairs.length > 0 ? sessionId : null);
 
   const initializeGame = () => {
     const selectedIds = COLOR_MATCHING_IDS.slice(0, PAIR_COUNT);
@@ -45,6 +49,7 @@ export default function ColorMatchingGame() {
     setColorPairs(shuffledPairs);
     setSelectedCards([]);
     setIsProcessing(false);
+    setSessionId(prev => prev + 1);
   };
 
   const handleCardClick = (cardIndex: number) => {

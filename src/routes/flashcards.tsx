@@ -1,11 +1,9 @@
-import { useEffect } from "react";
-
 import { createFileRoute } from "@tanstack/react-router";
 
 import FlashcardsGame from "@/components/flashcards-game";
 import ImmersiveView from "@/components/layout/immersive-view";
 import { usePreferences } from "@/hooks/usePreferences";
-import { preloadSprites } from "@/lib/audio-sprite-player";
+import { usePreloadAllSprites } from "@/hooks/useSpritePreload";
 import { validateTopicSearch } from "./-topic-search";
 
 export const Route = createFileRoute("/flashcards")({
@@ -16,9 +14,7 @@ export const Route = createFileRoute("/flashcards")({
 function FlashcardsPage() {
   const { prefs } = usePreferences();
 
-  useEffect(() => {
-    preloadSprites();
-  }, []);
+  usePreloadAllSprites();
 
   return (
     <ImmersiveView exitTo="/game">

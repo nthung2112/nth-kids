@@ -1,9 +1,11 @@
-import { Languages, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Languages, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { usePreferences } from "@/hooks/usePreferences";
+import { useSound } from "@/hooks/useSound";
+import { usePreloadSprite } from "@/hooks/useSpritePreload";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
 
 interface PresetRange {
@@ -40,8 +42,16 @@ const hintKey = (max: number) => {
 export default function SettingsPanel() {
   const { t, i18n } = useTranslation();
   const { prefs, update } = usePreferences();
+  const { playPromptSound } = useSound();
+
+  // Preload prompt sprite so the very first preview tap plays without delay.
+  usePreloadSprite("prompts");
 
   const currentBase = (i18n.language ?? "vi").split("-")[0];
+
+  const handlePreviewVoice = () => {
+    playPromptSound("preview");
+  };
 
   const sectionTitle = (key: string, icon: string) => (
     <div className="mb-3 flex items-center gap-2">
@@ -71,6 +81,28 @@ export default function SettingsPanel() {
           {prefs.soundMuted ? <VolumeX className="mr-2" /> : <Volume2 className="mr-2" />}
           {prefs.soundMuted ? t("settings.soundOn") : t("settings.soundOff")}
         </Button>
+      </section>
+
+      <section className="mb-5">
+        {sectionTitle("settings.sections.voice", "🎙️")}
+        <Card className="border-2 border-purple-200 bg-purple-50/40 p-3 text-sm text-purple-800">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <div className="font-semibold">{t("settings.voicePreview.label")}</div>
+              <div className="text-xs text-purple-600">{t("settings.voicePreview.help")}</div>
+            </div>
+            <Button
+              type="button"
+              onClick={handlePreviewVoice}
+              disabled={prefs.soundMuted}
+              className="h-10 shrink-0 rounded-lg bg-green-500 px-3 text-white hover:bg-green-600 disabled:opacity-50"
+              aria-label={t("settings.voicePreview.button")}
+            >
+              <Play className="mr-1 h-4 w-4" />
+              <span>{t("settings.voicePreview.button")}</span>
+            </Button>
+          </div>
+        </Card>
       </section>
 
       <section className="mb-5">

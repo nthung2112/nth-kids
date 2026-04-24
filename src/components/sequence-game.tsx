@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GAME_CONFIGS } from "@/config/games";
 import { useGameEngine } from "@/hooks/useGameEngine";
+import { useSpeakPromptOnChange } from "@/hooks/useSpeakPrompt";
 
 interface SequenceQuestion {
   sequence: string[];
@@ -27,6 +28,9 @@ export default function SequenceGame() {
 
   const [currentQuestion, setCurrentQuestion] = useState<SequenceQuestion | null>(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [questionId, setQuestionId] = useState(0);
+
+  useSpeakPromptOnChange("sequence", currentQuestion ? questionId : null);
 
   const generateQuestion = () => {
     const startIndex = Math.floor(Math.random() * 20);
@@ -51,6 +55,7 @@ export default function SequenceGame() {
     const options = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
 
     setCurrentQuestion({ sequence, correctAnswer, options });
+    setQuestionId(prev => prev + 1);
   };
 
   const handleAnswer = (selectedAnswer: string) => {

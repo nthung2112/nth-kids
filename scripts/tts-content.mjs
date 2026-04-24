@@ -52,6 +52,65 @@ const NUMBERS_VI_ITEMS = Array.from({ length: 100 }, (_, i) => ({
   text: viNumberName(i + 1),
 }));
 
+const NUMBERS_EN_ONES = [
+  "",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+];
+
+const NUMBERS_EN_TEENS = [
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
+];
+
+const NUMBERS_EN_TENS = [
+  "",
+  "",
+  "twenty",
+  "thirty",
+  "forty",
+  "fifty",
+  "sixty",
+  "seventy",
+  "eighty",
+  "ninety",
+];
+
+// English number name composer for 1..100. Irregular forms (forty, fifty)
+// live in NUMBERS_EN_TENS so the composer stays purely positional. Compound
+// numbers use the standard hyphen ("twenty-one", "ninety-nine").
+const enNumberName = n => {
+  if (n < 10) return NUMBERS_EN_ONES[n];
+  if (n < 20) return NUMBERS_EN_TEENS[n - 10];
+  if (n < 100) {
+    const tens = Math.floor(n / 10);
+    const unit = n % 10;
+    if (unit === 0) return NUMBERS_EN_TENS[tens];
+    return `${NUMBERS_EN_TENS[tens]}-${NUMBERS_EN_ONES[unit]}`;
+  }
+  return "one hundred";
+};
+
+const NUMBERS_EN_ITEMS = Array.from({ length: 100 }, (_, i) => ({
+  id: String(i + 1),
+  text: enNumberName(i + 1),
+}));
+
 const COLORS_VI_ORDER = [
   "red",
   "green",
@@ -82,6 +141,22 @@ const COLORS_VI_NAMES = {
 
 const COLORS_VI_ITEMS = COLORS_VI_ORDER.map(id => ({ id, text: COLORS_VI_NAMES[id] }));
 
+const COLORS_EN_NAMES = {
+  red: "Red",
+  yellow: "Yellow",
+  green: "Green",
+  blue: "Blue",
+  purple: "Purple",
+  orange: "Orange",
+  pink: "Pink",
+  brown: "Brown",
+  black: "Black",
+  white: "White",
+  gray: "Gray",
+};
+
+const COLORS_EN_ITEMS = COLORS_VI_ORDER.map(id => ({ id, text: COLORS_EN_NAMES[id] }));
+
 const SHAPES_VI_ORDER = [
   "square",
   "rectangle",
@@ -105,6 +180,19 @@ const SHAPES_VI_NAMES = {
 };
 
 const SHAPES_VI_ITEMS = SHAPES_VI_ORDER.map(id => ({ id, text: SHAPES_VI_NAMES[id] }));
+
+const SHAPES_EN_NAMES = {
+  circle: "Circle",
+  square: "Square",
+  triangle: "Triangle",
+  rectangle: "Rectangle",
+  star: "Star",
+  heart: "Heart",
+  diamond: "Diamond",
+  oval: "Oval",
+};
+
+const SHAPES_EN_ITEMS = SHAPES_VI_ORDER.map(id => ({ id, text: SHAPES_EN_NAMES[id] }));
 
 // Vietnamese letter pronunciation, as taught in Vietnamese kindergartens for
 // the English alphabet. A few letters overlap with the Vietnamese alphabet
@@ -170,6 +258,44 @@ const ALPHABET_VI_NAMES = {
 const ALPHABET_VI_ITEMS = ALPHABET_VI_LETTERS.map(letter => ({
   id: letter,
   text: ALPHABET_VI_NAMES[letter],
+}));
+
+// English letter names spelled phonetically. Single-letter tokens like "A",
+// "I" and "U" collide with the article "a" and pronouns "I"/"you" when fed
+// to TTS in isolation; the spelled-out forms ("ay", "eye", "you") force the
+// engine to read the alphabet name reliably. "zee" matches the en-US voice.
+const ALPHABET_EN_NAMES = {
+  A: "ay",
+  B: "bee",
+  C: "see",
+  D: "dee",
+  E: "ee",
+  F: "eff",
+  G: "gee",
+  H: "aitch",
+  I: "eye",
+  J: "jay",
+  K: "kay",
+  L: "el",
+  M: "em",
+  N: "en",
+  O: "oh",
+  P: "pee",
+  Q: "cue",
+  R: "ar",
+  S: "ess",
+  T: "tee",
+  U: "you",
+  V: "vee",
+  W: "double-u",
+  X: "ex",
+  Y: "why",
+  Z: "zee",
+};
+
+const ALPHABET_EN_ITEMS = ALPHABET_VI_LETTERS.map(letter => ({
+  id: letter,
+  text: ALPHABET_EN_NAMES[letter],
 }));
 
 // Alphabet example words — these feed `alphabetWords` sprite and are spoken
@@ -280,13 +406,13 @@ const PROMPT_TEXTS_VI = {
   alphabetGame: "Chữ cái nào bắt đầu từ này?",
   sequence: "Chữ cái tiếp theo là gì?",
   colorGuess: "Đây là màu gì?",
-  colorMatching: "Ghép cặp màu giống nhau!",
+  colorMatching: "Ghép cặp màu giống nhau.",
   shapesGame: "Đây là hình gì?",
   flashcardNumber: "Đây là số nào?",
   flashcardLetter: "Đây là chữ cái nào?",
   flashcardColor: "Đây là màu gì?",
   flashcardShape: "Đây là hình gì?",
-  preview: "Xin chào! Cùng học vui nhé.",
+  preview: "Xin chào, cùng học vui nhé.",
 };
 
 const PROMPT_EN_ITEMS = PROMPT_KEYS.map(key => ({ id: key, text: PROMPT_TEXTS_EN[key] }));
@@ -327,11 +453,44 @@ export const GENERATION_SPECS = [
     rate: DEFAULT_RATE,
     output: "public/assets/audio/alphabet-vi.m4a",
     items: ALPHABET_VI_ITEMS,
-    // The bare Vietnamese letter pronunciations ("a", "i", "e") are too short
-    // for the engine + silence detector to separate cleanly, so prefix each
-    // clip with "Chữ" (= "Letter"). This is also pedagogically clearer:
-    // children hear "Letter A" rather than just "A".
+    // Vietnamese letter pronunciations ("a", "i", "e") are very short and
+    // resist silence-detection batching even with a "Chữ" prefix. Synthesise
+    // each clip individually instead — Python edge-tts is reliable enough
+    // that the extra calls cost ~30s for the whole alphabet.
+    synthMode: "individual",
     wrapText: text => `Chữ ${text}`,
+  },
+  {
+    topic: "numbers",
+    locale: "en",
+    voice: EN_VOICE,
+    rate: DEFAULT_RATE,
+    output: "public/assets/audio/numbers-en.m4a",
+    items: NUMBERS_EN_ITEMS,
+  },
+  {
+    topic: "colors",
+    locale: "en",
+    voice: EN_VOICE,
+    rate: DEFAULT_RATE,
+    output: "public/assets/audio/colors-en.m4a",
+    items: COLORS_EN_ITEMS,
+  },
+  {
+    topic: "shapes",
+    locale: "en",
+    voice: EN_VOICE,
+    rate: DEFAULT_RATE,
+    output: "public/assets/audio/shapes-en.m4a",
+    items: SHAPES_EN_ITEMS,
+  },
+  {
+    topic: "alphabet",
+    locale: "en",
+    voice: EN_VOICE,
+    rate: DEFAULT_RATE,
+    output: "public/assets/audio/alphabet-en.m4a",
+    items: ALPHABET_EN_ITEMS,
   },
 
   // Alphabet example words (Phase 2 P2)
@@ -373,12 +532,83 @@ export const GENERATION_SPECS = [
 ];
 
 // Index map source of truth — drives typed constants in audioSprites.ts.
+// VI sprites are TTS-generated with our content order so indices are 0-based.
+// EN sprites were hand-recorded with their own structure, so we preserve the
+// historical hand-tuned mappings verbatim.
 export const SPRITE_INDICES = {
-  letters: Object.fromEntries(ALPHABET_VI_LETTERS.map((l, i) => [l, i])),
-  numbers: Object.fromEntries(
-    Array.from({ length: 100 }, (_, i) => [String(i + 1), i])
-  ),
-  colors: Object.fromEntries(COLORS_VI_ORDER.map((c, i) => [c, i])),
-  shapes: Object.fromEntries(SHAPES_VI_ORDER.map((s, i) => [s, i])),
-  prompts: Object.fromEntries(PROMPT_KEYS.map((k, i) => [k, i])),
+  letters: {
+    en: {
+      A: 1,
+      B: 2,
+      C: 3,
+      D: 4,
+      E: 5,
+      F: 6,
+      G: 7,
+      H: 8,
+      I: 9,
+      J: 10,
+      K: 11,
+      L: 12,
+      M: 13,
+      N: 14,
+      O: 15,
+      P: 16,
+      Q: 17,
+      R: 18,
+      S: 19,
+      T: 20,
+      U: 21,
+      V: 22,
+      W: 23,
+      X: 24,
+      Y: 25,
+      Z: 26,
+    },
+    vi: Object.fromEntries(ALPHABET_VI_LETTERS.map((l, i) => [l, i])),
+  },
+  numbers: {
+    // EN sprite was hand-tuned with `n: n+1` mapping (intro at index 0).
+    en: Object.fromEntries(Array.from({ length: 101 }, (_, i) => [String(i), i + 1])),
+    vi: Object.fromEntries(Array.from({ length: 100 }, (_, i) => [String(i + 1), i])),
+  },
+  colors: {
+    en: {
+      red: 1,
+      green: 2,
+      blue: 3,
+      white: 4,
+      black: 5,
+      yellow: 6,
+      orange: 7,
+      pink: 8,
+      brown: 9,
+      gray: 11,
+      purple: 14,
+    },
+    vi: Object.fromEntries(COLORS_VI_ORDER.map((c, i) => [c, i])),
+  },
+  shapes: {
+    en: {
+      square: 1,
+      rectangle: 2,
+      triangle: 3,
+      circle: 5,
+      oval: 6,
+      star: 7,
+      heart: 8,
+      diamond: 9,
+    },
+    vi: Object.fromEntries(SHAPES_VI_ORDER.map((s, i) => [s, i])),
+  },
+  // Prompts and alphabetWords have no legacy EN sprite, so both locales share
+  // the same content order (0-based).
+  prompts: {
+    en: Object.fromEntries(PROMPT_KEYS.map((k, i) => [k, i])),
+    vi: Object.fromEntries(PROMPT_KEYS.map((k, i) => [k, i])),
+  },
+  alphabetWords: {
+    en: Object.fromEntries(ALPHABET_VI_LETTERS.map((l, i) => [l, i])),
+    vi: Object.fromEntries(ALPHABET_VI_LETTERS.map((l, i) => [l, i])),
+  },
 };
