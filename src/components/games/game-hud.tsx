@@ -25,11 +25,14 @@ export default function GameHud({
   const { t } = useTranslation();
 
   return (
-    <div className="mb-6 flex items-center justify-between rounded-full bg-white p-3 shadow-lg sm:mb-8 sm:p-4">
+    <div className="mx-auto mb-6 flex w-full max-w-3xl flex-wrap items-center justify-between gap-2 rounded-3xl bg-white p-3 shadow-lg sm:mb-8 sm:gap-4 sm:rounded-full sm:p-4">
       <div className="flex items-center gap-2 sm:gap-4">
         <div className="flex items-center gap-2">
           <Trophy className="text-yellow-500" />
-          <span className="text-xl font-bold text-purple-800" aria-label={t("games.common.aria.score", { score })}>
+          <span
+            className="text-xl font-bold text-purple-800"
+            aria-label={t("games.common.aria.score", { score })}
+          >
             {score}
           </span>
         </div>
@@ -48,13 +51,13 @@ export default function GameHud({
       </div>
 
       <div
-        className="flex items-center gap-1"
+        className="order-last flex w-full items-center justify-center gap-1 sm:order-0 sm:w-auto"
         aria-label={t("games.common.aria.lives", { lives, total: livesStart })}
       >
         {[...Array(livesStart)].map((_, i) => (
           <Heart
             key={i}
-            className={`h-7 w-7 sm:h-8 sm:w-8 ${
+            className={`h-6 w-6 sm:h-8 sm:w-8 ${
               i < lives ? "fill-red-500 text-red-500" : "text-gray-300"
             }`}
             aria-hidden="true"

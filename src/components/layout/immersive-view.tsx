@@ -34,8 +34,8 @@ export default function ImmersiveView({
   const label = exitLabel ?? t("common.exit");
 
   return (
-    <div className={cn("relative flex min-h-0 flex-1 flex-col", className)}>
-      <div className="pointer-events-none absolute top-[max(env(safe-area-inset-top),10px)] right-3 z-30 flex items-center gap-2 sm:right-4">
+    <div className={cn("relative flex flex-1 flex-col", className)}>
+      <div className="pointer-events-none fixed top-[max(env(safe-area-inset-top),10px)] right-3 z-40 flex items-center gap-2 sm:right-4 lg:top-6 lg:right-6">
         {topRightExtra && <div className="pointer-events-auto">{topRightExtra}</div>}
         <button
           type="button"
@@ -47,7 +47,7 @@ export default function ImmersiveView({
           <X className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden="true" />
         </button>
       </div>
-      <div className="@container flex min-h-0 flex-1 flex-col overflow-y-auto px-3 pt-[max(env(safe-area-inset-top),12px)] pb-4 sm:px-4">
+      <div className="@container mx-auto flex w-full max-w-7xl flex-1 flex-col px-3 pt-[max(env(safe-area-inset-top),12px)] pb-6 sm:px-4 lg:px-8 lg:pt-8 lg:pb-10">
         {children}
       </div>
     </div>

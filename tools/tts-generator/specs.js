@@ -415,25 +415,8 @@ const PROMPT_TEXTS_VI = {
   preview: "Xin chào, cùng học vui nhé.",
 };
 
-// Some prompts contain internal sentence punctuation (e.g. "Hello! Let's
-// learn together.") which most TTS engines render with a noticeable pause.
-// Silence-detection then over-splits the rendered audio into multiple raw
-// segments per item. `segments` declares the expected raw-segment count per
-// item so the manifest builder can deterministically merge them back into
-// one final segment, regardless of TTS pacing.
-const PROMPT_SEGMENTS = {
-  preview: 2,
-};
-
-const promptItemsFor = textsByKey =>
-  PROMPT_KEYS.map(key => ({
-    id: key,
-    text: textsByKey[key],
-    ...(PROMPT_SEGMENTS[key] ? { segments: PROMPT_SEGMENTS[key] } : {}),
-  }));
-
-const PROMPT_EN_ITEMS = promptItemsFor(PROMPT_TEXTS_EN);
-const PROMPT_VI_ITEMS = promptItemsFor(PROMPT_TEXTS_VI);
+const PROMPT_EN_ITEMS = PROMPT_KEYS.map(key => ({ id: key, text: PROMPT_TEXTS_EN[key] }));
+const PROMPT_VI_ITEMS = PROMPT_KEYS.map(key => ({ id: key, text: PROMPT_TEXTS_VI[key] }));
 
 // One generation spec per (topic, locale). "enabled: false" can be used to
 // skip a topic during iterative testing without deleting it here.
@@ -575,4 +558,19 @@ export const SPRITE_INDICES = {
     en: Object.fromEntries(ALPHABET_VI_LETTERS.map((l, i) => [l, i])),
     vi: Object.fromEntries(ALPHABET_VI_LETTERS.map((l, i) => [l, i])),
   },
+};
+
+export const specId = spec => `${spec.topic}-${spec.locale}`;
+
+// Parses edge-tts rate strings ("-15%", "+20%") into Web Speech API `rate`
+// multipliers. "-15%" means 15% slower, which is rate=0.85. Clamped to the
+// 0.1..10 range that the Web Speech spec accepts.
+export const parseRateToMultiplier = rateStr => {
+  if (!rateStr || typeof rateStr !== "string") return 1;
+  const match = rateStr.trim().match(/^([-+]?)(\d+(?:\.\d+)?)%$/);
+  if (!match) return 1;
+  const sign = match[1] === "-" ? -1 : 1;
+  const pct = parseFloat(match[2]);
+  const multiplier = 1 + (sign * pct) / 100;
+  return Math.min(10, Math.max(0.1, multiplier));
 };

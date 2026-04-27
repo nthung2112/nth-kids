@@ -207,25 +207,25 @@ export function getNumberDisplayInfo(num: number) {
     return {
       showAllItems: true,
       gridCols: "grid-cols-2 @md:grid-cols-3 @lg:grid-cols-5",
-      cardSize: "p-6",
-      numberSize: "text-6xl md:text-8xl",
-      emojiSize: "text-4xl md:text-5xl",
+      cardSize: "p-4 @md:p-6",
+      numberSize: "text-5xl @sm:text-6xl @md:text-7xl @lg:text-8xl",
+      emojiSize: "text-3xl @sm:text-4xl @md:text-5xl",
     };
   }
   if (num <= 30) {
     return {
       showAllItems: false,
       gridCols: "grid-cols-2 @md:grid-cols-3 @lg:grid-cols-5",
-      cardSize: "p-4",
-      numberSize: "text-4xl md:text-6xl",
-      emojiSize: "text-3xl md:text-4xl",
+      cardSize: "p-3 @md:p-4",
+      numberSize: "text-4xl @md:text-5xl @lg:text-6xl",
+      emojiSize: "text-2xl @md:text-3xl @lg:text-4xl",
     };
   }
   return {
     showAllItems: false,
-    gridCols: "grid-cols-4 @md:grid-cols-6 @lg:grid-cols-8",
-    cardSize: "p-3",
-    numberSize: "text-3xl md:text-5xl",
-    emojiSize: "text-2xl md:text-3xl",
+    gridCols: "grid-cols-4 @md:grid-cols-6 @lg:grid-cols-8 @3xl:grid-cols-10",
+    cardSize: "p-2 @md:p-3",
+    numberSize: "text-3xl @md:text-4xl @lg:text-5xl",
+    emojiSize: "text-2xl @md:text-3xl",
   };
 }

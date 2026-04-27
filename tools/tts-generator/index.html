@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nth-kids TTS Generator</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="28" height="28">
+          <rect x="4" y="6" width="4" height="20" rx="2" />
+          <rect x="12" y="10" width="4" height="12" rx="2" />
+          <rect x="20" y="4" width="4" height="24" rx="2" />
+        </svg>
+      </div>
+      <div class="header-actions">
+        <a class="link" href="./index-advanced.html" title="Advanced sprite generator">
+          Advanced
+        </a>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- Left column: language / gender / voice -->
+      <aside class="panel left">
+        <div class="field">
+          <label for="language">Language</label>
+          <select id="language"></select>
+        </div>
+
+        <div class="field">
+          <span class="label">Gender</span>
+          <div class="segmented" role="tablist" aria-label="Gender">
+            <button type="button" class="seg" data-gender="Male" role="tab">Male</button>
+            <button type="button" class="seg active" data-gender="Female" role="tab">Female</button>
+          </div>
+        </div>
+
+        <div class="field voices-field">
+          <span class="label">Voice</span>
+          <ul id="voices" class="voices" role="listbox" aria-label="Voices"></ul>
+        </div>
+      </aside>
+
+      <!-- Centre column: text editor + controls -->
+      <section class="panel center">
+        <textarea
+          id="text"
+          class="editor"
+          spellcheck="false"
+          placeholder="Type the text you want to speak..."
+        ></textarea>
+
+        <div class="editor-toolbar">
+          <label class="autoplay">
+            <input type="checkbox" id="autoplay" checked />
+            Auto Play
+          </label>
+
+          <div class="speed">
+            <span class="label inline">Speed:</span>
+            <div class="segmented small" role="tablist" aria-label="Speed">
+              <button type="button" class="seg" data-speed="0.5">0.5x</button>
+              <button type="button" class="seg active" data-speed="1">1x</button>
+              <button type="button" class="seg" data-speed="1.25">1.25x</button>
+              <button type="button" class="seg" data-speed="1.5">1.5x</button>
+              <button type="button" class="seg" data-speed="2">2x</button>
+              <button type="button" class="seg" data-speed="3">3x</button>
+            </div>
+          </div>
+        </div>
+
+        <button id="generate" class="primary" type="button">
+          Generate Audio
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </button>
+      </section>
+
+      <!-- Right column: preview + downloads -->
+      <aside class="panel right">
+        <div id="preview-empty" class="preview-empty">
+          <p>Pick a voice, enter text, and click <strong>Generate Audio</strong>.</p>
+        </div>
+
+        <div id="preview" class="preview" hidden>
+          <div class="preview-header">
+            <span class="preview-voice" id="preview-voice"></span>
+          </div>
+          <p class="preview-text" id="preview-text"></p>
+          <audio id="player" controls></audio>
+          <div class="downloads">
+            <button id="download-mp3" class="download mp3" type="button" disabled>
+              Download Audio MP3
+            </button>
+            <button id="download-vtt" class="download vtt" type="button" disabled>
+              Download Subtitles VTT
+            </button>
+            <button id="download-srt" class="download srt" type="button" disabled>
+              Download Subtitles SRT
+            </button>
+          </div>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </aside>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

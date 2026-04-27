@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 // Build src/data/audioSpriteManifest.json + src/data/audioSprites.ts purely
-// from the .m4a files already present in public/assets/audio/.
+// from the audio files already present in public/assets/audio/. The current
+// pipeline produces .mp3 sprites via tools/tts-generator (browser-based);
+// legacy .m4a files are still supported transparently because `afconvert`
+// handles both container formats.
 //
 // Pipeline per file:
-//   1. Decode the .m4a to a 22050 Hz mono 16-bit WAV via `afconvert`.
+//   1. Decode the audio to a 22050 Hz mono 16-bit WAV via `afconvert`.
 //   2. Run silence detection to recover one segment per item.
 //   3. Cross-check the segment count against `spec.items.length` from
 //      tts-content.mjs and emit a warning (or hard fail with --strict) when
@@ -11,13 +14,22 @@
 //   4. Emit the manifest JSON and the TypeScript module.
 //
 // Use this when you already have audio assets and just want to (re)build the
-// manifest + TS without re-running TTS. `generate-tts-sprites.mjs` calls into
-// this module after producing fresh .m4a files.
+// manifest + TS without re-running TTS. The preferred way to regenerate the
+// audio itself is now tools/tts-generator/index.html (runs in Microsoft
+// Edge, avoids the intermittent "no audio received" errors that plague the
+// local edge-tts CLI pipeline).
 //
 // Usage:
 //   node scripts/build-sprite-manifest.mjs                # all audio files
 //   node scripts/build-sprite-manifest.mjs numbers-vi     # subset (topic-locale)
 //   node scripts/build-sprite-manifest.mjs --strict       # fail on segment-count mismatch
+//   node scripts/build-sprite-manifest.mjs --no-reconcile # disable automatic count fixup
+//
+// By default, when the silence-detected segment count does not match
+// `spec.items.length`, the script reconciles to the expected count:
+//   - too many: merge the adjacent pair with the smallest silence gap;
+//   - too few: split the longest segment at its quietest internal valley.
+// This keeps index maps in audioSprites.ts valid without hand-editing.
 //
 // Requires:
 //   - macOS `afconvert` (system).
@@ -95,14 +107,10 @@ const readWavSamples = path => {
   );
 };
 
-const detectSegments = samples => {
+const computeWindowRms = samples => {
   const windowSize = Math.max(1, Math.round((SAMPLE_RATE * WINDOW_MS) / 1000));
-  const minSilenceWindows = Math.ceil(MIN_SILENCE_MS / WINDOW_MS);
-  const minSegmentWindows = Math.ceil(MIN_SEGMENT_MS / WINDOW_MS);
-  const silenceThreshold = Math.pow(10, SILENCE_DBFS / 20) * 32768;
-
   const windowCount = Math.floor(samples.length / windowSize);
-  const isVoice = new Array(windowCount);
+  const rms = new Float32Array(windowCount);
   for (let w = 0; w < windowCount; w++) {
     let sumSq = 0;
     const base = w * windowSize;
@@ -110,15 +118,22 @@ const detectSegments = samples => {
       const s = samples[base + i];
       sumSq += s * s;
     }
-    isVoice[w] = Math.sqrt(sumSq / windowSize) > silenceThreshold;
+    rms[w] = Math.sqrt(sumSq / windowSize);
   }
+  return { rms, windowSize, windowCount };
+};
+
+const findRawSegments = rms => {
+  const minSilenceWindows = Math.ceil(MIN_SILENCE_MS / WINDOW_MS);
+  const minSegmentWindows = Math.ceil(MIN_SEGMENT_MS / WINDOW_MS);
+  const silenceThreshold = Math.pow(10, SILENCE_DBFS / 20) * 32768;
 
   const raw = [];
   let inVoice = false;
   let voiceStart = 0;
   let silenceRun = 0;
-  for (let w = 0; w <= windowCount; w++) {
-    const v = w < windowCount ? isVoice[w] : false;
+  for (let w = 0; w <= rms.length; w++) {
+    const v = w < rms.length ? rms[w] > silenceThreshold : false;
     if (v) {
       if (!inVoice) {
         if (raw.length > 0 && silenceRun < minSilenceWindows) {
@@ -139,17 +154,129 @@ const detectSegments = samples => {
       silenceRun++;
     }
   }
+  return raw;
+};
 
+// Reconcile the detected segment count against the known expected count
+// from the TTS spec. Two strategies:
+//   - too many: repeatedly merge the adjacent pair most likely to be an
+//     over-split — the pair where the shorter side is smallest (an over-split
+//     always produces at least one unusually short half), with a small gap
+//     bias as a tiebreaker.
+//   - too few: repeatedly split the segment most likely to contain a merged
+//     item — the longest segment whose interior contains the quietest dip,
+//     splitting at the centre of that valley.
+// Returns { segments, mergeOps, splitOps } where segments is the adjusted
+// list of { sw, ew } window ranges.
+const reconcileSegmentCount = (rawSegments, rms, expected) => {
+  const minSegmentWindows = Math.ceil(MIN_SEGMENT_MS / WINDOW_MS);
+  const segments = rawSegments.map(s => ({ ...s }));
+  let mergeOps = 0;
+  let splitOps = 0;
+
+  const segDur = s => s.ew - s.sw;
+
+  while (segments.length > expected && segments.length > 1) {
+    let bestScore = Infinity;
+    let bestIdx = -1;
+    for (let i = 0; i < segments.length - 1; i++) {
+      const left = segments[i];
+      const right = segments[i + 1];
+      const gap = right.sw - left.ew;
+      const shorterSide = Math.min(segDur(left), segDur(right));
+      const score = shorterSide + gap * 0.25;
+      if (score < bestScore) {
+        bestScore = score;
+        bestIdx = i;
+      }
+    }
+    if (bestIdx === -1) break;
+    segments[bestIdx] = { sw: segments[bestIdx].sw, ew: segments[bestIdx + 1].ew };
+    segments.splice(bestIdx + 1, 1);
+    mergeOps++;
+  }
+
+  while (segments.length < expected) {
+    const medianDur = (() => {
+      const sorted = segments.map(segDur).sort((a, b) => a - b);
+      return sorted[Math.floor(sorted.length / 2)] || 1;
+    })();
+
+    let bestSegIdx = -1;
+    let bestSplitW = -1;
+    let bestScore = Infinity;
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
+      const dur = segDur(seg);
+      if (dur < 2 * minSegmentWindows + 1) continue;
+      const lo = seg.sw + minSegmentWindows;
+      const hi = seg.ew - minSegmentWindows;
+      const lengthBias = Math.max(1, medianDur) / Math.max(1, dur);
+      for (let w = lo; w < hi; w++) {
+        const score = rms[w] * lengthBias;
+        if (score < bestScore) {
+          bestScore = score;
+          bestSplitW = w;
+          bestSegIdx = i;
+        }
+      }
+    }
+    if (bestSegIdx === -1) break;
+
+    const seg = segments[bestSegIdx];
+    const splitRms = rms[bestSplitW];
+    const valleyCeil = Math.max(splitRms * 1.5, splitRms + 1);
+    let valleyStart = bestSplitW;
+    let valleyEnd = bestSplitW;
+    while (valleyStart - 1 >= seg.sw + minSegmentWindows && rms[valleyStart - 1] <= valleyCeil) {
+      valleyStart--;
+    }
+    while (valleyEnd + 1 <= seg.ew - minSegmentWindows && rms[valleyEnd + 1] <= valleyCeil) {
+      valleyEnd++;
+    }
+    const right = { sw: valleyEnd + 1, ew: seg.ew };
+    segments[bestSegIdx] = { sw: seg.sw, ew: valleyStart };
+    segments.splice(bestSegIdx + 1, 0, right);
+    splitOps++;
+  }
+
+  return { segments, mergeOps, splitOps };
+};
+
+const toSecondSegments = (windowSegments, samples, windowSize) => {
   const padSec = PADDING_MS / 1000;
-  return raw.map(({ sw, ew }) => ({
+  const totalSec = samples.length / SAMPLE_RATE;
+  return windowSegments.map(({ sw, ew }) => ({
     start: ROUND(Math.max(0, (sw * windowSize) / SAMPLE_RATE - padSec)),
-    end: ROUND(Math.min(samples.length / SAMPLE_RATE, (ew * windowSize) / SAMPLE_RATE + padSec)),
+    end: ROUND(Math.min(totalSec, (ew * windowSize) / SAMPLE_RATE + padSec)),
   }));
 };
 
 const specId = spec => `${spec.topic}-${spec.locale}`;
 
-const analyseAudioFile = (spec, { strict }) => {
+// Some items declare `segments: N` to indicate they're rendered as N raw
+// audio segments (e.g. a sentence with internal punctuation that TTS speaks
+// with a noticeable pause). When the raw segment count matches the sum of
+// per-item segment counts, we deterministically merge each item's raw
+// segments back into one final segment, in spec order. This is unambiguous
+// and avoids guessing which adjacent pair is an over-split.
+const segmentsPerItem = spec => spec.items.map(item => item.segments ?? 1);
+
+const collapseByItemSegments = (rawSegments, perItemCounts) => {
+  const total = perItemCounts.reduce((sum, n) => sum + n, 0);
+  if (rawSegments.length !== total) return null;
+  const out = [];
+  let cursor = 0;
+  for (const count of perItemCounts) {
+    const first = rawSegments[cursor];
+    const last = rawSegments[cursor + count - 1];
+    out.push({ sw: first.sw, ew: last.ew });
+    cursor += count;
+  }
+  return out;
+};
+
+const analyseAudioFile = (spec, { strict, reconcile }) => {
   const audioPath = resolve(repoRoot, spec.output);
   if (!existsSync(audioPath)) {
     throw new Error(`[${specId(spec)}] missing audio file: ${spec.output}`);
@@ -162,21 +289,64 @@ const analyseAudioFile = (spec, { strict }) => {
   decodeToWav(audioPath, wavPath);
 
   const samples = readWavSamples(wavPath);
-  const segments = detectSegments(samples);
+  const { rms, windowSize } = computeWindowRms(samples);
+  const rawWindowSegments = findRawSegments(rms);
+  const detectedCount = rawWindowSegments.length;
+  const perItemCounts = segmentsPerItem(spec);
+  const expectedCount = spec.items.length;
+  const expectedRawCount = perItemCounts.reduce((sum, n) => sum + n, 0);
   const duration = ROUND(samples.length / SAMPLE_RATE);
 
-  if (segments.length !== spec.items.length) {
+  let windowSegments = rawWindowSegments;
+  let reconciled = null;
+
+  const structural =
+    expectedRawCount !== expectedCount
+      ? collapseByItemSegments(rawWindowSegments, perItemCounts)
+      : null;
+  if (structural) {
+    windowSegments = structural;
+    reconciled = { mergeOps: expectedRawCount - expectedCount, splitOps: 0, mode: "structural" };
+    console.log(
+      `  info: ${id} collapsed by per-item segments (raw=${detectedCount} -> ${expectedCount}).`
+    );
+  } else if (detectedCount !== expectedCount) {
     const msg =
-      `[${id}] segment count mismatch: detected=${segments.length}, expected=${spec.items.length}. ` +
+      `[${id}] segment count mismatch: detected=${detectedCount}, expected=${expectedCount}. ` +
       "Index maps in audioSprites.ts assume the expected count.";
-    if (strict) throw new Error(msg);
-    console.warn(`  warn: ${msg}`);
+
+    if (reconcile) {
+      const { segments, mergeOps, splitOps } = reconcileSegmentCount(
+        rawWindowSegments,
+        rms,
+        expectedCount
+      );
+      if (segments.length === expectedCount) {
+        windowSegments = segments;
+        reconciled = { mergeOps, splitOps, mode: "heuristic" };
+        console.log(
+          `  info: ${id} reconciled to ${expectedCount} segments ` +
+            `(merges=${mergeOps}, splits=${splitOps}).`
+        );
+      } else {
+        const failMsg =
+          `${msg} Auto-reconcile fell short: ended at ${segments.length} ` +
+          `(merges=${mergeOps}, splits=${splitOps}).`;
+        if (strict) throw new Error(failMsg);
+        console.warn(`  warn: ${failMsg}`);
+      }
+    } else if (strict) {
+      throw new Error(msg);
+    } else {
+      console.warn(`  warn: ${msg}`);
+    }
   }
 
   return {
     duration,
     sampleRate: SAMPLE_RATE,
-    segments,
+    segments: toSecondSegments(windowSegments, samples, windowSize),
+    reconciled,
   };
 };
 
@@ -299,7 +469,11 @@ export const ALPHABET_WORDS_SPRITE_INDEX: Record<SpriteLocale, Partial<Record<st
   return body;
 };
 
-export const buildSpriteManifestFromAudio = ({ filters = [], strict = false } = {}) => {
+export const buildSpriteManifestFromAudio = ({
+  filters = [],
+  strict = false,
+  reconcile = true,
+} = {}) => {
   ensureDir(tempRoot);
   const specs = GENERATION_SPECS.filter(
     spec => filters.length === 0 || filters.includes(specId(spec))
@@ -310,15 +484,16 @@ export const buildSpriteManifestFromAudio = ({ filters = [], strict = false } = 
     );
   }
 
+  const flags = [strict ? "strict" : null, reconcile ? "reconcile" : null].filter(Boolean);
   console.log(
     `Building manifest from ${specs.length} audio file${specs.length === 1 ? "" : "s"}` +
-      `${strict ? " (strict mode)" : ""}...`
+      `${flags.length ? ` (${flags.join(", ")})` : ""}...`
   );
 
   const analysed = new Map();
   for (const spec of specs) {
     const id = specId(spec);
-    const result = analyseAudioFile(spec, { strict });
+    const result = analyseAudioFile(spec, { strict, reconcile });
     console.log(
       `[${id}] ${spec.output}  duration=${result.duration}s  segments=${result.segments.length}`
     );
@@ -335,9 +510,10 @@ const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(imp
 if (isMain) {
   const args = process.argv.slice(2);
   const strict = args.includes("--strict");
+  const reconcile = !args.includes("--no-reconcile");
   const filters = args.filter(a => !a.startsWith("--"));
   try {
-    buildSpriteManifestFromAudio({ filters, strict });
+    buildSpriteManifestFromAudio({ filters, strict, reconcile });
     console.log("\nDone.");
   } catch (error) {
     console.error(error);

@@ -202,7 +202,7 @@ export default function ColoringGame() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 @5xl:grid-cols-3">
         <Card className="border-4 border-pink-300 bg-linear-to-br from-pink-100 to-purple-100 p-6">
           <h3 className="mb-4 text-center text-2xl font-bold text-purple-800">
             <Palette className="mr-2 inline" aria-hidden="true" />
@@ -389,7 +389,7 @@ export default function ColoringGame() {
             {t("games.coloring.galleryEmpty")}
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 @sm:grid-cols-3 @md:grid-cols-4 @lg:grid-cols-6">
             {gallery.map(entry => {
               const tpl = COLORING_TEMPLATES.find(template => template.id === entry.templateId);
               if (!tpl) return null;
@@ -427,7 +427,7 @@ export default function ColoringGame() {
           <h4 className="mb-2 text-xl font-bold text-orange-800">
             {t("games.coloring.howTo.title")}
           </h4>
-          <div className="grid grid-cols-1 gap-4 text-sm text-orange-700 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 text-sm text-orange-700 @md:grid-cols-3">
             {howToSteps.map((step, index) => (
               <div key={index}>
                 <span className="font-semibold">{step.label}</span> {step.text}

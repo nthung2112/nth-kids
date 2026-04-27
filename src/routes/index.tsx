@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ChevronRight, Gamepad2, GraduationCap } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import PageContainer from "@/components/layout/page-container";
 import RecommendationCard from "@/components/recommendation-card";
 import { Card } from "@/components/ui/card";
 import { GAME_TOPICS, LEARN_TOPICS, type GameTopicPath, type TopicPath } from "@/data/topics";
@@ -40,52 +41,64 @@ function Home() {
   const flashcardsTopic = GAME_TOPICS.find(topic => topic.id === "flashcards");
 
   return (
-    <div className="flex flex-col px-4 pt-[max(env(safe-area-inset-top),16px)] pb-4">
-      <header className="mb-4 text-center sm:mb-5">
-        <h1 className="text-2xl font-bold text-purple-800 sm:text-3xl">{t("app.title")}</h1>
-        <p className="mt-1 text-sm font-semibold text-purple-600 sm:text-base">
+    <PageContainer>
+      <header className="mb-4 text-center sm:mb-5 lg:mb-8">
+        <h1 className="text-2xl font-bold text-purple-800 sm:text-3xl lg:text-4xl">
+          {t("app.title")}
+        </h1>
+        <p className="mt-1 text-sm font-semibold text-purple-600 sm:text-base lg:text-lg">
           {t("app.subtitle")}
         </p>
       </header>
 
-      <div className="mb-4">
+      <div className="mb-4 lg:mb-6">
         <RecommendationCard
           recentTopicKey={RECENT_TOPIC_KEY}
           onNavigate={(path, mode) => goToTopic(path as TopicPath | GameTopicPath, mode)}
         />
       </div>
 
-      <div className="mb-4 grid grid-cols-2 gap-3">
+      <div className="mb-4 grid grid-cols-2 gap-3 sm:gap-4 lg:mb-6 lg:gap-6">
         <button
           type="button"
           onClick={() => goToHub("/learn")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-4 border-purple-300 bg-linear-to-br from-purple-100 to-purple-200 p-4 text-center shadow-sm transition-all hover:scale-[1.03] hover:shadow-lg active:scale-95 motion-reduce:transition-none"
+          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-4 border-purple-300 bg-linear-to-br from-purple-100 to-purple-200 p-4 text-center shadow-sm transition-all hover:scale-[1.03] hover:shadow-lg active:scale-95 motion-reduce:transition-none sm:p-6 lg:gap-3 lg:p-8"
         >
-          <GraduationCap className="h-8 w-8 text-purple-700" aria-hidden="true" />
-          <span className="text-sm font-bold text-purple-800 sm:text-base">{t("nav.learn")}</span>
+          <GraduationCap
+            className="h-8 w-8 text-purple-700 sm:h-10 sm:w-10 lg:h-12 lg:w-12"
+            aria-hidden="true"
+          />
+          <span className="text-sm font-bold text-purple-800 sm:text-base lg:text-xl">
+            {t("nav.learn")}
+          </span>
         </button>
         <button
           type="button"
           onClick={() => goToHub("/game")}
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-4 border-pink-300 bg-linear-to-br from-pink-100 to-pink-200 p-4 text-center shadow-sm transition-all hover:scale-[1.03] hover:shadow-lg active:scale-95 motion-reduce:transition-none"
+          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-4 border-pink-300 bg-linear-to-br from-pink-100 to-pink-200 p-4 text-center shadow-sm transition-all hover:scale-[1.03] hover:shadow-lg active:scale-95 motion-reduce:transition-none sm:p-6 lg:gap-3 lg:p-8"
         >
-          <Gamepad2 className="h-8 w-8 text-pink-700" aria-hidden="true" />
-          <span className="text-sm font-bold text-pink-800 sm:text-base">{t("nav.game")}</span>
+          <Gamepad2
+            className="h-8 w-8 text-pink-700 sm:h-10 sm:w-10 lg:h-12 lg:w-12"
+            aria-hidden="true"
+          />
+          <span className="text-sm font-bold text-pink-800 sm:text-base lg:text-xl">
+            {t("nav.game")}
+          </span>
         </button>
       </div>
 
-      <section className="mb-4">
-        <h2 className="mb-2 text-sm font-bold text-purple-700 uppercase tracking-wide sm:text-base">
+      <section className="mb-4 lg:mb-8">
+        <h2 className="mb-2 text-sm font-bold text-purple-700 uppercase tracking-wide sm:text-base lg:mb-4 lg:text-lg">
           {t("home.exploreTopics")}
         </h2>
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-4 xl:grid-cols-4">
           {heroTopics.map(topic => (
             <Card
               key={topic.path}
               role="button"
               tabIndex={0}
               aria-label={t(topic.homeTitleKey)}
-              className={`flex cursor-pointer items-center gap-3 border-4 p-3 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-95 motion-reduce:transition-none ${topic.theme.cardClass}`}
+              className={`flex cursor-pointer items-center gap-3 border-4 p-3 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-95 motion-reduce:transition-none lg:p-4 ${topic.theme.cardClass}`}
               onClick={() => goToTopic(topic.path, "learn")}
               onKeyDown={event => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -117,7 +130,7 @@ function Home() {
               role="button"
               tabIndex={0}
               aria-label={t(flashcardsTopic.homeTitleKey)}
-              className={`flex cursor-pointer items-center gap-3 border-4 p-3 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-95 motion-reduce:transition-none sm:col-span-2 ${flashcardsTopic.theme.cardClass}`}
+              className={`flex cursor-pointer items-center gap-3 border-4 p-3 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-95 motion-reduce:transition-none sm:col-span-2 lg:col-span-1 lg:p-4 ${flashcardsTopic.theme.cardClass}`}
               onClick={() => goToTopic(flashcardsTopic.path, "game")}
               onKeyDown={event => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -147,23 +160,25 @@ function Home() {
       </section>
 
       <section>
-        <h2 className="mb-2 text-center text-sm font-bold text-purple-700 sm:text-base">
+        <h2 className="mb-2 text-center text-sm font-bold text-purple-700 sm:text-base lg:mb-4 lg:text-lg">
           {t("home.featuresTitle")}
         </h2>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4 lg:gap-4">
           {FEATURES.map(feature => (
             <div
               key={feature.key}
-              className="flex items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-left shadow-sm"
+              className="flex items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-left shadow-sm lg:px-4 lg:py-3"
             >
-              <div className="text-lg sm:text-xl" aria-hidden="true">
+              <div className="text-lg sm:text-xl lg:text-2xl" aria-hidden="true">
                 {feature.icon}
               </div>
-              <div className="text-xs font-bold text-purple-700 sm:text-sm">{t(feature.key)}</div>
+              <div className="text-xs font-bold text-purple-700 sm:text-sm lg:text-base">
+                {t(feature.key)}
+              </div>
             </div>
           ))}
         </div>
       </section>
-    </div>
+    </PageContainer>
   );
 }
