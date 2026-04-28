@@ -29,7 +29,33 @@
     "label": "Ngôn ngữ",
     "switchTo": "Chuyển sang {{name}}"
   },
+  "visual": {
+    "alt": {
+      "default": "Minh họa đồ chơi mềm mại",
+      "numbers": "Các khối đồ chơi chữ số",
+      "letters": "Các khối đồ chơi chữ cái",
+      "colors": "Bảng màu đồ chơi",
+      "shapes": "Hộp thả hình đồ chơi",
+      "flashcards": "Bộ thẻ đồ chơi"
+    }
+  },
   "home": {
+    "hero": {
+      "eyebrow": "Bài học nhỏ, niềm vui lớn",
+      "title": "Chọn đồ chơi để học",
+      "subtitle": "Nút lớn, âm thanh vui và trò chơi nhẹ nhàng cho đôi tay nhỏ",
+      "primaryAction": "Bắt đầu chơi"
+    },
+    "heroTiles": {
+      "learn": {
+        "title": "Học bài",
+        "description": "Chữ cái, số, màu và hình"
+      },
+      "play": {
+        "title": "Chơi game",
+        "description": "Trò chơi nhỏ cho tay bé"
+      }
+    },
     "welcome": "Chào mừng trở lại!",
     "tapToStart": "Chạm vào một ô bên dưới để bắt đầu",
     "quickPick": "Bắt đầu nhanh",
@@ -122,7 +148,9 @@
   "letters": {
     "modes": {
       "basic": "🎯 Cơ Bản",
-      "sequence": "🧠 Chuỗi Chữ"
+      "sequence": "🧠 Chuỗi Chữ",
+      "sounds": "🔊 Nghe & Chọn",
+      "soundsDescription": "Nghe âm chữ cái và chọn đúng."
     },
     "learning": {
       "instructionsTitle": "Nhấn vào chữ cái để học nhé!",
@@ -135,7 +163,9 @@
     "modes": {
       "identify": "🎯 Nhận Dạng",
       "matching": "🧩 Ghép Cặp",
-      "coloring": "🎨 Tô Màu"
+      "coloring": "🎨 Tô Màu",
+      "sort": "🧺 Phân loại",
+      "sortDescription": "Thả mỗi đồ vật vào giỏ cùng màu."
     },
     "learning": {
       "instructionsTitle": "Nhấn vào màu để học nhé!",
@@ -198,6 +228,12 @@
       "instructionsSubtitle": "Quan sát thứ tự và chọn chữ cái đúng",
       "completeSequence": "Chuỗi hoàn chỉnh:"
     },
+    "letterSounds": {
+      "question": "Bé nghe chữ nào vậy?",
+      "instructionsTitle": "Chạm vào chữ cái bé nghe được!",
+      "instructionsSubtitle": "Nghe thật kỹ và chọn chữ đúng.",
+      "replayButton": "Nghe lại"
+    },
     "colorGuess": {
       "question": "Đây là màu gì?",
       "instructionsTitle": "Nhìn màu và chọn tên đúng!",
@@ -208,6 +244,12 @@
       "instructionsTitle": "Lật thẻ và ghép cặp màu giống nhau!",
       "instructionsSubtitle": "Nhớ vị trí các thẻ để ghép thành công",
       "hiddenCard": "Thẻ úp"
+    },
+    "colorSorting": {
+      "question": "Đồ này bỏ vào giỏ nào?",
+      "instructionsTitle": "Thả mỗi đồ vào đúng giỏ nhé!",
+      "instructionsSubtitle": "Chạm vào giỏ cùng màu với đồ vật.",
+      "basketLabel": "Giỏ màu {{color}}"
     },
     "coloring": {
       "palette": "Bảng Màu",
@@ -265,6 +307,22 @@
         {
           "title": "🎮 Sẵn Sàng Chơi!",
           "content": "Bé đã hiểu cách chơi rồi! Hãy bắt đầu và tìm những chữ cái tiếp theo nhé!"
+        }
+      ]
+    },
+    "letterSounds": {
+      "steps": [
+        {
+          "title": "🔊 Lắng Nghe",
+          "content": "Ứng dụng đọc một chữ cái mỗi lượt."
+        },
+        {
+          "title": "👆 Chạm Vào Chữ",
+          "content": "Chạm vào chữ cái bé vừa nghe."
+        },
+        {
+          "title": "🔁 Chưa Rõ?",
+          "content": "Chạm vào nút nghe lại để nghe chữ thêm lần nữa."
         }
       ]
     },
@@ -348,6 +406,22 @@
         }
       ]
     },
+    "colorSorting": {
+      "steps": [
+        {
+          "title": "🧺 Phân Loại Màu",
+          "content": "Mỗi lượt xuất hiện một món đồ. Bé thả đúng vào giỏ cùng màu nhé!"
+        },
+        {
+          "title": "👆 Cách Chơi",
+          "content": "Chạm vào giỏ có cùng màu với đồ vật."
+        },
+        {
+          "title": "🎉 Vui Vẻ Nhé!",
+          "content": "Cố gắng phân loại hết mà không lẫn màu!"
+        }
+      ]
+    },
     "coloring": {
       "steps": [
         {
@@ -410,12 +484,19 @@
       "voice": "Giọng đọc",
       "language": "Ngôn ngữ",
       "numberRange": "Phạm vi số (trang Số)",
-      "accessibility": "Trải nghiệm"
+      "accessibility": "Trải nghiệm",
+      "about": "Về ứng dụng"
+    },
+    "about": {
+      "title": "Về ứng dụng",
+      "description": "Các trò chơi đơn giản giúp bé làm quen với chữ số, chữ cái, màu sắc và hình khối."
     },
     "soundOn": "Bật âm thanh",
     "soundOff": "Tắt âm thanh",
     "reduceMotion": "Giảm hiệu ứng chuyển động",
     "reduceMotionHelp": "Bớt nảy/xoay khi bé dễ phân tâm",
+    "guidedPlay": "Gợi ý chơi hàng ngày",
+    "guidedPlayHelp": "Hiển thị danh sách hoạt động ngắn trên trang chủ",
     "trigger": "Cài đặt",
     "voicePreview": {
       "label": "Nghe thử giọng đọc",
@@ -522,6 +603,144 @@
       "letter": "Chữ cái nào?",
       "color": "Đây là màu gì?",
       "shape": "Hình gì đây?"
+    }
+  },
+  "rewards": {
+    "stickers": {
+      "numbers-first": {
+        "title": "Lần đầu đếm số",
+        "description": "Bé đã khám phá các con số!"
+      },
+      "numbers-3": {
+        "title": "Nhà vô địch con số",
+        "description": "Ba lần chơi đếm số rồi!"
+      },
+      "letters-first": {
+        "title": "Lần đầu gặp chữ",
+        "description": "Bé đã làm quen bảng chữ cái!"
+      },
+      "letters-3": {
+        "title": "Nhà vô địch chữ cái",
+        "description": "Ba lần chơi bảng chữ cái!"
+      },
+      "colors-first": {
+        "title": "Lần đầu học màu",
+        "description": "Bé đã khám phá màu sắc!"
+      },
+      "colors-3": {
+        "title": "Nhà vô địch màu sắc",
+        "description": "Ba lần chơi đoán màu!"
+      },
+      "shapes-first": {
+        "title": "Lần đầu học hình",
+        "description": "Bé đã gặp những hình đầu tiên!"
+      },
+      "shapes-3": {
+        "title": "Nhà vô địch hình khối",
+        "description": "Ba lần chơi hình khối!"
+      },
+      "flashcards-first": {
+        "title": "Sao ôn tập",
+        "description": "Bé hoàn thành một vòng ôn tập!"
+      },
+      "coloring-first": {
+        "title": "Họa sĩ nhí",
+        "description": "Bé đã lưu bức tranh đầu tiên!"
+      },
+      "color-sort-first": {
+        "title": "Chuyên gia phân loại",
+        "description": "Bé đã phân loại màu sắc lần đầu!"
+      },
+      "letter-sounds-first": {
+        "title": "Đôi tai tinh nhanh",
+        "description": "Bé chọn đúng chữ nhờ nghe!"
+      },
+      "toy-explorer-5": {
+        "title": "Nhà thám hiểm nhí",
+        "description": "Năm hoạt động đã hoàn thành!"
+      },
+      "toy-explorer-12": {
+        "title": "Nhà thám hiểm siêu đỉnh",
+        "description": "Mười hai hoạt động đã hoàn thành!"
+      }
+    },
+    "summary": {
+      "title": "Đồ chơi của bé",
+      "totalActivities": "Đã chơi: {{count}} hoạt động",
+      "unlockedStickers": "Sticker: {{count}}",
+      "lastActivity": "Gần nhất: {{title}}",
+      "empty": "Chơi một chút để nhận sticker đầu tiên nhé!"
+    },
+    "settings": {
+      "title": "Tiến trình",
+      "description": "Hoạt động và sticker được lưu trên thiết bị này.",
+      "totalActivities": "Số hoạt động đã hoàn thành: {{count}}",
+      "unlockedStickers": "Số sticker đã mở: {{count}}",
+      "resetButton": "Đặt lại tiến trình",
+      "resetConfirm": "Đặt lại toàn bộ tiến trình đã lưu trên thiết bị này?",
+      "lastReward": "Sticker mới nhất: {{title}}"
+    },
+    "reveal": {
+      "title": "Sticker mới!",
+      "subtitle": "{{title}}"
+    },
+    "locked": "Đang khóa",
+    "board": {
+      "title": "Bảng sticker"
+    }
+  },
+  "daily": {
+    "title": "Đồ chơi hôm nay",
+    "subtitle": "Thử vài hoạt động nhỏ",
+    "done": "Xong",
+    "next": "Chơi ngay",
+    "allDone": "Hoàn thành hết rồi! Bé giỏi lắm!",
+    "freePlay": "Chọn bất cứ đồ chơi nào bé thích bên dưới.",
+    "activities": {
+      "learn-numbers": {
+        "title": "Làm quen con số",
+        "description": "Chạm vào vài khối chữ số."
+      },
+      "learn-letters": {
+        "title": "Làm quen chữ cái",
+        "description": "Chạm vào vài khối chữ cái."
+      },
+      "learn-colors": {
+        "title": "Làm quen màu sắc",
+        "description": "Chạm vào vài hộp màu."
+      },
+      "learn-shapes": {
+        "title": "Làm quen hình khối",
+        "description": "Chạm vào vài khối hình."
+      },
+      "game-numbers": {
+        "title": "Đếm đồ vật",
+        "description": "Một trò đếm ngắn."
+      },
+      "game-letters-alphabet": {
+        "title": "Trò chơi chữ cái",
+        "description": "Tìm chữ cái đúng."
+      },
+      "game-colors-identify": {
+        "title": "Trò chơi màu sắc",
+        "description": "Gọi đúng tên màu."
+      },
+      "game-shapes": {
+        "title": "Trò chơi hình khối",
+        "description": "Chọn hình đúng."
+      },
+      "game-flashcards": {
+        "title": "Ôn tập tổng hợp",
+        "description": "Một vòng ôn ngắn."
+      },
+      "game-colors-sort": {
+        "title": "Phân loại màu sắc",
+        "description": "Thả đồ vào giỏ cùng màu."
+      },
+      "game-letters-sounds": {
+        "title": "Nghe âm chữ cái",
+        "description": "Chạm vào chữ cái bé nghe được."
+      }
     }
   }
 }

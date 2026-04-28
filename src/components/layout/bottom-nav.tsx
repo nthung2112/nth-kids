@@ -53,7 +53,7 @@ export default function BottomNav() {
     <nav
       aria-label={t("nav.mainNav")}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-purple-200/70 bg-white/90 backdrop-blur-md pb-[max(env(safe-area-inset-bottom),6px)]",
+        "fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-purple-200/70 bg-white/90 pb-[max(env(safe-area-inset-bottom),6px)] backdrop-blur-md",
         "md:inset-x-auto md:right-auto md:bottom-4 md:left-1/2 md:w-[min(560px,calc(100vw-2rem))] md:-translate-x-1/2 md:rounded-full md:border md:border-purple-200/80 md:px-2 md:pb-2 md:shadow-2xl md:ring-1 md:ring-black/5"
       )}
     >
@@ -64,9 +64,9 @@ export default function BottomNav() {
             key={item.path}
             to={item.path}
             className={cn(
-              "relative flex min-h-14 flex-col items-center justify-center gap-0.5 py-1.5 text-[11px] font-bold transition-colors motion-reduce:transition-none",
+              "relative flex min-h-14 flex-col items-center justify-center gap-0.5 py-1.5 text-[11px] font-black transition-all motion-reduce:transition-none",
               "md:min-h-12 md:rounded-full md:px-3 md:py-2 md:text-xs",
-              active ? "text-purple-700" : "text-gray-500 hover:text-purple-600"
+              active ? "-translate-y-1 text-purple-800" : "text-gray-500 hover:text-purple-700"
             )}
             aria-current={active ? "page" : undefined}
             aria-label={t(item.labelKey)}
@@ -74,7 +74,7 @@ export default function BottomNav() {
             {active && (
               <>
                 <span
-                  className="pointer-events-none absolute inset-x-4 top-0 h-[3px] rounded-b-full bg-purple-500 md:hidden"
+                  className="pointer-events-none absolute bottom-0 left-1/2 h-1.5 w-8 -translate-x-1/2 rounded-full bg-purple-300 shadow-[0_2px_6px_rgba(139,92,246,0.35)] md:hidden"
                   aria-hidden="true"
                 />
                 <span

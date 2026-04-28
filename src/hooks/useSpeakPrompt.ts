@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 
 import type { PromptKey } from "@/data/audioSprites";
-import { useSound } from "@/hooks/useSound";
 import { usePreferences } from "@/hooks/usePreferences";
+import { useSound } from "@/hooks/useSound";
 
 interface SpeakOptions {
   delayMs?: number;

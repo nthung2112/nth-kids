@@ -6,9 +6,11 @@ import { useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
 
+type ImmersiveExitTarget = "/" | "/learn" | "/game" | "/game/letters" | "/game/colors";
+
 interface ImmersiveViewProps {
   children: ReactNode;
-  exitTo: "/learn" | "/game" | "/";
+  exitTo: ImmersiveExitTarget;
   exitLabel?: string;
   className?: string;
   onBeforeExit?: () => void;

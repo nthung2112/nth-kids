@@ -1,21 +1,17 @@
 import { useNavigate } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 import PageContainer from "@/components/layout/page-container";
-import { Card } from "@/components/ui/card";
-import type { GameTopicMeta, TopicMeta, TopicMode } from "@/data/topics";
+import { ToyBackdrop, ToyTile } from "@/components/toys";
+import type { GameTopicId, GameTopicMeta, TopicMeta } from "@/data/topics";
 
 interface TopicHubProps {
   title: string;
   subtitle: string;
   topics: ReadonlyArray<TopicMeta | GameTopicMeta>;
-  mode: TopicMode;
   recentKey: string;
 }
 
-export default function TopicHub({ title, subtitle, topics, mode, recentKey }: TopicHubProps) {
-  const { t } = useTranslation();
+export default function TopicHub({ title, subtitle, topics, recentKey }: TopicHubProps) {
   const navigate = useNavigate();
 
   const handlePick = (topic: TopicMeta | GameTopicMeta) => {
@@ -24,8 +20,10 @@ export default function TopicHub({ title, subtitle, topics, mode, recentKey }: T
     } catch {
       // ignore private-mode storage errors
     }
-    navigate({ to: topic.path, search: { mode } });
+    navigate({ to: topic.path });
   };
+
+  const backdropTopicId: GameTopicId = topics[0]?.id ?? "numbers";
 
   return (
     <PageContainer>
@@ -34,42 +32,13 @@ export default function TopicHub({ title, subtitle, topics, mode, recentKey }: T
         <p className="mt-1 text-sm text-purple-600 sm:text-base lg:text-lg">{subtitle}</p>
       </header>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-        {topics.map(topic => (
-          <Card
-            key={topic.path}
-            role="button"
-            tabIndex={0}
-            aria-label={t(topic.homeTitleKey)}
-            className={`flex cursor-pointer flex-col items-center justify-center gap-2 border-4 p-4 text-center shadow-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-lg active:scale-95 motion-reduce:transition-none sm:gap-3 sm:p-5 lg:p-6 ${topic.theme.cardClass}`}
-            onClick={() => handlePick(topic)}
-            onKeyDown={event => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                handlePick(topic);
-              }
-            }}
-          >
-            <div
-              className="text-5xl transition-transform duration-300 group-hover:scale-110 sm:text-6xl lg:text-7xl"
-              aria-hidden="true"
-            >
-              {topic.icon}
-            </div>
-            <div>
-              <h2 className={`text-lg font-bold sm:text-xl lg:text-2xl ${topic.theme.titleClass}`}>
-                {t(topic.homeTitleKey)}
-              </h2>
-              <p className={`mt-0.5 text-xs sm:text-sm lg:text-base ${topic.theme.descClass}`}>
-                {t(topic.homeDescriptionKey)}
-              </p>
-            </div>
-            <ChevronRight
-              className={`h-5 w-5 shrink-0 ${topic.theme.arrowClass}`}
-              aria-hidden="true"
-            />
-          </Card>
-        ))}
+      <div className="relative overflow-hidden rounded-[2rem] border-4 border-white/70 bg-white/60 p-3 shadow-xl sm:p-5 lg:p-6">
+        <ToyBackdrop topicId={backdropTopicId} className="absolute inset-0 opacity-50" />
+        <div className="relative z-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {topics.map(topic => (
+            <ToyTile key={topic.path} topic={topic} onSelect={() => handlePick(topic)} />
+          ))}
+        </div>
       </div>
     </PageContainer>
   );

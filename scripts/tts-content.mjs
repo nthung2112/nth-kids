@@ -560,11 +560,11 @@ export const SPRITE_INDICES = {
     vi: Object.fromEntries(Array.from({ length: 100 }, (_, i) => [String(i + 1), i])),
   },
   colors: {
-    en: Object.fromEntries(Object.keys(COLORS_EN_NAMES).map((c, i) => [c, i])),
+    en: Object.fromEntries(COLORS_VI_ORDER.map((c, i) => [c, i])),
     vi: Object.fromEntries(COLORS_VI_ORDER.map((c, i) => [c, i])),
   },
   shapes: {
-    en: Object.fromEntries(Object.keys(SHAPES_EN_NAMES).map((s, i) => [s, i])),
+    en: Object.fromEntries(SHAPES_VI_ORDER.map((s, i) => [s, i])),
     vi: Object.fromEntries(SHAPES_VI_ORDER.map((s, i) => [s, i])),
   },
   prompts: {

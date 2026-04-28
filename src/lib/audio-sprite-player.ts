@@ -44,29 +44,20 @@ const resolveBaseUrl = (src: string): string => {
   return `${normalisedBase}${src.replace(/^\//, "")}`;
 };
 
-const getLocaleEntry = (
-  topic: SpriteTopic,
-  locale: SpriteLocale
-): AudioSpriteLocale | null => {
+const getLocaleEntry = (topic: SpriteTopic, locale: SpriteLocale): AudioSpriteLocale | null => {
   const sprite = AUDIO_SPRITES[topic];
   if (!sprite) return null;
   // Fall back to EN when a locale-specific recording is not (yet) available.
   return sprite[locale] ?? sprite.en ?? null;
 };
 
-const setBufferState = (
-  topic: SpriteTopic,
-  locale: SpriteLocale,
-  state: BufferState
-): void => {
+const setBufferState = (topic: SpriteTopic, locale: SpriteLocale, state: BufferState): void => {
   if (!buffers[topic]) buffers[topic] = {};
   buffers[topic]![locale] = state;
 };
 
-const getBufferState = (
-  topic: SpriteTopic,
-  locale: SpriteLocale
-): BufferState | undefined => buffers[topic]?.[locale];
+const getBufferState = (topic: SpriteTopic, locale: SpriteLocale): BufferState | undefined =>
+  buffers[topic]?.[locale];
 
 const loadBuffer = async (
   topic: SpriteTopic,
@@ -101,11 +92,7 @@ const loadBuffer = async (
   }
 };
 
-const startPlayback = (
-  ctx: AudioContext,
-  buffer: AudioBuffer,
-  segment: AudioSegment
-): boolean => {
+const startPlayback = (ctx: AudioContext, buffer: AudioBuffer, segment: AudioSegment): boolean => {
   if (ctx.state === "suspended") {
     void ctx.resume();
   }

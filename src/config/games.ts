@@ -2,8 +2,10 @@ export type GameId =
   | "counting"
   | "alphabet"
   | "sequence"
+  | "letterSounds"
   | "colorGuess"
   | "colorMatching"
+  | "colorSorting"
   | "shapes"
   | "flashcards";
 
@@ -35,6 +37,13 @@ export const GAME_CONFIGS: Record<Exclude<GameId, "counting">, GameConfig> = {
     pointsPerQuestion: 15,
     resultThresholds: { superRatio: 0.625, goodRatio: 0.375 },
   },
+  letterSounds: {
+    id: "letterSounds",
+    livesStart: 3,
+    totalQuestions: 8,
+    pointsPerQuestion: 12,
+    resultThresholds: baseThresholds,
+  },
   colorGuess: {
     id: "colorGuess",
     livesStart: 3,
@@ -47,6 +56,13 @@ export const GAME_CONFIGS: Record<Exclude<GameId, "counting">, GameConfig> = {
     livesStart: 3,
     totalQuestions: 3,
     pointsPerQuestion: 20,
+    resultThresholds: baseThresholds,
+  },
+  colorSorting: {
+    id: "colorSorting",
+    livesStart: 3,
+    totalQuestions: 8,
+    pointsPerQuestion: 12,
     resultThresholds: baseThresholds,
   },
   shapes: {

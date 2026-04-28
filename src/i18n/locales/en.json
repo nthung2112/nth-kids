@@ -29,7 +29,33 @@
     "label": "Language",
     "switchTo": "Switch to {{name}}"
   },
+  "visual": {
+    "alt": {
+      "default": "A soft toy illustration",
+      "numbers": "Toy number blocks",
+      "letters": "Toy alphabet blocks",
+      "colors": "Toy paint palette",
+      "shapes": "Toy shape sorter",
+      "flashcards": "Toy flashcard stack"
+    }
+  },
   "home": {
+    "hero": {
+      "eyebrow": "Tiny lessons, big play",
+      "title": "Pick a toy and play",
+      "subtitle": "Big buttons, bright sounds and gentle games for little hands",
+      "primaryAction": "Start playing"
+    },
+    "heroTiles": {
+      "learn": {
+        "title": "Learn",
+        "description": "Letters, numbers, colors and shapes"
+      },
+      "play": {
+        "title": "Play",
+        "description": "Mini games for little hands"
+      }
+    },
     "welcome": "Welcome back!",
     "tapToStart": "Tap a tile below to begin",
     "quickPick": "Jump right in",
@@ -122,7 +148,9 @@
   "letters": {
     "modes": {
       "basic": "🎯 Basic",
-      "sequence": "🧠 Sequence"
+      "sequence": "🧠 Sequence",
+      "sounds": "🔊 Listen & Pick",
+      "soundsDescription": "Hear a letter and tap the match."
     },
     "learning": {
       "instructionsTitle": "Tap a letter to learn!",
@@ -135,7 +163,9 @@
     "modes": {
       "identify": "🎯 Identify",
       "matching": "🧩 Matching",
-      "coloring": "🎨 Coloring"
+      "coloring": "🎨 Coloring",
+      "sort": "🧺 Sort by color",
+      "sortDescription": "Drop each toy in the matching basket."
     },
     "learning": {
       "instructionsTitle": "Tap a color to learn!",
@@ -198,6 +228,12 @@
       "instructionsSubtitle": "Watch the order and pick the right letter",
       "completeSequence": "Complete sequence:"
     },
+    "letterSounds": {
+      "question": "Which letter did you hear?",
+      "instructionsTitle": "Tap the letter you hear!",
+      "instructionsSubtitle": "Listen carefully and pick the matching letter.",
+      "replayButton": "Play again"
+    },
     "colorGuess": {
       "question": "What color is this?",
       "instructionsTitle": "Look at the color and pick the right name!",
@@ -208,6 +244,12 @@
       "instructionsTitle": "Flip the cards and match the same colors!",
       "instructionsSubtitle": "Remember the positions to match them all",
       "hiddenCard": "Hidden card"
+    },
+    "colorSorting": {
+      "question": "Which basket does this belong in?",
+      "instructionsTitle": "Drop each toy in the right basket!",
+      "instructionsSubtitle": "Tap the basket that matches the color.",
+      "basketLabel": "{{color}} basket"
     },
     "coloring": {
       "palette": "Color Palette",
@@ -265,6 +307,22 @@
         {
           "title": "🎮 Ready to Play!",
           "content": "You've got it! Let's start and find the next letters!"
+        }
+      ]
+    },
+    "letterSounds": {
+      "steps": [
+        {
+          "title": "🔊 Listen Carefully",
+          "content": "The app says one letter at a time."
+        },
+        {
+          "title": "👆 Tap the Match",
+          "content": "Tap the letter you just heard."
+        },
+        {
+          "title": "🔁 Miss It?",
+          "content": "Tap the replay button to hear the letter again."
         }
       ]
     },
@@ -348,6 +406,22 @@
         }
       ]
     },
+    "colorSorting": {
+      "steps": [
+        {
+          "title": "🧺 Color Sorting",
+          "content": "Each round shows one toy. Drop it in the matching color basket."
+        },
+        {
+          "title": "👆 How to Play",
+          "content": "Tap the basket with the same color as the toy."
+        },
+        {
+          "title": "🎉 Have fun!",
+          "content": "Try to sort them all without mixing colors up."
+        }
+      ]
+    },
     "coloring": {
       "steps": [
         {
@@ -410,12 +484,19 @@
       "voice": "Voice",
       "language": "Language",
       "numberRange": "Number range (Numbers page)",
-      "accessibility": "Experience"
+      "accessibility": "Experience",
+      "about": "About this app"
+    },
+    "about": {
+      "title": "About this app",
+      "description": "Simple games to introduce numbers, letters, colors and shapes to young children."
     },
     "soundOn": "Sound on",
     "soundOff": "Sound off",
     "reduceMotion": "Reduce motion",
     "reduceMotionHelp": "Tone down bouncing and spinning effects",
+    "guidedPlay": "Daily play suggestions",
+    "guidedPlayHelp": "Show today's tiny activity list on the home screen",
     "trigger": "Settings",
     "voicePreview": {
       "label": "Preview the voice",
@@ -542,6 +623,114 @@
       "letter": "Which letter?",
       "color": "What color is this?",
       "shape": "What shape is this?"
+    }
+  },
+  "rewards": {
+    "stickers": {
+      "numbers-first": { "title": "First numbers", "description": "You tried your first numbers!" },
+      "numbers-3": { "title": "Number champion", "description": "Three counting games done!" },
+      "letters-first": { "title": "First letters", "description": "You met the alphabet!" },
+      "letters-3": { "title": "Letter champion", "description": "Three alphabet games done!" },
+      "colors-first": { "title": "First colors", "description": "You explored fun colors!" },
+      "colors-3": { "title": "Color champion", "description": "Three color games done!" },
+      "shapes-first": { "title": "First shapes", "description": "You met your first shapes!" },
+      "shapes-3": { "title": "Shape champion", "description": "Three shape games done!" },
+      "flashcards-first": {
+        "title": "Memory star",
+        "description": "You finished a review round!"
+      },
+      "coloring-first": {
+        "title": "Little artist",
+        "description": "You saved your first picture!"
+      },
+      "color-sort-first": {
+        "title": "Color sorter",
+        "description": "You sorted your first toys by color!"
+      },
+      "letter-sounds-first": {
+        "title": "Sharp ears",
+        "description": "You picked the right letter by listening!"
+      },
+      "toy-explorer-5": { "title": "Toy explorer", "description": "Five activities done!" },
+      "toy-explorer-12": { "title": "Super explorer", "description": "Twelve activities done!" }
+    },
+    "summary": {
+      "title": "Your toys",
+      "totalActivities": "Activities done: {{count}}",
+      "unlockedStickers": "Stickers: {{count}}",
+      "lastActivity": "Last played: {{title}}",
+      "empty": "Play a little to earn your first sticker!"
+    },
+    "settings": {
+      "title": "Progress",
+      "description": "Activities and stickers saved on this device.",
+      "totalActivities": "Activities completed: {{count}}",
+      "unlockedStickers": "Stickers unlocked: {{count}}",
+      "resetButton": "Reset progress",
+      "resetConfirm": "Reset all saved progress on this device?",
+      "lastReward": "Last sticker: {{title}}"
+    },
+    "reveal": {
+      "title": "New sticker!",
+      "subtitle": "{{title}}"
+    },
+    "locked": "Locked",
+    "board": {
+      "title": "Sticker board"
+    }
+  },
+  "daily": {
+    "title": "Today's toys",
+    "subtitle": "Try a few little activities",
+    "done": "Done",
+    "next": "Play now",
+    "allDone": "All done! Great job!",
+    "freePlay": "Pick anything you like below.",
+    "activities": {
+      "learn-numbers": {
+        "title": "Meet the numbers",
+        "description": "Tap a few counting toys."
+      },
+      "learn-letters": {
+        "title": "Meet the letters",
+        "description": "Tap a few alphabet toys."
+      },
+      "learn-colors": {
+        "title": "Meet the colors",
+        "description": "Tap a few paint toys."
+      },
+      "learn-shapes": {
+        "title": "Meet the shapes",
+        "description": "Tap a few shape toys."
+      },
+      "game-numbers": {
+        "title": "Count the toys",
+        "description": "A short counting game."
+      },
+      "game-letters-alphabet": {
+        "title": "Letter game",
+        "description": "Find the matching letter."
+      },
+      "game-colors-identify": {
+        "title": "Color game",
+        "description": "Name the right color."
+      },
+      "game-shapes": {
+        "title": "Shape game",
+        "description": "Pick the matching shape."
+      },
+      "game-flashcards": {
+        "title": "Mixed review",
+        "description": "A short mixed round."
+      },
+      "game-colors-sort": {
+        "title": "Sort by color",
+        "description": "Drop each toy in the matching basket."
+      },
+      "game-letters-sounds": {
+        "title": "Listen to letters",
+        "description": "Tap the letter you hear."
+      }
     }
   }
 }

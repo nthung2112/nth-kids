@@ -4,6 +4,7 @@ const KEYS = {
   soundMuted: "soundMuted",
   maxNumber: "maxNumber",
   reduceMotion: "nthkids:reduce-motion",
+  showGuidedPlay: "nthkids:show-guided-play",
 } as const;
 
 const REDUCE_MOTION_CLASS = "reduce-motion";
@@ -12,12 +13,14 @@ export interface Preferences {
   soundMuted: boolean;
   maxNumber: number;
   reduceMotion: boolean;
+  showGuidedPlay: boolean;
 }
 
 const DEFAULTS: Preferences = {
   soundMuted: false,
   maxNumber: 10,
   reduceMotion: false,
+  showGuidedPlay: true,
 };
 
 const PREFS_EVENT = "nthkids:prefs-changed";
@@ -29,10 +32,13 @@ const readPreferences = (): Preferences => {
   const parsedMax = rawMax ? Number.parseInt(rawMax, 10) : DEFAULTS.maxNumber;
   const maxNumber = Number.isFinite(parsedMax) && parsedMax > 0 ? parsedMax : DEFAULTS.maxNumber;
   const reduceMotion = window.localStorage.getItem(KEYS.reduceMotion) === "true";
+  const rawGuided = window.localStorage.getItem(KEYS.showGuidedPlay);
+  const showGuidedPlay = rawGuided === null ? DEFAULTS.showGuidedPlay : rawGuided === "true";
   return {
     soundMuted,
     maxNumber,
     reduceMotion,
+    showGuidedPlay,
   };
 };
 
@@ -72,6 +78,9 @@ export function usePreferences() {
     }
     if (next.reduceMotion !== undefined) {
       window.localStorage.setItem(KEYS.reduceMotion, String(next.reduceMotion));
+    }
+    if (next.showGuidedPlay !== undefined) {
+      window.localStorage.setItem(KEYS.showGuidedPlay, String(next.showGuidedPlay));
     }
     window.dispatchEvent(new Event(PREFS_EVENT));
   }, []);

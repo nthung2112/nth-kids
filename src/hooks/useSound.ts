@@ -39,8 +39,7 @@ const isMuted = () => {
   return window.localStorage.getItem(MUTE_STORAGE_KEY) === "true";
 };
 
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 const normaliseLocale = (input: string | undefined | null): SpriteLocale => {
   const base = (input ?? "vi").toLowerCase().split("-")[0];
@@ -70,7 +69,8 @@ export const useSound = () => {
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
       const Ctor =
-        window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       audioContextRef.current = new Ctor();
     }
     return audioContextRef.current;
@@ -172,7 +172,9 @@ export const useSound = () => {
       if (sprite.scheduled) return;
 
       // Fallback synth: pentatonic mod 8 → mọi số đều cho ra note hài hoà
-      const idx = ((number - 1) % PENTATONIC_SCALE.length + PENTATONIC_SCALE.length) % PENTATONIC_SCALE.length;
+      const idx =
+        (((number - 1) % PENTATONIC_SCALE.length) + PENTATONIC_SCALE.length) %
+        PENTATONIC_SCALE.length;
       playSoftTone(PENTATONIC_SCALE[idx], 0.45, {
         type: "sine",
         volume: 0.18,
@@ -274,11 +276,7 @@ export const useSound = () => {
   const playColorSound = useCallback(
     (colorId: string) => {
       const lc = localeRef.current;
-      const sprite = playSpriteSegment(
-        "colors",
-        lc,
-        COLOR_SPRITE_INDEX[lc][colorId as ColorId]
-      );
+      const sprite = playSpriteSegment("colors", lc, COLOR_SPRITE_INDEX[lc][colorId as ColorId]);
       if (sprite.scheduled) return;
 
       // Fallback synth: each color = 1 pentatonic note
@@ -312,11 +310,7 @@ export const useSound = () => {
   const playShapeSound = useCallback(
     (shapeId: string) => {
       const lc = localeRef.current;
-      const sprite = playSpriteSegment(
-        "shapes",
-        lc,
-        SHAPE_SPRITE_INDEX[lc][shapeId as ShapeId]
-      );
+      const sprite = playSpriteSegment("shapes", lc, SHAPE_SPRITE_INDEX[lc][shapeId as ShapeId]);
       if (sprite.scheduled) return;
 
       // Fallback synth: pentatonic note based on stable hash

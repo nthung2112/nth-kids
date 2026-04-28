@@ -9,54 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ShapesRouteImport } from './routes/shapes'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as NumbersRouteImport } from './routes/numbers'
-import { Route as LettersRouteImport } from './routes/letters'
-import { Route as LearnRouteImport } from './routes/learn'
-import { Route as GameRouteImport } from './routes/game'
-import { Route as FlashcardsRouteImport } from './routes/flashcards'
-import { Route as ColorsRouteImport } from './routes/colors'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LearnIndexRouteImport } from './routes/learn/index'
+import { Route as GameIndexRouteImport } from './routes/game/index'
+import { Route as LearnShapesRouteImport } from './routes/learn/shapes'
+import { Route as LearnNumbersRouteImport } from './routes/learn/numbers'
+import { Route as LearnLettersRouteImport } from './routes/learn/letters'
+import { Route as LearnColorsRouteImport } from './routes/learn/colors'
+import { Route as GameShapesRouteImport } from './routes/game/shapes'
+import { Route as GameNumbersRouteImport } from './routes/game/numbers'
+import { Route as GameFlashcardsRouteImport } from './routes/game/flashcards'
+import { Route as GameLettersIndexRouteImport } from './routes/game/letters/index'
+import { Route as GameColorsIndexRouteImport } from './routes/game/colors/index'
+import { Route as GameLettersSoundsRouteImport } from './routes/game/letters/sounds'
+import { Route as GameLettersSequenceRouteImport } from './routes/game/letters/sequence'
+import { Route as GameLettersAlphabetRouteImport } from './routes/game/letters/alphabet'
+import { Route as GameColorsSortRouteImport } from './routes/game/colors/sort'
+import { Route as GameColorsMatchingRouteImport } from './routes/game/colors/matching'
+import { Route as GameColorsIdentifyRouteImport } from './routes/game/colors/identify'
+import { Route as GameColorsColoringRouteImport } from './routes/game/colors/coloring'
 
-const ShapesRoute = ShapesRouteImport.update({
-  id: '/shapes',
-  path: '/shapes',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NumbersRoute = NumbersRouteImport.update({
-  id: '/numbers',
-  path: '/numbers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LettersRoute = LettersRouteImport.update({
-  id: '/letters',
-  path: '/letters',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GameRoute = GameRouteImport.update({
-  id: '/game',
-  path: '/game',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FlashcardsRoute = FlashcardsRouteImport.update({
-  id: '/flashcards',
-  path: '/flashcards',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ColorsRoute = ColorsRouteImport.update({
-  id: '/colors',
-  path: '/colors',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -64,145 +40,263 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnIndexRoute = LearnIndexRouteImport.update({
+  id: '/learn/',
+  path: '/learn/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameIndexRoute = GameIndexRouteImport.update({
+  id: '/game/',
+  path: '/game/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnShapesRoute = LearnShapesRouteImport.update({
+  id: '/learn/shapes',
+  path: '/learn/shapes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnNumbersRoute = LearnNumbersRouteImport.update({
+  id: '/learn/numbers',
+  path: '/learn/numbers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnLettersRoute = LearnLettersRouteImport.update({
+  id: '/learn/letters',
+  path: '/learn/letters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnColorsRoute = LearnColorsRouteImport.update({
+  id: '/learn/colors',
+  path: '/learn/colors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameShapesRoute = GameShapesRouteImport.update({
+  id: '/game/shapes',
+  path: '/game/shapes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameNumbersRoute = GameNumbersRouteImport.update({
+  id: '/game/numbers',
+  path: '/game/numbers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameFlashcardsRoute = GameFlashcardsRouteImport.update({
+  id: '/game/flashcards',
+  path: '/game/flashcards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameLettersIndexRoute = GameLettersIndexRouteImport.update({
+  id: '/game/letters/',
+  path: '/game/letters/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameColorsIndexRoute = GameColorsIndexRouteImport.update({
+  id: '/game/colors/',
+  path: '/game/colors/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameLettersSoundsRoute = GameLettersSoundsRouteImport.update({
+  id: '/game/letters/sounds',
+  path: '/game/letters/sounds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameLettersSequenceRoute = GameLettersSequenceRouteImport.update({
+  id: '/game/letters/sequence',
+  path: '/game/letters/sequence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameLettersAlphabetRoute = GameLettersAlphabetRouteImport.update({
+  id: '/game/letters/alphabet',
+  path: '/game/letters/alphabet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameColorsSortRoute = GameColorsSortRouteImport.update({
+  id: '/game/colors/sort',
+  path: '/game/colors/sort',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameColorsMatchingRoute = GameColorsMatchingRouteImport.update({
+  id: '/game/colors/matching',
+  path: '/game/colors/matching',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameColorsIdentifyRoute = GameColorsIdentifyRouteImport.update({
+  id: '/game/colors/identify',
+  path: '/game/colors/identify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameColorsColoringRoute = GameColorsColoringRouteImport.update({
+  id: '/game/colors/coloring',
+  path: '/game/colors/coloring',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/colors': typeof ColorsRoute
-  '/flashcards': typeof FlashcardsRoute
-  '/game': typeof GameRoute
-  '/learn': typeof LearnRoute
-  '/letters': typeof LettersRoute
-  '/numbers': typeof NumbersRoute
   '/settings': typeof SettingsRoute
-  '/shapes': typeof ShapesRoute
+  '/game/flashcards': typeof GameFlashcardsRoute
+  '/game/numbers': typeof GameNumbersRoute
+  '/game/shapes': typeof GameShapesRoute
+  '/learn/colors': typeof LearnColorsRoute
+  '/learn/letters': typeof LearnLettersRoute
+  '/learn/numbers': typeof LearnNumbersRoute
+  '/learn/shapes': typeof LearnShapesRoute
+  '/game/': typeof GameIndexRoute
+  '/learn/': typeof LearnIndexRoute
+  '/game/colors/coloring': typeof GameColorsColoringRoute
+  '/game/colors/identify': typeof GameColorsIdentifyRoute
+  '/game/colors/matching': typeof GameColorsMatchingRoute
+  '/game/colors/sort': typeof GameColorsSortRoute
+  '/game/letters/alphabet': typeof GameLettersAlphabetRoute
+  '/game/letters/sequence': typeof GameLettersSequenceRoute
+  '/game/letters/sounds': typeof GameLettersSoundsRoute
+  '/game/colors/': typeof GameColorsIndexRoute
+  '/game/letters/': typeof GameLettersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/colors': typeof ColorsRoute
-  '/flashcards': typeof FlashcardsRoute
-  '/game': typeof GameRoute
-  '/learn': typeof LearnRoute
-  '/letters': typeof LettersRoute
-  '/numbers': typeof NumbersRoute
   '/settings': typeof SettingsRoute
-  '/shapes': typeof ShapesRoute
+  '/game/flashcards': typeof GameFlashcardsRoute
+  '/game/numbers': typeof GameNumbersRoute
+  '/game/shapes': typeof GameShapesRoute
+  '/learn/colors': typeof LearnColorsRoute
+  '/learn/letters': typeof LearnLettersRoute
+  '/learn/numbers': typeof LearnNumbersRoute
+  '/learn/shapes': typeof LearnShapesRoute
+  '/game': typeof GameIndexRoute
+  '/learn': typeof LearnIndexRoute
+  '/game/colors/coloring': typeof GameColorsColoringRoute
+  '/game/colors/identify': typeof GameColorsIdentifyRoute
+  '/game/colors/matching': typeof GameColorsMatchingRoute
+  '/game/colors/sort': typeof GameColorsSortRoute
+  '/game/letters/alphabet': typeof GameLettersAlphabetRoute
+  '/game/letters/sequence': typeof GameLettersSequenceRoute
+  '/game/letters/sounds': typeof GameLettersSoundsRoute
+  '/game/colors': typeof GameColorsIndexRoute
+  '/game/letters': typeof GameLettersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/colors': typeof ColorsRoute
-  '/flashcards': typeof FlashcardsRoute
-  '/game': typeof GameRoute
-  '/learn': typeof LearnRoute
-  '/letters': typeof LettersRoute
-  '/numbers': typeof NumbersRoute
   '/settings': typeof SettingsRoute
-  '/shapes': typeof ShapesRoute
+  '/game/flashcards': typeof GameFlashcardsRoute
+  '/game/numbers': typeof GameNumbersRoute
+  '/game/shapes': typeof GameShapesRoute
+  '/learn/colors': typeof LearnColorsRoute
+  '/learn/letters': typeof LearnLettersRoute
+  '/learn/numbers': typeof LearnNumbersRoute
+  '/learn/shapes': typeof LearnShapesRoute
+  '/game/': typeof GameIndexRoute
+  '/learn/': typeof LearnIndexRoute
+  '/game/colors/coloring': typeof GameColorsColoringRoute
+  '/game/colors/identify': typeof GameColorsIdentifyRoute
+  '/game/colors/matching': typeof GameColorsMatchingRoute
+  '/game/colors/sort': typeof GameColorsSortRoute
+  '/game/letters/alphabet': typeof GameLettersAlphabetRoute
+  '/game/letters/sequence': typeof GameLettersSequenceRoute
+  '/game/letters/sounds': typeof GameLettersSoundsRoute
+  '/game/colors/': typeof GameColorsIndexRoute
+  '/game/letters/': typeof GameLettersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/colors'
-    | '/flashcards'
-    | '/game'
-    | '/learn'
-    | '/letters'
-    | '/numbers'
     | '/settings'
-    | '/shapes'
+    | '/game/flashcards'
+    | '/game/numbers'
+    | '/game/shapes'
+    | '/learn/colors'
+    | '/learn/letters'
+    | '/learn/numbers'
+    | '/learn/shapes'
+    | '/game/'
+    | '/learn/'
+    | '/game/colors/coloring'
+    | '/game/colors/identify'
+    | '/game/colors/matching'
+    | '/game/colors/sort'
+    | '/game/letters/alphabet'
+    | '/game/letters/sequence'
+    | '/game/letters/sounds'
+    | '/game/colors/'
+    | '/game/letters/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/colors'
-    | '/flashcards'
+    | '/settings'
+    | '/game/flashcards'
+    | '/game/numbers'
+    | '/game/shapes'
+    | '/learn/colors'
+    | '/learn/letters'
+    | '/learn/numbers'
+    | '/learn/shapes'
     | '/game'
     | '/learn'
-    | '/letters'
-    | '/numbers'
-    | '/settings'
-    | '/shapes'
+    | '/game/colors/coloring'
+    | '/game/colors/identify'
+    | '/game/colors/matching'
+    | '/game/colors/sort'
+    | '/game/letters/alphabet'
+    | '/game/letters/sequence'
+    | '/game/letters/sounds'
+    | '/game/colors'
+    | '/game/letters'
   id:
     | '__root__'
     | '/'
-    | '/colors'
-    | '/flashcards'
-    | '/game'
-    | '/learn'
-    | '/letters'
-    | '/numbers'
     | '/settings'
-    | '/shapes'
+    | '/game/flashcards'
+    | '/game/numbers'
+    | '/game/shapes'
+    | '/learn/colors'
+    | '/learn/letters'
+    | '/learn/numbers'
+    | '/learn/shapes'
+    | '/game/'
+    | '/learn/'
+    | '/game/colors/coloring'
+    | '/game/colors/identify'
+    | '/game/colors/matching'
+    | '/game/colors/sort'
+    | '/game/letters/alphabet'
+    | '/game/letters/sequence'
+    | '/game/letters/sounds'
+    | '/game/colors/'
+    | '/game/letters/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ColorsRoute: typeof ColorsRoute
-  FlashcardsRoute: typeof FlashcardsRoute
-  GameRoute: typeof GameRoute
-  LearnRoute: typeof LearnRoute
-  LettersRoute: typeof LettersRoute
-  NumbersRoute: typeof NumbersRoute
   SettingsRoute: typeof SettingsRoute
-  ShapesRoute: typeof ShapesRoute
+  GameFlashcardsRoute: typeof GameFlashcardsRoute
+  GameNumbersRoute: typeof GameNumbersRoute
+  GameShapesRoute: typeof GameShapesRoute
+  LearnColorsRoute: typeof LearnColorsRoute
+  LearnLettersRoute: typeof LearnLettersRoute
+  LearnNumbersRoute: typeof LearnNumbersRoute
+  LearnShapesRoute: typeof LearnShapesRoute
+  GameIndexRoute: typeof GameIndexRoute
+  LearnIndexRoute: typeof LearnIndexRoute
+  GameColorsColoringRoute: typeof GameColorsColoringRoute
+  GameColorsIdentifyRoute: typeof GameColorsIdentifyRoute
+  GameColorsMatchingRoute: typeof GameColorsMatchingRoute
+  GameColorsSortRoute: typeof GameColorsSortRoute
+  GameLettersAlphabetRoute: typeof GameLettersAlphabetRoute
+  GameLettersSequenceRoute: typeof GameLettersSequenceRoute
+  GameLettersSoundsRoute: typeof GameLettersSoundsRoute
+  GameColorsIndexRoute: typeof GameColorsIndexRoute
+  GameLettersIndexRoute: typeof GameLettersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/shapes': {
-      id: '/shapes'
-      path: '/shapes'
-      fullPath: '/shapes'
-      preLoaderRoute: typeof ShapesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/numbers': {
-      id: '/numbers'
-      path: '/numbers'
-      fullPath: '/numbers'
-      preLoaderRoute: typeof NumbersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/letters': {
-      id: '/letters'
-      path: '/letters'
-      fullPath: '/letters'
-      preLoaderRoute: typeof LettersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/game': {
-      id: '/game'
-      path: '/game'
-      fullPath: '/game'
-      preLoaderRoute: typeof GameRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/flashcards': {
-      id: '/flashcards'
-      path: '/flashcards'
-      fullPath: '/flashcards'
-      preLoaderRoute: typeof FlashcardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/colors': {
-      id: '/colors'
-      path: '/colors'
-      fullPath: '/colors'
-      preLoaderRoute: typeof ColorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -212,19 +306,156 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn/': {
+      id: '/learn/'
+      path: '/learn'
+      fullPath: '/learn/'
+      preLoaderRoute: typeof LearnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/': {
+      id: '/game/'
+      path: '/game'
+      fullPath: '/game/'
+      preLoaderRoute: typeof GameIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/shapes': {
+      id: '/learn/shapes'
+      path: '/learn/shapes'
+      fullPath: '/learn/shapes'
+      preLoaderRoute: typeof LearnShapesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/numbers': {
+      id: '/learn/numbers'
+      path: '/learn/numbers'
+      fullPath: '/learn/numbers'
+      preLoaderRoute: typeof LearnNumbersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/letters': {
+      id: '/learn/letters'
+      path: '/learn/letters'
+      fullPath: '/learn/letters'
+      preLoaderRoute: typeof LearnLettersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/colors': {
+      id: '/learn/colors'
+      path: '/learn/colors'
+      fullPath: '/learn/colors'
+      preLoaderRoute: typeof LearnColorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/shapes': {
+      id: '/game/shapes'
+      path: '/game/shapes'
+      fullPath: '/game/shapes'
+      preLoaderRoute: typeof GameShapesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/numbers': {
+      id: '/game/numbers'
+      path: '/game/numbers'
+      fullPath: '/game/numbers'
+      preLoaderRoute: typeof GameNumbersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/flashcards': {
+      id: '/game/flashcards'
+      path: '/game/flashcards'
+      fullPath: '/game/flashcards'
+      preLoaderRoute: typeof GameFlashcardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/letters/': {
+      id: '/game/letters/'
+      path: '/game/letters'
+      fullPath: '/game/letters/'
+      preLoaderRoute: typeof GameLettersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/colors/': {
+      id: '/game/colors/'
+      path: '/game/colors'
+      fullPath: '/game/colors/'
+      preLoaderRoute: typeof GameColorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/letters/sounds': {
+      id: '/game/letters/sounds'
+      path: '/game/letters/sounds'
+      fullPath: '/game/letters/sounds'
+      preLoaderRoute: typeof GameLettersSoundsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/letters/sequence': {
+      id: '/game/letters/sequence'
+      path: '/game/letters/sequence'
+      fullPath: '/game/letters/sequence'
+      preLoaderRoute: typeof GameLettersSequenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/letters/alphabet': {
+      id: '/game/letters/alphabet'
+      path: '/game/letters/alphabet'
+      fullPath: '/game/letters/alphabet'
+      preLoaderRoute: typeof GameLettersAlphabetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/colors/sort': {
+      id: '/game/colors/sort'
+      path: '/game/colors/sort'
+      fullPath: '/game/colors/sort'
+      preLoaderRoute: typeof GameColorsSortRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/colors/matching': {
+      id: '/game/colors/matching'
+      path: '/game/colors/matching'
+      fullPath: '/game/colors/matching'
+      preLoaderRoute: typeof GameColorsMatchingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/colors/identify': {
+      id: '/game/colors/identify'
+      path: '/game/colors/identify'
+      fullPath: '/game/colors/identify'
+      preLoaderRoute: typeof GameColorsIdentifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/colors/coloring': {
+      id: '/game/colors/coloring'
+      path: '/game/colors/coloring'
+      fullPath: '/game/colors/coloring'
+      preLoaderRoute: typeof GameColorsColoringRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ColorsRoute: ColorsRoute,
-  FlashcardsRoute: FlashcardsRoute,
-  GameRoute: GameRoute,
-  LearnRoute: LearnRoute,
-  LettersRoute: LettersRoute,
-  NumbersRoute: NumbersRoute,
   SettingsRoute: SettingsRoute,
-  ShapesRoute: ShapesRoute,
+  GameFlashcardsRoute: GameFlashcardsRoute,
+  GameNumbersRoute: GameNumbersRoute,
+  GameShapesRoute: GameShapesRoute,
+  LearnColorsRoute: LearnColorsRoute,
+  LearnLettersRoute: LearnLettersRoute,
+  LearnNumbersRoute: LearnNumbersRoute,
+  LearnShapesRoute: LearnShapesRoute,
+  GameIndexRoute: GameIndexRoute,
+  LearnIndexRoute: LearnIndexRoute,
+  GameColorsColoringRoute: GameColorsColoringRoute,
+  GameColorsIdentifyRoute: GameColorsIdentifyRoute,
+  GameColorsMatchingRoute: GameColorsMatchingRoute,
+  GameColorsSortRoute: GameColorsSortRoute,
+  GameLettersAlphabetRoute: GameLettersAlphabetRoute,
+  GameLettersSequenceRoute: GameLettersSequenceRoute,
+  GameLettersSoundsRoute: GameLettersSoundsRoute,
+  GameColorsIndexRoute: GameColorsIndexRoute,
+  GameLettersIndexRoute: GameLettersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
